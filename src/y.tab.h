@@ -54,7 +54,36 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    CONSTANTE_BASICA = 258         /* CONSTANTE_BASICA  */
+    INI_VAR = 258,                 /* INI_VAR  */
+    FIN_VAR = 259,                 /* FIN_VAR  */
+    PRINCIPAL = 260,               /* PRINCIPAL  */
+    INI_BLOQUE = 261,              /* INI_BLOQUE  */
+    FIN_BLOQUE = 262,              /* FIN_BLOQUE  */
+    CONSTANTE_NUM = 263,           /* CONSTANTE_NUM  */
+    CONSTANTE_CHAR = 264,          /* CONSTANTE_CHAR  */
+    CONSTANTE_FLOAT = 265,         /* CONSTANTE_FLOAT  */
+    TIPO_DATO = 266,               /* TIPO_DATO  */
+    SIGSIG = 267,                  /* SIGSIG  */
+    SALIDA = 268,                  /* SALIDA  */
+    LISTA = 269,                   /* LISTA  */
+    MIENTRAS = 270,                /* MIENTRAS  */
+    SI = 271,                      /* SI  */
+    ENTRADA = 272,                 /* ENTRADA  */
+    IMPRIMIR = 273,                /* IMPRIMIR  */
+    DEVOLVER = 274,                /* DEVOLVER  */
+    DIRECCION = 275,               /* DIRECCION  */
+    IDENT = 276,                   /* IDENT  */
+    OP_BINARIO = 277,              /* OP_BINARIO  */
+    OP_UNARIO = 278,               /* OP_UNARIO  */
+    OP_TERNARIO = 279,             /* OP_TERNARIO  */
+    LLAVE_ABRE = 280,              /* LLAVE_ABRE  */
+    LLAVE_CIERRA = 281,            /* LLAVE_CIERRA  */
+    PARENTESIS_ABRE = 282,         /* PARENTESIS_ABRE  */
+    PARENTESIS_CIERRA = 283,       /* PARENTESIS_CIERRA  */
+    CORCHETE_ABRE = 284,           /* CORCHETE_ABRE  */
+    CORCHETE_CIERRA = 285,         /* CORCHETE_CIERRA  */
+    COMA = 286,                    /* COMA  */
+    PYC = 287                      /* PYC  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

@@ -1,51 +1,113 @@
+Terminals unused in grammar
+
+    INI_VAR
+    FIN_VAR
+    PRINCIPAL
+    INI_BLOQUE
+    FIN_BLOQUE
+    CONSTANTE_CHAR
+    CONSTANTE_FLOAT
+    TIPO_DATO
+    SIGSIG
+    SALIDA
+    LISTA
+    MIENTRAS
+    SI
+    ENTRADA
+    IMPRIMIR
+    DEVOLVER
+    DIRECCION
+    IDENT
+    OP_BINARIO
+    OP_UNARIO
+    OP_TERNARIO
+    LLAVE_ABRE
+    LLAVE_CIERRA
+    PARENTESIS_ABRE
+    PARENTESIS_CIERRA
+    CORCHETE_ABRE
+    CORCHETE_CIERRA
+    COMA
+    PYC
+
+
 Grammar
 
-    0 $accept: constante $end
+    0 $accept: programa $end
 
-    1 constante: CONSTANTE_BASICA
+    1 programa: CONSTANTE_NUM
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
     error (256)
-    CONSTANTE_BASICA (258) 1
+    INI_VAR (258)
+    FIN_VAR (259)
+    PRINCIPAL (260)
+    INI_BLOQUE (261)
+    FIN_BLOQUE (262)
+    CONSTANTE_NUM (263) 1
+    CONSTANTE_CHAR (264)
+    CONSTANTE_FLOAT (265)
+    TIPO_DATO (266)
+    SIGSIG (267)
+    SALIDA (268)
+    LISTA (269)
+    MIENTRAS (270)
+    SI (271)
+    ENTRADA (272)
+    IMPRIMIR (273)
+    DEVOLVER (274)
+    DIRECCION (275)
+    IDENT (276)
+    OP_BINARIO (277)
+    OP_UNARIO (278)
+    OP_TERNARIO (279)
+    LLAVE_ABRE (280)
+    LLAVE_CIERRA (281)
+    PARENTESIS_ABRE (282)
+    PARENTESIS_CIERRA (283)
+    CORCHETE_ABRE (284)
+    CORCHETE_CIERRA (285)
+    COMA (286)
+    PYC (287)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (4)
+    $accept (33)
         on left: 0
-    constante (5)
+    programa (34)
         on left: 1
         on right: 0
 
 
 State 0
 
-    0 $accept: • constante $end
+    0 $accept: • programa $end
 
-    CONSTANTE_BASICA  shift, and go to state 1
+    CONSTANTE_NUM  shift, and go to state 1
 
-    constante  go to state 2
+    programa  go to state 2
 
 
 State 1
 
-    1 constante: CONSTANTE_BASICA •
+    1 programa: CONSTANTE_NUM •
 
-    $default  reduce using rule 1 (constante)
+    $default  reduce using rule 1 (programa)
 
 
 State 2
 
-    0 $accept: constante • $end
+    0 $accept: programa • $end
 
     $end  shift, and go to state 3
 
 
 State 3
 
-    0 $accept: constante $end •
+    0 $accept: programa $end •
 
     $default  accept

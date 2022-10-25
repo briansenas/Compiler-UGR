@@ -113,9 +113,38 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_CONSTANTE_BASICA = 3,           /* CONSTANTE_BASICA  */
-  YYSYMBOL_YYACCEPT = 4,                   /* $accept  */
-  YYSYMBOL_constante = 5                   /* constante  */
+  YYSYMBOL_INI_VAR = 3,                    /* INI_VAR  */
+  YYSYMBOL_FIN_VAR = 4,                    /* FIN_VAR  */
+  YYSYMBOL_PRINCIPAL = 5,                  /* PRINCIPAL  */
+  YYSYMBOL_INI_BLOQUE = 6,                 /* INI_BLOQUE  */
+  YYSYMBOL_FIN_BLOQUE = 7,                 /* FIN_BLOQUE  */
+  YYSYMBOL_CONSTANTE_NUM = 8,              /* CONSTANTE_NUM  */
+  YYSYMBOL_CONSTANTE_CHAR = 9,             /* CONSTANTE_CHAR  */
+  YYSYMBOL_CONSTANTE_FLOAT = 10,           /* CONSTANTE_FLOAT  */
+  YYSYMBOL_TIPO_DATO = 11,                 /* TIPO_DATO  */
+  YYSYMBOL_SIGSIG = 12,                    /* SIGSIG  */
+  YYSYMBOL_SALIDA = 13,                    /* SALIDA  */
+  YYSYMBOL_LISTA = 14,                     /* LISTA  */
+  YYSYMBOL_MIENTRAS = 15,                  /* MIENTRAS  */
+  YYSYMBOL_SI = 16,                        /* SI  */
+  YYSYMBOL_ENTRADA = 17,                   /* ENTRADA  */
+  YYSYMBOL_IMPRIMIR = 18,                  /* IMPRIMIR  */
+  YYSYMBOL_DEVOLVER = 19,                  /* DEVOLVER  */
+  YYSYMBOL_DIRECCION = 20,                 /* DIRECCION  */
+  YYSYMBOL_IDENT = 21,                     /* IDENT  */
+  YYSYMBOL_OP_BINARIO = 22,                /* OP_BINARIO  */
+  YYSYMBOL_OP_UNARIO = 23,                 /* OP_UNARIO  */
+  YYSYMBOL_OP_TERNARIO = 24,               /* OP_TERNARIO  */
+  YYSYMBOL_LLAVE_ABRE = 25,                /* LLAVE_ABRE  */
+  YYSYMBOL_LLAVE_CIERRA = 26,              /* LLAVE_CIERRA  */
+  YYSYMBOL_PARENTESIS_ABRE = 27,           /* PARENTESIS_ABRE  */
+  YYSYMBOL_PARENTESIS_CIERRA = 28,         /* PARENTESIS_CIERRA  */
+  YYSYMBOL_CORCHETE_ABRE = 29,             /* CORCHETE_ABRE  */
+  YYSYMBOL_CORCHETE_CIERRA = 30,           /* CORCHETE_CIERRA  */
+  YYSYMBOL_COMA = 31,                      /* COMA  */
+  YYSYMBOL_PYC = 32,                       /* PYC  */
+  YYSYMBOL_YYACCEPT = 33,                  /* $accept  */
+  YYSYMBOL_programa = 34                   /* programa  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -446,7 +475,7 @@ union yyalloc
 #define YYLAST   1
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  4
+#define YYNTOKENS  33
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
@@ -455,7 +484,7 @@ union yyalloc
 #define YYNSTATES  4
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   258
+#define YYMAXUTOK   287
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -494,14 +523,17 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    32
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    21,    21
+       0,    70,    70
 };
 #endif
 
@@ -517,8 +549,13 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "CONSTANTE_BASICA",
-  "$accept", "constante", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "INI_VAR", "FIN_VAR",
+  "PRINCIPAL", "INI_BLOQUE", "FIN_BLOQUE", "CONSTANTE_NUM",
+  "CONSTANTE_CHAR", "CONSTANTE_FLOAT", "TIPO_DATO", "SIGSIG", "SALIDA",
+  "LISTA", "MIENTRAS", "SI", "ENTRADA", "IMPRIMIR", "DEVOLVER",
+  "DIRECCION", "IDENT", "OP_BINARIO", "OP_UNARIO", "OP_TERNARIO",
+  "LLAVE_ABRE", "LLAVE_CIERRA", "PARENTESIS_ABRE", "PARENTESIS_CIERRA",
+  "CORCHETE_ABRE", "CORCHETE_CIERRA", "COMA", "PYC", "$accept", "programa", YY_NULLPTR
 };
 
 static const char *
@@ -528,7 +565,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-4)
+#define YYPACT_NINF (-9)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -542,7 +579,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -4,     1,    -4
+      -8,    -9,     1,    -9
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -556,7 +593,7 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4
+      -9,    -9
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -575,20 +612,20 @@ static const yytype_int8 yytable[] =
 
 static const yytype_int8 yycheck[] =
 {
-       3,     0
+       8,     0
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     5,     0
+       0,     8,    34,     0
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     4,     5
+       0,    33,    34
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -1328,7 +1365,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1332 "src/y.tab.c"
+#line 1369 "src/y.tab.c"
 
       default: break;
     }
@@ -1552,7 +1589,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 23 "./src/scanner.y"
+#line 72 "./src/scanner.y"
 
 
 

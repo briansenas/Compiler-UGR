@@ -16,7 +16,7 @@ GUIONES                 [-_]
 ESPACIO					[" "]
 
 %option noyywrap
-
+%option yylineno
 %%
 
 "ini_var"                       return(INI_VAR);
