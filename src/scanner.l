@@ -28,7 +28,7 @@ ESPACIO					[" "]
 "real"                           return(TIPO_DATO);
 "car"                       return(TIPO_DATO);
 "bool"                       return(TIPO_DATO);
-"lista de"                       return(LISTA);
+"listade"                       return(LISTA);
 "si"                             return(SI);
 "devolver"                       return(DEVOLVER);
 "mientras"                       return(MIENTRAS);
@@ -63,8 +63,6 @@ ESPACIO					[" "]
 "%"                              return(OP_BINARIO);
 "**"                             return(OP_BINARIO);
 ","                              return(COMA);
-"]"                              return(CORCHETE_CIERRA);
-"["                              return(CORCHETE_ABRE);
 {DIGITO}+				         return(CONSTANTE_NUM);
 {DIGITO}+"."{DIGITO}+	         return(CONSTANTE_FLOAT);
 \'[^\"\']\'                      return(CONSTANTE_CHAR);

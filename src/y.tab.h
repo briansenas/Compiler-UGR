@@ -80,10 +80,8 @@ extern int yydebug;
     LLAVE_CIERRA = 281,            /* LLAVE_CIERRA  */
     PARENTESIS_ABRE = 282,         /* PARENTESIS_ABRE  */
     PARENTESIS_CIERRA = 283,       /* PARENTESIS_CIERRA  */
-    CORCHETE_ABRE = 284,           /* CORCHETE_ABRE  */
-    CORCHETE_CIERRA = 285,         /* CORCHETE_CIERRA  */
-    COMA = 286,                    /* COMA  */
-    PYC = 287                      /* PYC  */
+    COMA = 284,                    /* COMA  */
+    PYC = 285                      /* PYC  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

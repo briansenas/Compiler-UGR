@@ -55,10 +55,6 @@ int num_errores = 0;
 %token LLAVE_CIERRA
 %token PARENTESIS_ABRE
 %token PARENTESIS_CIERRA
-%token CORCHETE_ABRE
-%token CORCHETE_CIERRA
-%left CORCHETE_ABRE
-%left CORCHETE_CIERRA
 
 %token COMA
 %token PYC
