@@ -1,0 +1,4 @@
+principal {
+        ini_var real brian; fin_var
+        brian = 2;
+}

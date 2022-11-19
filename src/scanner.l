@@ -1,13 +1,19 @@
 /* scanner for a Generating Pseudo-like Code-language */
 %{
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./../include/scanner.h"
+// #include "./../include/scanner.h"
+#include "y.tab.h"
 
-using namespace std;
+// using namespace std;
 
 %}
+
+%option noyywrap
+%option yylineno
+
 /* SECCIÓN DE DEFINCIONES */
 DIGITO					[0-9]
 FLOTANTE				[0-9]+([.][0-9]*)
@@ -15,61 +21,65 @@ LETRA					[a-zA-Z]
 GUIONES                 [-_]
 ESPACIO					[" "]
 
-%option noyywrap
-%option yylineno
 %%
 
-"ini_var"                       return(INI_VAR);
-"fin_var"                       return(FIN_VAR);
-"principal"                    return(PRINCIPAL);
-"}"                              return(INI_BLOQUE);
-"{"                              return(FIN_BLOQUE);
-"entero"                         return(TIPO_DATO);
-"real"                           return(TIPO_DATO);
-"car"                       return(TIPO_DATO);
-"bool"                       return(TIPO_DATO);
-"listade"                       return(LISTA);
-"si"                             return(SI);
-"devolver"                       return(DEVOLVER);
-"mientras"                       return(MIENTRAS);
-"imprimir"                         return(IMPRIMIR);
-"entrada"                        return(ENTRADA);
-"<<"                             return(DIRECCION);
-">>"                             return(DIRECCION);
-")"                              return(PARENTESIS_CIERRA);
-"("                              return(PARENTESIS_ABRE);
-";"                              return(PYC);
-"++"                             return(SIGSIG);
-"--"                             return(SIGSIG);
-"@"                              return(OP_TERNARIO);
-"!"                              return(OP_UNARIO);
-"#"                              return(OP_UNARIO);
-"?"                              return(OP_UNARIO);
-"$"                              return(OP_UNARIO);
-"-"                              return(SIGNO);
-"+"                              return(SIGNO);
-"="                              return(OP_BINARIO);
-"*"                              return(OP_BINARIO);
-"/"                              return(OP_BINARIO);
-"&&"                             return(OP_BINARIO);
-"||"                             return(OP_BINARIO);
-"^"                              return(OP_BINARIO);
-"<"                              return(OP_BINARIO);
-">"                              return(OP_BINARIO);
-"<="                             return(OP_BINARIO);
-">="                             return(OP_BINARIO);
-"=="                             return(OP_BINARIO);
-"!="                             return(OP_BINARIO);
-"%"                              return(OP_BINARIO);
-"**"                             return(OP_BINARIO);
-","                              return(COMA);
-{DIGITO}+				         return(CONSTANTE_NUM);
-{DIGITO}+"."{DIGITO}+	         return(CONSTANTE_FLOAT);
-\'[^\"\']\'                      return(CONSTANTE_CHAR);
-("Verdadero"|"Falso")	         return(BOOLEANO);
-\"[^\"]+\"				         return(CADENA);
-{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    return(IDENT);
-"\n"                                    return 1;
+"ini_var"                { ECHO;       return(INI_VAR);}
+"fin_var"                { ECHO;       return(FIN_VAR);}
+"principal"             { ECHO; return(PRINCIPAL);}
+"}"                       { ECHO;       return(FIN_BLOQUE);}
+"{"                       { ECHO;       return(INI_BLOQUE);}
+"entero"                  { ECHO;       return(TIPO_DATO);}
+"real"                    { ECHO;       return(TIPO_DATO);}
+"car"                { ECHO;       return(TIPO_DATO);}
+"bool"                { ECHO;       return(TIPO_DATO);}
+"listade"                { ECHO;       return(LISTA);}
+"si"                      { ECHO;       return(SI);}
+"devolver"                { ECHO;       return(DEVOLVER);}
+"mientras"                { ECHO;       return(MIENTRAS);}
+"imprimir"                  { ECHO;       return(IMPRIMIR);}
+"entrada"                        { ECHO; return(ENTRADA);}
+"<<"                             { ECHO; return(DIRECCION);}
+">>"                             { ECHO; return(DIRECCION);}
+")"                              { ECHO; return(PARENTESIS_CIERRA);}
+"("                              { ECHO; return(PARENTESIS_ABRE);}
+";"                              { ECHO; return(PYC);}
+"++"                             { ECHO; return(SIGSIG);}
+"--"                             { ECHO; return(SIGSIG);}
+"@"                              { ECHO; return(OP_TERNARIO);}
+"!"                              { ECHO; return(OP_UNARIO);}
+"#"                              { ECHO; return(OP_UNARIO);}
+"?"                       { ECHO;       return(OP_UNARIO);}
+"$"                       { ECHO;       return(OP_UNARIO);}
+"-"                       { ECHO;       return(SIGNO);}
+"+"                       { ECHO;       return(SIGNO);}
+"="                       { ECHO;       return(OP_BINARIO);}
+"*"                       { ECHO;       return(OP_BINARIO);}
+"/"                       { ECHO;       return(OP_BINARIO);}
+"&&"                      { ECHO;       return(OP_BINARIO);}
+"||"                      { ECHO;       return(OP_BINARIO);}
+"^"                       { ECHO;       return(OP_BINARIO);}
+"<"                       { ECHO;       return(OP_BINARIO);}
+">"                       { ECHO;       return(OP_BINARIO);}
+"<="                      { ECHO;       return(OP_BINARIO);}
+">="                      { ECHO;       return(OP_BINARIO);}
+"=="                      { ECHO;       return(OP_BINARIO);}
+"!="                      { ECHO;       return(OP_BINARIO);}
+"%"                       { ECHO;       return(OP_BINARIO);}
+"**"                      { ECHO;       return(OP_BINARIO);}
+","                       { ECHO;       return(COMA);}
+{DIGITO}+				  { ECHO;       return(CONSTANTE_NUM);}
+{DIGITO}+"."{DIGITO}+	  { ECHO;       return(CONSTANTE_FLOAT);}
+\'[^\"\']\'               { ECHO;       return(CONSTANTE_CHAR);}
+("Verdadero"|"Falso")	  { ECHO;       return(BOOLEANO);}
+\"[^\"]+\"				  { ECHO;       return(CADENA);}
+{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; return(IDENT);}
+
+[ \t] {
+    ECHO;
+}
+[\n\r] {
+    ECHO;
+}
 
 . {
     printf(" \nError Léxico en Linea: %d. No se reconoce la palabra '%s'. ", yylineno, yytext);

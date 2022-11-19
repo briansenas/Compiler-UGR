@@ -39,7 +39,7 @@
 # define YY_YY_SRC_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -59,29 +59,33 @@ extern int yydebug;
     PRINCIPAL = 260,               /* PRINCIPAL  */
     INI_BLOQUE = 261,              /* INI_BLOQUE  */
     FIN_BLOQUE = 262,              /* FIN_BLOQUE  */
-    CONSTANTE_NUM = 263,           /* CONSTANTE_NUM  */
-    CONSTANTE_CHAR = 264,          /* CONSTANTE_CHAR  */
-    CONSTANTE_FLOAT = 265,         /* CONSTANTE_FLOAT  */
-    TIPO_DATO = 266,               /* TIPO_DATO  */
-    SIGSIG = 267,                  /* SIGSIG  */
-    SALIDA = 268,                  /* SALIDA  */
-    LISTA = 269,                   /* LISTA  */
-    MIENTRAS = 270,                /* MIENTRAS  */
-    SI = 271,                      /* SI  */
-    ENTRADA = 272,                 /* ENTRADA  */
-    IMPRIMIR = 273,                /* IMPRIMIR  */
-    DEVOLVER = 274,                /* DEVOLVER  */
-    DIRECCION = 275,               /* DIRECCION  */
-    IDENT = 276,                   /* IDENT  */
-    OP_BINARIO = 277,              /* OP_BINARIO  */
-    OP_UNARIO = 278,               /* OP_UNARIO  */
-    OP_TERNARIO = 279,             /* OP_TERNARIO  */
-    LLAVE_ABRE = 280,              /* LLAVE_ABRE  */
-    LLAVE_CIERRA = 281,            /* LLAVE_CIERRA  */
-    PARENTESIS_ABRE = 282,         /* PARENTESIS_ABRE  */
-    PARENTESIS_CIERRA = 283,       /* PARENTESIS_CIERRA  */
-    COMA = 284,                    /* COMA  */
-    PYC = 285                      /* PYC  */
+    BOOLEANO = 263,                /* BOOLEANO  */
+    CONSTANTE_NUM = 264,           /* CONSTANTE_NUM  */
+    CONSTANTE_CHAR = 265,          /* CONSTANTE_CHAR  */
+    CONSTANTE_FLOAT = 266,         /* CONSTANTE_FLOAT  */
+    TIPO_DATO = 267,               /* TIPO_DATO  */
+    SIGSIG = 268,                  /* SIGSIG  */
+    SIGNO = 269,                   /* SIGNO  */
+    CADENA = 270,                  /* CADENA  */
+    LISTA = 271,                   /* LISTA  */
+    MIENTRAS = 272,                /* MIENTRAS  */
+    SI = 273,                      /* SI  */
+    ENTRADA = 274,                 /* ENTRADA  */
+    IMPRIMIR = 275,                /* IMPRIMIR  */
+    DEVOLVER = 276,                /* DEVOLVER  */
+    DIRECCION = 277,               /* DIRECCION  */
+    IDENT = 278,                   /* IDENT  */
+    OP_BINARIO = 279,              /* OP_BINARIO  */
+    OP_UNARIO = 280,               /* OP_UNARIO  */
+    OP_TERNARIO = 281,             /* OP_TERNARIO  */
+    LLAVE_ABRE = 282,              /* LLAVE_ABRE  */
+    LLAVE_CIERRA = 283,            /* LLAVE_CIERRA  */
+    PARENTESIS_ABRE = 284,         /* PARENTESIS_ABRE  */
+    PARENTESIS_CIERRA = 285,       /* PARENTESIS_CIERRA  */
+    CORCHETE_ABRE = 286,           /* CORCHETE_ABRE  */
+    CORCHETE_CIERRA = 287,         /* CORCHETE_CIERRA  */
+    COMA = 288,                    /* COMA  */
+    PYC = 289                      /* PYC  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
