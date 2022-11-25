@@ -15,7 +15,7 @@ $(BIN)/scanner: $(SRC)/main.c $(SRC)/lex.yy.c $(SRC)/y.tab.c $(SRC)/y.tab.h
 	gcc -o $@ $^
 
 $(SRC)/y.tab.c $(SRC)/y.tab.h: $(SRC)/scanner.y
-	bison -t -v -d -o $@ $(SRC)/scanner.y
+	bison -t -v -d -Wcounterexamples -Wconflicts-rr -o $@ $(SRC)/scanner.y
 
 $(SRC)/lex.yy.c: $(SRC)/scanner.l
 	flex -o $@ $(SRC)/scanner.l

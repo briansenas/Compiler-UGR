@@ -50,8 +50,8 @@ ESPACIO					[" "]
 "#"                              { ECHO; return(OP_UNARIO);}
 "?"                       { ECHO;       return(OP_UNARIO);}
 "$"                       { ECHO;       return(OP_UNARIO);}
-"-"                       { ECHO;       return(SIGNO);}
-"+"                       { ECHO;       return(SIGNO);}
+"-"                       { ECHO;       return(OP_UNARIO);}
+"+"                       { ECHO;       return(OP_UNARIO);}
 "="                       { ECHO;       return(OP_BINARIO);}
 "*"                       { ECHO;       return(OP_BINARIO);}
 "/"                       { ECHO;       return(OP_BINARIO);}
@@ -69,7 +69,7 @@ ESPACIO					[" "]
 ","                       { ECHO;       return(COMA);}
 {DIGITO}+				  { ECHO;       return(CONSTANTE_NUM);}
 {DIGITO}+"."{DIGITO}+	  { ECHO;       return(CONSTANTE_FLOAT);}
-\'[^\"\']\'               { ECHO;       return(CONSTANTE_CHAR);}
+\'[^\"\']\'               { ECHO;       return(CONSTANTE_CAR);}
 ("Verdadero"|"Falso")	  { ECHO;       return(BOOLEANO);}
 \"[^\"]+\"				  { ECHO;       return(CADENA);}
 {LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; return(IDENT);}

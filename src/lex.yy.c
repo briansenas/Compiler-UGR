@@ -998,12 +998,12 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 53 "./src/scanner.l"
-{ ECHO;       return(SIGNO);}
+{ ECHO;       return(OP_UNARIO);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 54 "./src/scanner.l"
-{ ECHO;       return(SIGNO);}
+{ ECHO;       return(OP_UNARIO);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
@@ -1094,7 +1094,7 @@ case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
 #line 72 "./src/scanner.l"
-{ ECHO;       return(CONSTANTE_CHAR);}
+{ ECHO;       return(CONSTANTE_CAR);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP

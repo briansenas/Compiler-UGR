@@ -27,12 +27,11 @@ int num_errores = 0;
 
 %token BOOLEANO
 %token CONSTANTE_NUM
-%token CONSTANTE_CHAR
+%token CONSTANTE_CAR
 %token CONSTANTE_FLOAT
 %token TIPO_DATO
 
 %token SIGSIG
-%token SIGNO
 
 %token CADENA
 %token LISTA
@@ -54,8 +53,6 @@ int num_errores = 0;
 %left OP_TERNARIO
 %left SIGSIG
 
-%token LLAVE_ABRE
-%token LLAVE_CIERRA
 %token PARENTESIS_ABRE
 %token PARENTESIS_CIERRA
 %token CORCHETE_ABRE
@@ -99,6 +96,7 @@ lista_parametros: tipo IDENT
 sentencias: sentencias sentencia
     | sentencia;
 
+
 sentencia: bloque
     | sentencia_asignacion
     | sentencia_si
@@ -109,7 +107,7 @@ sentencia: bloque
 
 sentencia_asignacion: IDENT OP_BINARIO expresion PYC;
 
-sentencia_si : SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencias;
+sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia;
 
 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia;
 
@@ -137,7 +135,6 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     | expresion OP_UNARIO
     | expresion OP_BINARIO expresion
     | expresion SIGSIG expresion OP_TERNARIO
-    | expresion
     | IDENT
     | constante
     | funcion
@@ -167,13 +164,13 @@ contenido_lista_flotante: CONSTANTE_FLOAT
 
 lista_constante_car : CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA;
 
-contenido_lista_car : CADENA
-    | CADENA  COMA contenido_lista_car;
+contenido_lista_car : CONSTANTE_CAR
+    | CONSTANTE_CAR COMA contenido_lista_car;
 
 constante: BOOLEANO
 | CONSTANTE_NUM
 | CONSTANTE_FLOAT
-| CADENA;
+| CONSTANTE_CAR;
 
 %%
 

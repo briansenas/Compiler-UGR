@@ -1,4 +1,5 @@
 principal {
-        ini_var real brian; fin_var
-        brian = 2;
+        ini_var real brian, a, b; fin_var      
+        
+        return 0;
 }
