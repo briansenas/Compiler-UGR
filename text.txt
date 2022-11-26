@@ -1,5 +1,0 @@
-principal {
-        ini_var real brian, a, b; fin_var      
-        
-        return 0;
-}

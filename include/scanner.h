@@ -28,3 +28,4 @@
 #define IDENT 284
 #define PYC 285
 #define COMA 286
+#define SINO 287

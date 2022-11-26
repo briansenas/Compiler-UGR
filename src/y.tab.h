@@ -69,20 +69,21 @@ extern int yydebug;
     LISTA = 270,                   /* LISTA  */
     MIENTRAS = 271,                /* MIENTRAS  */
     SI = 272,                      /* SI  */
-    ENTRADA = 273,                 /* ENTRADA  */
-    IMPRIMIR = 274,                /* IMPRIMIR  */
-    DEVOLVER = 275,                /* DEVOLVER  */
-    DIRECCION = 276,               /* DIRECCION  */
-    IDENT = 277,                   /* IDENT  */
-    OP_BINARIO = 278,              /* OP_BINARIO  */
-    OP_UNARIO = 279,               /* OP_UNARIO  */
-    OP_TERNARIO = 280,             /* OP_TERNARIO  */
-    PARENTESIS_ABRE = 281,         /* PARENTESIS_ABRE  */
-    PARENTESIS_CIERRA = 282,       /* PARENTESIS_CIERRA  */
-    CORCHETE_ABRE = 283,           /* CORCHETE_ABRE  */
-    CORCHETE_CIERRA = 284,         /* CORCHETE_CIERRA  */
-    COMA = 285,                    /* COMA  */
-    PYC = 286                      /* PYC  */
+    SINO = 273,                    /* SINO  */
+    ENTRADA = 274,                 /* ENTRADA  */
+    IMPRIMIR = 275,                /* IMPRIMIR  */
+    DEVOLVER = 276,                /* DEVOLVER  */
+    DIRECCION = 277,               /* DIRECCION  */
+    IDENT = 278,                   /* IDENT  */
+    OP_BINARIO = 279,              /* OP_BINARIO  */
+    OP_UNARIO = 280,               /* OP_UNARIO  */
+    OP_TERNARIO = 281,             /* OP_TERNARIO  */
+    PARENTESIS_ABRE = 282,         /* PARENTESIS_ABRE  */
+    PARENTESIS_CIERRA = 283,       /* PARENTESIS_CIERRA  */
+    CORCHETE_ABRE = 284,           /* CORCHETE_ABRE  */
+    CORCHETE_CIERRA = 285,         /* CORCHETE_CIERRA  */
+    COMA = 286,                    /* COMA  */
+    PYC = 287                      /* PYC  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

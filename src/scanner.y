@@ -37,6 +37,7 @@ int num_errores = 0;
 %token LISTA
 %token MIENTRAS
 %token SI
+%token SINO
 %token ENTRADA
 %token IMPRIMIR
 %token DEVOLVER
@@ -65,16 +66,18 @@ int num_errores = 0;
 
 %%
 
-programa: PRINCIPAL bloque;
+programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque;
 
-bloque: INI_BLOQUE declar_de_variables_locales declar_de_subprogs sentencias FIN_BLOQUE;
+bloque: INI_BLOQUE declar_de_variables_locales declar_de_subprogs sentencias FIN_BLOQUE
+      | INI_BLOQUE declar_de_variables_locales declar_de_subprogs FIN_BLOQUE;
 
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
 declar_subprog: cabecera_subprog bloque;
 
-declar_de_variables_locales: INI_VAR variables_locales FIN_VAR;
+declar_de_variables_locales: INI_VAR variables_locales FIN_VAR
+                           |;
 
 variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables;
@@ -87,7 +90,7 @@ varios_identificador: IDENT
 tipo: TIPO_DATO
     | LISTA TIPO_DATO;
 
-cabecera_subprog: tipo IDENT  PARENTESIS_ABRE lista_parametros PARENTESIS_ABRE;
+cabecera_subprog: tipo IDENT  PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA;
 
 lista_parametros: tipo IDENT
     | lista_parametros COMA tipo IDENT
@@ -107,15 +110,14 @@ sentencia: bloque
 
 sentencia_asignacion: IDENT OP_BINARIO expresion PYC;
 
-sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia;
+sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
+            | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia ;
 
 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia;
 
-sentencia_entrada: nomb_entrada lista_variables PYC;
+sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
 
-nomb_entrada: ENTRADA;
-
-sentencia_salida: nomb_salida lista_expresiones_o_cadena PYC;
+sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
 
 lista_variables: IDENT
                | DIRECCION lista_variables
@@ -126,21 +128,25 @@ lista_expresiones_o_cadena: expresion
     | CADENA
     | CADENA DIRECCION lista_expresiones_o_cadena;
 
-nomb_salida: IMPRIMIR DIRECCION;
-
 sentencia_retorno: DEVOLVER expresion PYC;
 
 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     | OP_UNARIO expresion
     | expresion OP_UNARIO
+    | IDENT DIRECCION
     | expresion OP_BINARIO expresion
-    | expresion SIGSIG expresion OP_TERNARIO
+    | expresion SIGSIG expresion
+    | expresion OP_TERNARIO CONSTANTE_NUM
     | IDENT
     | constante
     | funcion
     | lista_constantes;
 
-funcion: IDENT PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA;
+funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
+       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA;
+
+lista_expresiones: lista_expresiones COMA expresion
+                 | expresion;
 
 lista_constantes: lista_constante_booleano
     | lista_constante_entero
