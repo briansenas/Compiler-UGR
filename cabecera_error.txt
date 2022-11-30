@@ -1,0 +1,8 @@
+principal()
+{
+    car funcion (car a, car b car c)
+    {
+        return 0;
+    }
+
+}

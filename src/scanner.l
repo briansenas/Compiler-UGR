@@ -8,7 +8,6 @@
 #include "y.tab.h"
 
 // using namespace std;
-int num_errores = 0;
 %}
 
 %option noyywrap
@@ -22,6 +21,12 @@ GUIONES                 [-_]
 ESPACIO					[" "]
 
 %%
+
+"//".*                           { ECHO; /* DO NOTHING */ }
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { ECHO; /* DO NOTHING */ }
+[/][*]                                    {
+    printf(" \n [Linea %d]: lexical error: no se reconoce la palabra '%s'. ", yylineno, yytext);
+}
 
 "ini_var"                { ECHO;       return(INI_VAR);}
 "fin_var"                { ECHO;       return(FIN_VAR);}
@@ -83,7 +88,7 @@ ESPACIO					[" "]
 }
 
 . {
-    printf(" \nError Léxico en Linea: %d. No se reconoce la palabra '%s'. ", yylineno, yytext);
+    printf(" \n [Linea %d]: lexical error: no se reconoce la palabra '%s'. ", yylineno, yytext);
 }
 
 %%
@@ -91,6 +96,5 @@ ESPACIO					[" "]
 
 void yyerror(const char *msg)
 {
-     fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
-	 num_errores++;
+     fprintf(stderr,"[Linea %d]: %s en la entrada \'%s\'\n", yylineno, msg, yytext) ;
 }

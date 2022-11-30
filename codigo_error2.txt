@@ -1,0 +1,13 @@
+principal()
+{
+    // alsdjklaksdjf
+    /* laskdjfaklsdjf */
+    ini_var
+    entero a b,c,def
+    flotante vf ,h, jk;
+    caracter vc ;
+    booleano vl ;
+    ent··ero pe[0], pe2[0] ;
+    fin_var
+
+}

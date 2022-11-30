@@ -1,0 +1,12 @@
+principal()
+{
+    ini_var
+        entero pe, pe2;
+        listade entero pc;
+    fin_var
+
+    pe = 2+1_3;
+    pe2 = xf*(funcionC(falso,1)  funcionC(verdadero,23))/10.0;
+    pc=pc++'#'@0;
+    pe = pe++10*(20/2000)@?pe;
+}

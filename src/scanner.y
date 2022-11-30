@@ -16,6 +16,7 @@ void yyerror(const char * mensaje);
 
 // A continuación declaramos los nombres simbólicos de los tokens.
 // byacc se encarga de asociar a cada uno un código.
+
 %token INI_VAR
 %token FIN_VAR
 %token PRINCIPAL
@@ -42,10 +43,6 @@ void yyerror(const char * mensaje);
 %token DIRECCION
 %token IDENT
 
-%token OP_BINARIO
-%token OP_UNARIO
-%token OP_TERNARIO
-
 %left OP_BINARIO
 %right OP_UNARIO
 %left OP_TERNARIO
@@ -63,7 +60,8 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque;
+programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
+        | error;
 
 bloque: INI_BLOQUE declar_de_variables_locales declar_de_subprogs sentencias FIN_BLOQUE
       | INI_BLOQUE declar_de_variables_locales declar_de_subprogs FIN_BLOQUE;
