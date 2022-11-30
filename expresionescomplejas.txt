@@ -1,0 +1,36 @@
+principal()
+{
+    ini_var
+        entero a,b;
+        real vf;
+        car vc;
+        float e1, e2;
+    fin_var
+
+    a===b;
+
+    mientras(a===b)
+    
+    vf=vc;
+        si (e1 > 3·5)
+        {
+            a++;
+        }sino
+        {
+            si (e1 ^ && e2)
+            {
+                vc = vc>>;
+            }sinoo
+            {
+                a=4
+            }
+        }
+
+    }
+
+
+
+
+ 
+    devolver 0;
+}

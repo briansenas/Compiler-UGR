@@ -1,0 +1,12 @@
+principal()
+{
+    inii_var
+        entero pe, pe2, p4;
+        real pf, pf2, p1;
+        car pc, pc2, al;
+    finn_var
+
+    pe=2;
+     
+    devolver 0;
+}
