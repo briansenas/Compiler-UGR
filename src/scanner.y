@@ -7,9 +7,6 @@
 int yylex();
 void yyerror(const char * mensaje);
 
-int num_linea = 1;
-int num_errores = 0;
-
 #define YYERROR_VERBOSE
 
 %}
@@ -82,7 +79,8 @@ declar_de_variables_locales: INI_VAR variables_locales FIN_VAR
 variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables;
 
-cuerpo_declar_variables: tipo varios_identificador PYC;
+cuerpo_declar_variables: tipo varios_identificador PYC
+                       | error;
 
 varios_identificador: IDENT
     | varios_identificador COMA IDENT;
@@ -90,7 +88,8 @@ varios_identificador: IDENT
 tipo: TIPO_DATO
     | LISTA TIPO_DATO;
 
-cabecera_subprog: tipo IDENT  PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA;
+cabecera_subprog: tipo IDENT  PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA
+                | error ;
 
 lista_parametros: tipo IDENT
     | lista_parametros COMA tipo IDENT
@@ -140,7 +139,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     | IDENT
     | constante
     | funcion
-    | lista_constantes;
+    | lista_constantes
+    | error ;
 
 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA;
@@ -179,9 +179,3 @@ constante: BOOLEANO
 | CONSTANTE_CAR;
 
 %%
-
-void yyerror(const char *msg)
-{
-     fprintf(stderr,"[Linea %d]: %s\n", num_linea, msg) ;
-	 num_errores++;
-}

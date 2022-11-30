@@ -8,7 +8,7 @@
 #include "y.tab.h"
 
 // using namespace std;
-
+int num_errores = 0;
 %}
 
 %option noyywrap
@@ -87,3 +87,10 @@ ESPACIO					[" "]
 }
 
 %%
+
+
+void yyerror(const char *msg)
+{
+     fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
+	 num_errores++;
+}

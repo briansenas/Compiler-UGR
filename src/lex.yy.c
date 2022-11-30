@@ -570,7 +570,7 @@ char *yytext;
 #include "y.tab.h"
 
 // using namespace std;
-
+int num_errores = 0;
 #line 575 "src/lex.yy.c"
 /* SECCIÓN DE DEFINCIONES */
 #line 577 "src/lex.yy.c"
@@ -2163,4 +2163,11 @@ void yyfree (void * ptr )
 
 #line 89 "./src/scanner.l"
 
+
+
+void yyerror(const char *msg)
+{
+     fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
+	 num_errores++;
+}
 
