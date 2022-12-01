@@ -1,0 +1,12 @@
+principal()
+{
+    ini_var
+        entero a,b;
+        real vf;
+        car vc;
+    fin_var
+    
+    3 = 4;
+ 
+    devolver 0;
+}

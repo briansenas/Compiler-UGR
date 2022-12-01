@@ -1,0 +1,14 @@
+principal()
+{
+    ini_var
+        entero a, b, c, d;
+    fin_var
+
+    a = 1;
+    b = 2;
+    c = 3;
+    d = (a + b) * c;
+
+     
+    devolver 0;
+}
