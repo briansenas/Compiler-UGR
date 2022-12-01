@@ -22,11 +22,6 @@ ESPACIO					[" "]
 
 %%
 
-"//".*                           { ECHO; /* DO NOTHING */ }
-[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { ECHO; /* DO NOTHING */ }
-[/][*]                                    {
-    printf(" \n [Linea %d]: lexical error: no se reconoce la palabra '%s'. ", yylineno, yytext);
-}
 
 "ini_var"                { ECHO;       return(INI_VAR);}
 "fin_var"                { ECHO;       return(FIN_VAR);}
@@ -80,6 +75,13 @@ ESPACIO					[" "]
 \"[^\"]*\"				  { ECHO;       return(CADENA);}
 {LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; return(IDENT);}
 
+
+"//".*                           { /* DO NOTHING */ }
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ }
+[/][*]                                    {
+    printf(" \n [Linea %d]: lexical error: comentario sin cerrar'%s'. ", yylineno, yytext);
+}
+
 [ \t] {
     ECHO;
 }
@@ -96,5 +98,5 @@ ESPACIO					[" "]
 
 void yyerror(const char *msg)
 {
-     fprintf(stderr,"[Linea %d]: %s en la entrada \'%s\'\n", yylineno, msg, yytext) ;
+     fprintf(stderr,"[Linea %d]: %s antes de la entrada \'%s\'\n", yylineno, msg, yytext) ;
 }
