@@ -90,7 +90,7 @@ ESPACIO					[" "]
 }
 
 . {
-    printf(" \n [Linea %d]: lexical error: no se reconoce la palabra '%s'. ", yylineno, yytext);
+    printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 
 %%
