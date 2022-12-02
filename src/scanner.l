@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include "./../include/scanner.h"
-#include "y.tab.h"
+#include "./../include/scanner.h"
+// #include "y.tab.h"
 
 // using namespace std;
 %}
@@ -51,21 +51,21 @@ ESPACIO					[" "]
 "#"                              { ECHO; return(OP_UNARIO);}
 "?"                       { ECHO;       return(OP_UNARIO);}
 "$"                       { ECHO;       return(OP_UNARIO);}
-"-"                       { ECHO;       return(OP_BINARIO);}
-"+"                       { ECHO;       return(OP_BINARIO);}
-"="                       { ECHO;       return(OP_BINARIO);}
-"*"                       { ECHO;       return(OP_BINARIO);}
-"/"                       { ECHO;       return(OP_BINARIO);}
-"&&"                      { ECHO;       return(OP_BINARIO);}
-"||"                      { ECHO;       return(OP_BINARIO);}
-"^"                       { ECHO;       return(OP_BINARIO);}
-"<"                       { ECHO;       return(OP_BINARIO);}
-">"                       { ECHO;       return(OP_BINARIO);}
-"<="                      { ECHO;       return(OP_BINARIO);}
-">="                      { ECHO;       return(OP_BINARIO);}
-"=="                      { ECHO;       return(OP_BINARIO);}
-"!="                      { ECHO;       return(OP_BINARIO);}
-"%"                       { ECHO;       return(OP_BINARIO);}
+"-"                       { ECHO;       return(OP_ADITIVO);}
+"+"                       { ECHO;       return(OP_ADITIVO);}
+"="                       { ECHO;       return(OP_ASIGNACION);}
+"*"                       { ECHO;       return(OP_MULTIPLICATIVO);}
+"/"                       { ECHO;       return(OP_MULTIPLICATIVO);}
+"&&"                      { ECHO;       return(OP_AND);}
+"||"                      { ECHO;       return(OP_OR);}
+"^"                       { ECHO;       return(OP_XOR);}
+"<"                       { ECHO;       return(OP_RELACION);}
+">"                       { ECHO;       return(OP_RELACION);}
+"<="                      { ECHO;       return(OP_RELACION);}
+">="                      { ECHO;       return(OP_RELACION);}
+"=="                      { ECHO;       return(OP_IGUALDAD);}
+"!="                      { ECHO;       return(OP_IGUALDAD);}
+"%"                       { ECHO;       return(OP_MULTIPLICATIVO);}
 "**"                      { ECHO;       return(OP_BINARIO);}
 ","                       { ECHO;       return(COMA);}
 {DIGITO}+				  { ECHO;       return(CONSTANTE_NUM);}

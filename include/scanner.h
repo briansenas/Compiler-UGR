@@ -8,7 +8,7 @@
 #define CORCHETE_ABRE 284
 #define CORCHETE_CIERRA 285
 #define CONSTANTE_NUM 266
-#define CONSTANTE_CHAR 267
+#define CONSTANTE_CAR 267
 #define CONSTANTE_FLOAT 268
 #define TIPO_DATO 269
 #define LISTA 270
@@ -29,3 +29,11 @@
 #define PYC 285
 #define COMA 286
 #define SINO 287
+#define OP_ASIGNACION 288
+#define OP_ADITIVO 289
+#define OP_MULTIPLICATIVO 290
+#define OP_XOR 291
+#define OP_OR 292
+#define OP_AND 293
+#define OP_RELACION 294
+#define OP_IGUALDAD 295

@@ -575,8 +575,8 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include "./../include/scanner.h"
-#include "y.tab.h"
+#include "./../include/scanner.h"
+// #include "y.tab.h"
 
 // using namespace std;
 #line 583 "src/lex.yy.c"
@@ -1012,77 +1012,77 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 54 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_ADITIVO);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 55 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_ADITIVO);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 56 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_ASIGNACION);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 57 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 58 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 59 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_AND);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 60 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_OR);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 61 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_XOR);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 62 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_RELACION);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 63 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_RELACION);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 64 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_RELACION);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 65 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_RELACION);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 66 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_IGUALDAD);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 67 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_IGUALDAD);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 68 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
@@ -1163,7 +1163,7 @@ case 57:
 YY_RULE_SETUP
 #line 92 "./src/scanner.l"
 {
-    printf(" \n [Linea %d]: lexical error: no se reconoce la palabra '%s'. ", yylineno, yytext);
+    printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 58:
