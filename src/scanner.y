@@ -17,6 +17,20 @@ void yyerror(const char * mensaje);
 // A continuación declaramos los nombres simbólicos de los tokens.
 // byacc se encarga de asociar a cada uno un código.
 
+%left OP_OR expresion
+%left OP_AND expresion
+%left OP_XOR expresion
+%left OP_RELACION expresion
+%left OP_MULTIPLICATTIVO expresion
+%left OP_IGUALDAD expresion
+%left OP_ADITIVO expresion
+%left OP_ASIGNACION expresion
+
+%left OP_BINARIO
+%right OP_UNARIO
+%left OP_TERNARIO
+%left SIGSIG
+
 %token INI_VAR
 %token FIN_VAR
 %token PRINCIPAL
@@ -28,8 +42,6 @@ void yyerror(const char * mensaje);
 %token CONSTANTE_CAR
 %token CONSTANTE_FLOAT
 %token TIPO_DATO
-
-%token SIGSIG
 
 %token CADENA
 %token LISTA
@@ -43,10 +55,6 @@ void yyerror(const char * mensaje);
 %token DIRECCION
 %token IDENT
 
-%left OP_BINARIO
-%right OP_UNARIO
-%left OP_TERNARIO
-%left SIGSIG
 
 %token PARENTESIS_ABRE
 %token PARENTESIS_CIERRA
@@ -132,8 +140,17 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     | expresion OP_UNARIO
     | IDENT DIRECCION
     | expresion OP_BINARIO expresion
-    | expresion SIGSIG expresion
+    | expresion SIGSIG
+    | SIGSIG expresion
     | expresion OP_TERNARIO CONSTANTE_NUM
+    | expresion OP_OR expresion
+    | expresion OP_AND expresion
+    | expresion OP_XOR expresion
+    | expresion OP_RELACION expresion
+    | expresion OP_MULTIPLICATTIVO expresion
+    | expresion OP_IGUALDAD expresion
+    | expresion OP_ADITIVO expresion
+    | expresion OP_ASIGNACION expresion
     | IDENT
     | constante
     | funcion
