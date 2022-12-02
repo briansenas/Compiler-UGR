@@ -5,8 +5,12 @@ principal()
         real vf;
         car vc;
     fin_var
-    
+
     3 = 4;
- 
+
+    3 = 6;
+
+    azul = -2.2º,;
+
     devolver 0;
 }

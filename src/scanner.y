@@ -12,7 +12,7 @@ void yyerror(const char * mensaje);
 %}
 
 // %error-verbose
-//%define parse.error verbose
+%define parse.error verbose
 
 // A continuación declaramos los nombres simbólicos de los tokens.
 // byacc se encarga de asociar a cada uno un código.
@@ -23,13 +23,24 @@ void yyerror(const char * mensaje);
 %token INI_BLOQUE
 %token FIN_BLOQUE
 
+%left OP_OR
+%left OP_AND
+%left OP_XOR
+%left OP_IGUALDAD
+%left OP_RELACION
+%left OP_ADITIVO
+%left SIGSIG
+%left OP_MULTIPLICATIVO
+
+%right OP_UNARIO
+%left OP_TERNARIO
+
+%token OP_ASIGNACION
 %token BOOLEANO
 %token CONSTANTE_NUM
 %token CONSTANTE_CAR
 %token CONSTANTE_FLOAT
 %token TIPO_DATO
-
-%token SIGSIG
 
 %token CADENA
 %token LISTA
@@ -42,11 +53,6 @@ void yyerror(const char * mensaje);
 
 %token DIRECCION
 %token IDENT
-
-%left OP_BINARIO
-%right OP_UNARIO
-%left OP_TERNARIO
-%left SIGSIG
 
 %token PARENTESIS_ABRE
 %token PARENTESIS_CIERRA
@@ -105,7 +111,7 @@ sentencia: bloque
     | sentencia_salida
     | sentencia_retorno;
 
-sentencia_asignacion: IDENT OP_BINARIO expresion PYC;
+sentencia_asignacion: IDENT OP_ASIGNACION expresion PYC;
 
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia ;
@@ -131,9 +137,16 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     | OP_UNARIO expresion
     | expresion OP_UNARIO
     | IDENT DIRECCION
-    | expresion OP_BINARIO expresion
-    | expresion SIGSIG expresion
     | expresion OP_TERNARIO CONSTANTE_NUM
+    | expresion OP_OR expresion
+    | expresion OP_AND expresion
+    | expresion OP_XOR expresion
+    | expresion OP_RELACION expresion
+    | expresion OP_MULTIPLICATIVO expresion
+    | expresion OP_IGUALDAD expresion
+    | expresion OP_ADITIVO expresion
+    | OP_ADITIVO expresion %prec OP_UNARIO
+    | expresion SIGSIG expresion
     | IDENT
     | constante
     | funcion

@@ -9,13 +9,14 @@ principal()
 
     a===b;
 
-    mientras(a===b)
-    
-    vf=vc;
-        si (e1 > 3·5)
-        {
-            a++;
-        }sino
+    mientras(a===b){
+        vf=vc;
+    }
+
+        si (e1 > 3·5){
+            a = 1;
+        }
+        sino
         {
             si (e1 ^ && e2)
             {
@@ -31,6 +32,6 @@ principal()
 
 
 
- 
+
     devolver 0;
 }

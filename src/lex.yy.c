@@ -575,8 +575,8 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./../include/scanner.h"
-// #include "y.tab.h"
+// #include "./../include/scanner.h"
+#include "y.tab.h"
 
 // using namespace std;
 #line 583 "src/lex.yy.c"
@@ -1087,7 +1087,7 @@ YY_RULE_SETUP
 case 44:
 YY_RULE_SETUP
 #line 69 "./src/scanner.l"
-{ ECHO;       return(OP_BINARIO);}
+{ ECHO;       return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
