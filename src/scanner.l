@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 // #include "./../include/scanner.h"
-#include "y.tab.h"
+// #include "y.tab.h"
 
 // using namespace std;
 %}
@@ -28,11 +28,11 @@ ESPACIO					[" "]
 "principal"             { ECHO; return(PRINCIPAL);}
 "}"                       { ECHO;       return(FIN_BLOQUE);}
 "{"                       { ECHO;       return(INI_BLOQUE);}
-"entero"                  { ECHO;       return(TIPO_DATO);}
-"real"                    { ECHO;       return(TIPO_DATO);}
-"car"                { ECHO;       return(TIPO_DATO);}
-"bool"                { ECHO;       return(TIPO_DATO);}
-"listade"                { ECHO;       return(LISTA);}
+"entero"                  { ECHO; yylval.tipoDato=entero; return(TIPO_DATO);}
+"real"                    { ECHO; yylval.tipoDato=real; return(TIPO_DATO);}
+"car"                { ECHO;      yylval.tipoDato=caracter;return(TIPO_DATO);}
+"bool"                { ECHO;     yylval.tipoDato=booleano;return(TIPO_DATO);}
+"listade"                { ECHO;    yylval.tipoDato=lista; return(LISTA);}
 "si"                      { ECHO;       return(SI);}
 "sino"                      { ECHO;       return(SINO);}
 "devolver"                { ECHO;       return(DEVOLVER);}
@@ -47,33 +47,34 @@ ESPACIO					[" "]
 "++"                             { ECHO; return(SIGSIG);}
 "--"                             { ECHO; return(SIGSIG);}
 "@"                              { ECHO; return(OP_TERNARIO);}
-"!"                              { ECHO; return(OP_UNARIO);}
-"#"                              { ECHO; return(OP_UNARIO);}
-"?"                       { ECHO;       return(OP_UNARIO);}
-"$"                       { ECHO;       return(OP_UNARIO);}
-"-"                       { ECHO;       return(OP_ADITIVO);}
-"+"                       { ECHO;       return(OP_ADITIVO);}
+"!"                              { ECHO; yylval.attr=0; return(OP_UNARIO);}
+"#"                              { ECHO; yylval.attr=1; return(OP_UNARIO);}
+"?"                       { ECHO;       yylval.attr=2; return(OP_UNARIO);}
+"$"                       { ECHO;       yylval.attr=3; return(OP_UNARIO);}
+"-"                       { ECHO;       yylval.attr=1; return(OP_ADITIVO);}
+"+"                       { ECHO;       yylval.attr=0; return(OP_ADITIVO);}
 "="                       { ECHO;       return(OP_ASIGNACION);}
-"*"                       { ECHO;       return(OP_MULTIPLICATIVO);}
-"/"                       { ECHO;       return(OP_MULTIPLICATIVO);}
+"*"                       { ECHO;       yylval.attr=0; return(OP_MULTIPLICATIVO);}
+"/"                       { ECHO;       yylval.attr=1; return(OP_MULTIPLICATIVO);}
 "&&"                      { ECHO;       return(OP_AND);}
 "||"                      { ECHO;       return(OP_OR);}
 "^"                       { ECHO;       return(OP_XOR);}
-"<"                       { ECHO;       return(OP_RELACION);}
-">"                       { ECHO;       return(OP_RELACION);}
-"<="                      { ECHO;       return(OP_RELACION);}
-">="                      { ECHO;       return(OP_RELACION);}
-"=="                      { ECHO;       return(OP_IGUALDAD);}
-"!="                      { ECHO;       return(OP_IGUALDAD);}
-"%"                       { ECHO;       return(OP_MULTIPLICATIVO);}
-"**"                      { ECHO;       return(OP_MULTIPLICATIVO);}
+"<"                       { ECHO;       yylval.attr=0; return(OP_RELACION);}
+">"                       { ECHO;       yylval.attr=1; return(OP_RELACION);}
+"<="                      { ECHO;       yylval.attr=2; return(OP_RELACION);}
+">="                      { ECHO;       yylval.attr=3; return(OP_RELACION);}
+"=="                      { ECHO;       yylval.attr=0; return(OP_IGUALDAD);}
+"!="                      { ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
+"%"                       { ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
+"**"                      { ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 ","                       { ECHO;       return(COMA);}
-{DIGITO}+				  { ECHO;       return(CONSTANTE_NUM);}
-{DIGITO}+"."{DIGITO}+	  { ECHO;       return(CONSTANTE_FLOAT);}
-\'[^\"\']?\'               { ECHO;       return(CONSTANTE_CAR);}
-("Verdadero"|"Falso")	  { ECHO;       return(BOOLEANO);}
+{DIGITO}+				  { ECHO;    yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{DIGITO}+"."{DIGITO}+	  { ECHO;    yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+\'[^\"\']?\'               { ECHO;   yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+"Verdadero"                 { ECHO; yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+"Falso"                 { ECHO; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 \"[^\"]*\"				  { ECHO;       return(CADENA);}
-{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; return(IDENT);}
+{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; yylval.nombre=strdup(yytext); return(IDENT);}
 
 
 "//".*                           { /* DO NOTHING */ }
@@ -96,7 +97,3 @@ ESPACIO					[" "]
 %%
 
 
-void yyerror(const char *msg)
-{
-     fprintf(stderr,"[Linea %d]: %s antes de la entrada \'%s\'\n", yylineno, msg, yytext) ;
-}

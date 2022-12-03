@@ -9,26 +9,25 @@ typedef enum {
 	variable,//VAR,
 	parametro_formal,//FORM
 
-} tIn;
+} tipoEntrada;
 
 typedef enum {
 
 	entero,//NOT_ASIG = 0,
 	real,//ENTERO,
-	caracter,//FLOTANTE -> ES REAL
-	booleano,//CARACTER,
-	lista,//BOOLEANO,
-	desconocido,//STRING,
-	no_asignado,//MATRIZ,
-	//NA habria que añadir flotante??????
+	caracter,//CARACTER,
+	booleano,//BOOLEANO,
+	lista,
+	desconocido,
+    na,
 
-} tData;
+} dtipo;
 
 typedef struct {
 
-	tIn entrada;//in;
+	tipoEntrada entrada;//in;
 	char *nombre;//*lex;
-	tData tipoDato;//type;
+	dtipo tipoDato;//type;
 	unsigned int nParam;
 	unsigned int nDim;
 
@@ -38,36 +37,35 @@ typedef struct {
 	// Tamaño de la dimensión 2
 	int tamDimen2;//tDim2;
 
-} inTS;
+} entradaTS;
 
 typedef struct {
 
 	int attr;
-	char *lex;
-	tData type;
+	char *nombre;
+	dtipo tipoDato;
 	unsigned int nDim;
-
 	// Tamaño de la dimensión 1
-	int tDim1;
+	int tamDimen1;
+    // Tamaño de la dimensión 2
+	int tamDimen2;
 
-	// Tamaño de la dimensión 2
-	int tDim2;
+} atributos;
 
-} attrs;
+#define YYSTYPE atributos
 
-#define YYSTYPE attrs
-#define MAX_IN 1000
+#define MAX_IN 500
 
-extern long int TOPE=0;//LIMIT;
+extern long int TOPE;//LIMIT;
 
-extern inTS ts[MAX_IN];
+extern entradaTS ts[MAX_IN];
 
 // Línea del fichero que se está analizando
 extern int line;
 
 // Se indica si se están utilizando las variables (0) o si se están declarando
 // (1), (2) llamada desde expresión
-extern int decVar;
+extern int decvariable;
 
 // Indica el comienzo de un subprograma o función con 0 si es un bloque y 1 si
 // es la cabecera del subprograma
@@ -79,7 +77,7 @@ extern int decParam;
 extern int decFunction;
 
 // Variable global que almacena el tipo en las declaraciones
-extern tData globalType;
+extern dtipo globalType;
 
 // Cuenta el número de parámetros de una función
 extern int nParam;
@@ -89,20 +87,20 @@ extern int currentFunction;
 extern int aux;
 
 // Devuelve si el atributo es array o no
-int isList(attrs e);
+int isList(atributos e);
 
 // Devuelve si los dos posibles arrays que recibe tienen el mismo tamaño
-int equalSize(attrs e1, attrs e2);
+int equalSize(atributos e1, atributos e2);
 
 // Guarda el tipo de la variable
-int setType(attrs value);
+int setType(atributos value);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Tabla de Símbolos
 //
 
 // Inserta una entrada en la tabla de símbolos
-int tsAddIn(inTS in);
+int tsAddIn(entradaTS in);
 
 // Elimina una entrada de la tabla de símbolos
 int tsDelIn();
@@ -111,25 +109,25 @@ int tsDelIn();
 void tsCleanIn();
 
 // Busca una entrada según el identificador
-int tsSearchId(attrs e);
+int tsSearchId(atributos e);
 
 // Busca una entrada según el nombre
-int tsSearchName(attrs e);
+int tsSearchName(atributos e);
 
 // Añade un identificador
-void tsAddId(attrs e);
+void tsAddId(atributos e);
 
 // Añade una marca de tope
 void tsAddMark();
 
 // Añade una entrada de subprograma
-void tsAddSubprog(attrs e);
+void tsAddSubprog(atributos e);
 
 // Añade una entrada de parametro formal
-void tsAddParam(attrs e);
+void tsAddParam(atributos e);
 
 // Actualiza el número de parámetros de la función
-void tsUpdateNparam(attrs e);
+void tsUpdateNparam(atributos e);
 
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -142,40 +140,43 @@ void tsUpdateNparam(attrs e);
 int tsGetNextFunction();
 
 // Comprueba si el tipo de la expresión coincide con lo que devuelve la función
-void tsCheckReturn(attrs expr, attrs* res);
+void tsCheckReturn(atributos expr, atributos* res);
 
 // Devuelve el identificar
-void tsGetId(attrs id, attrs* res);
+void tsGetId(atributos id, atributos* res);
 
 // Realiza la comprobación de la operación !, &, ~
-void tsOpUnary(attrs op, attrs o, attrs* res);
+void tsOpUnary(atributos op, atributos o, atributos* res);
 
 // Realiza la comprobación de la operación +, -
-void tsOpSign(attrs op, attrs o, attrs* res);
+void tsOpSign(atributos op, atributos o, atributos* res);
 
 // Realiza la comprobación de la operación +, - binaria
-void tsOpSignBin(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpSignBin(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación *, /
-void tsOpMul(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación &&
-void tsOpAnd(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación ||
-void tsOpOr(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res);
+
+// Realiza la comprobación de la operación XOR
+void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación ==, !=
-void tsOpEqual(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación <, >, <=, >=, <>
-void tsOpRel(attrs o1, attrs op, attrs o2, attrs* res);
+void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la llamada a una función
-void tsFunctionCall(attrs id, attrs* res);
+void tsFunctionCall(atributos id, atributos* res);
 
 // Realiza la comprobación de cada parámetro de una función
-void tsCheckParam(attrs param, int checkParam);
+void tsCheckParam(atributos param, int checkParam);
 
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,13 +189,13 @@ void tsCheckParam(attrs param, int checkParam);
 void printIn(int row);
 
 // Muestra el tipo de la entrada
-void printInType(tIn tipo);
+void printInType(tipoEntrada tipo);
 
 // Muestra el tipo del dato recibido
-void printDataType(tData type);
+void printDataType(dtipo type);
 
 // Muestra la tabla de símbolos
 void printTS();
 
 // Muestra un atributo recibido
-void printAttr(attrs e, char *t);
+void printAttr(atributos e, char *t);

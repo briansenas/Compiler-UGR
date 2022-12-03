@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "y.tab.h"
-#include "/include/scansemantic.h"
+// #include "y.tab.h"
+#include "../include/scansemantic.h"
 
-int yylex();
+// int yylex();
 void yyerror(const char * mensaje);
 
 #define YYERROR_VERBOSE
@@ -70,12 +70,12 @@ void yyerror(const char * mensaje);
 programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
         | error;
 
-bloque: INI_BLOQUE 
+bloque: INI_BLOQUE
         {tsAddMark();}
         bloque2
         FIN_BLOQUE
         {tsCleanIn();}
-      
+
 bloque2: declar_de_variables_locales declar_de_subprogs sentencias
        | declar_de_variables_locales declar_de_subprogs;
 
@@ -84,7 +84,7 @@ declar_de_subprogs: declar_de_subprogs declar_subprog
 
 declar_subprog: cabecera_subprog {subProg=1;} bloque {subProg=0;};
 
-declar_de_variables_locales: INI_VAR {decVar=1;} variables_locales FIN_VAR {decVar=0;}
+declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
                            |;
 
 variables_locales: variables_locales cuerpo_declar_variables
@@ -106,8 +106,8 @@ lista_parametros: tipo IDENT
     | lista_parametros COMA tipo IDENT
     |;
 
-sentencias: sentencias {decVar=2;} sentencia
-    |{decVar=2;} sentencia;
+sentencias: sentencias {decvariable=2;} sentencia
+    |{decvariable=2;} sentencia;
 
 
 sentencia: bloque
@@ -122,7 +122,7 @@ sentencia_asignacion: IDENT OP_ASIGNACION expresion PYC{
     if($1.tipoDato != $3.tipoDato){
         printf("they are not equal \n");
     }
-    if(!equalSize($1,$3){
+    if(!equalSize($1,$3)){
         printf("size is not equal \n");
     }
 
@@ -205,3 +205,14 @@ constante: BOOLEANO
 | CONSTANTE_CAR;
 
 %%
+
+#ifdef DOSWINDOWS /* Variable de entorno que indica la plataforma */
+#include "lexyy.c"
+#else
+#include "lex.yy.c"
+#endif
+
+void yyerror(const char *msg)
+{
+     fprintf(stderr,"[Linea %d]: %s \n", yylineno, msg) ;
+}

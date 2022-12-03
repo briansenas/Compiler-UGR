@@ -1,26 +1,25 @@
+#include "../include/scansemantic.h"
 
-#include "/include/scansemantic.h"
-
-inTS ts[MAX_IN];
+entradaTS ts[MAX_IN];
 int line = 1;
 long int TOPE = 0;
 int decvariable = 0;
 int decParam = 0;
 int decfuncion = 0;
 int subProg = 0;
-tData globaltipoDato= no_asignado;
+dtipo globaltipoDato= na;
 int nParam = 0;
 int currentfuncion = -1;
 int aux = 0;
 
 // Devuelve si el atributo es lista o no
-int isList(attrs e){
+int isList(atributos e){
 
     return (e.nDim!=0);
 }
 
 // Devuelve si los dos posibles arrays que recibe tienen el mismo tamaño
-int equalSize(attrs e1, attrs e2){
+int equalSize(atributos e1, atributos e2){
 
     return (e1.nDim == e2.nDim &&
         e1.tamDimen1 == e2.tamDimen1 &&
@@ -29,7 +28,7 @@ int equalSize(attrs e1, attrs e2){
 }
 
 // Guarda el tipoDatode la variableiable
-int setType(attrs value){
+int setType(atributos value){
 
     globaltipoDato= value.tipoDato;
 
@@ -40,7 +39,7 @@ int setType(attrs value){
 //
 
 // Inserta una in en la tabla de símbolos
-int tsAddIn(inTS in){
+int tsAddIn(entradaTS in){
 
     // Si se tienen más entradas de las que puede alojar la tabla de símbolos
     // dará un error, si no, se inserta
@@ -93,15 +92,15 @@ int tsDelIn(){
 // Elimina las entradas de la tabla de símbolos hasta la marca de tope
 void tsCleanIn(){
 
-    while(ts[TOPE-1].in != marca && TOPE > 0){
+    while(ts[TOPE-1].entrada != marca && TOPE > 0){
 		TOPE--;
 	}
-	if (ts[TOPE-1].in == marca) {
+	if (ts[TOPE-1].entrada == marca) {
 		TOPE--;
 	}
 
-    if (ts[TOPE-1].in == parametro_formal) {
-        while(ts[TOPE-1].in != funcion && TOPE > 0){
+    if (ts[TOPE-1].entrada == parametro_formal) {
+        while(ts[TOPE-1].entrada != funcion && TOPE > 0){
     		TOPE--;
     	}
         TOPE--;
@@ -110,13 +109,13 @@ void tsCleanIn(){
 }
 
 // Busca una entrada según el id
-int tsSearchId(attrs e){
+int tsSearchId(atributos e){
 
     int i = TOPE - 1;
 	int found = 0;
 
-	while (i > 0 && !found /*&& ts[i].in != marca*/) {
-		if (ts[i].in == variable && strcmp(e.nombre, ts[i].nombre) == 0) {
+	while (i > 0 && !found /*&& ts[i].entrada != marca*/) {
+		if (ts[i].entrada == variable && strcmp(e.nombre, ts[i].nombre) == 0) {
 			found = 1;
 		} else{
 			i--;
@@ -133,14 +132,14 @@ int tsSearchId(attrs e){
 }
 
 // Busca una in según el nombre
-int tsSearchName(attrs e){
+int tsSearchName(atributos e){
 
     int i = TOPE - 1;
 	int found = 0;
 
 
-	while (i > 0 && !found /*&& ts[i].in != marca*/) {
-		if (ts[i].in == funcion && strcmp(e.nombre, ts[i].nombre) == 0) {
+	while (i > 0 && !found /*&& ts[i].entrada != marca*/) {
+		if (ts[i].entrada == funcion && strcmp(e.nombre, ts[i].nombre) == 0) {
 			found = 1;
 		} else{
 			i--;
@@ -157,7 +156,7 @@ int tsSearchName(attrs e){
 }
 
 // Añade un id
-void tsAddId(attrs e){
+void tsAddId(atributos e){
 
     // Para añadir un id a la pila no se puede haber llegado al tope,
     // el id no puede existir y se deben estar declarando variableiables
@@ -166,7 +165,7 @@ void tsAddId(attrs e){
 
 	if(j >= 0 && decvariable == 1){
 		// Se obtiene la posición de la marca del bloque
-		while((ts[j].in != marca) && (j >= 0) && !found){
+		while((ts[j].entrada != marca) && (j >= 0) && !found){
 
 			if(strcmp(ts[j].nombre, e.nombre) != 0){
 
@@ -184,10 +183,10 @@ void tsAddId(attrs e){
 		// Si no se ha encontrado significa que no existe, por lo que se añade
         // a la pila
 		if(!found) {
-			inTS newIn;
-			newIn.in = variable;
+			entradaTS newIn;
+			newIn.entrada = variable;
 			newIn.nombre = e.nombre;
-			newIn.tipoDato= globalType;
+			newIn.tipoDato= globaltipoDato;
 			newIn.nParam = 0;
 			newIn.nDim=e.nDim;
 			newIn.tamDimen1=e.tamDimen1;
@@ -200,13 +199,13 @@ void tsAddId(attrs e){
 }
 
 // Añade una marca de tope
-void tsAddmarca(){
+void tsAddMark(){
 
-    inTS inInitScope;
+    entradaTS inInitScope;
 
 	inInitScope.entrada = marca;
 	inInitScope.nombre = "{";
-	inInitScope.tipoDato= no_asignado;
+	inInitScope.tipoDato= na;
 	inInitScope.nParam = 0;
 	inInitScope.nDim = 0;
 	inInitScope.tamDimen1 = 0;
@@ -228,7 +227,7 @@ void tsAddmarca(){
 
 			if(ts[j].entrada == parametro_formal) {
 
-				inTS newIn;
+				entradaTS newIn;
 				newIn.entrada = variable;
 				newIn.nombre = ts[j].nombre;
 				newIn.tipoDato= ts[j].tipoDato;
@@ -249,9 +248,9 @@ void tsAddmarca(){
 }
 
 // Añade una in de subprograma
-void tsAddSubprog(attrs e){
+void tsAddSubprog(atributos e){
 
-  inTS inSubProg;
+  entradaTS inSubProg;
 	inSubProg.entrada = funcion;
 	inSubProg.nombre = e.nombre;
 	inSubProg.nParam = 0;
@@ -266,7 +265,7 @@ void tsAddSubprog(attrs e){
 }
 
 // Añade una in de param parametro_formalal
-void tsAddParam(attrs e){
+void tsAddParam(atributos e){
 
     int j = TOPE - 1, found = 0;
 
@@ -287,7 +286,7 @@ void tsAddParam(attrs e){
 
 	if(!found) {
 
-		inTS newIn;
+		entradaTS newIn;
 		newIn.entrada = parametro_formal;
 		newIn.nombre = e.nombre;
 		newIn.tipoDato= globaltipoDato;
@@ -302,7 +301,7 @@ void tsAddParam(attrs e){
 }
 
 // Actualiza el número de parámetros de la función
-void tsUpdateNparam(attrs e){
+void tsUpdateNparam(atributos e){
 
     ts[currentfuncion].nParam = nParam;
 	ts[currentfuncion].nDim=e.nDim;
@@ -343,7 +342,7 @@ int tsGetNextfuncion(){
 }
 
 // Comprueba si el tipoDatode la expresión coincide con lo que devuelve la función
-void tsCheckReturn(attrs expr, attrs* res){
+void tsCheckReturn(atributos expr, atributos* res){
 
     int index = tsGetNextfuncion();
 
@@ -355,7 +354,7 @@ void tsCheckReturn(attrs expr, attrs* res){
 			return;
 		}
 
-		attrs tmp;
+		atributos tmp;
 		tmp.nDim = ts[index].nDim;
 		tmp.tamDimen1 = ts[index].tamDimen1;
 		tmp.tamDimen2 = ts[index].tamDimen2;
@@ -380,7 +379,7 @@ void tsCheckReturn(attrs expr, attrs* res){
 }
 
 // Devuelve el identificar
-void tsGetId(attrs id, attrs* res){
+void tsGetId(atributos id, atributos* res){
 
     int index = tsSearchId(id);
 
@@ -400,7 +399,7 @@ void tsGetId(attrs id, attrs* res){
 }
 
 // Realiza la comprobación de la operación !, &, ~
-void tsOpUnary(attrs op, attrs o, attrs* res){
+void tsOpUnary(atributos op, atributos o, atributos* res){
 
     if (o.tipoDato!= booleano || isList(o)) {
 		printf("Semantic Error(%d): Not operator expects logic expression.", line);
@@ -414,7 +413,7 @@ void tsOpUnary(attrs op, attrs o, attrs* res){
 }
 
 // Realiza la comprobación de la operación +, -
-void tsOpSign(attrs op, attrs o, attrs* res){
+void tsOpSign(atributos op, atributos o, atributos* res){
 
     if ((o.tipoDato!= real && o.tipoDato!= entero) || isList(o)) {
 		printf("Semantic Error(%d): Operator expects integer or real expression.", line);
@@ -428,7 +427,7 @@ void tsOpSign(attrs op, attrs o, attrs* res){
 }
 
 // Realiza la comprobación de la operación +, - binaria
-void tsOpSignBin(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpSignBin(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 	    printf("Semantic Error(%d): Expressions must be equals types.", line);
@@ -490,7 +489,7 @@ void tsOpSignBin(attrs o1, attrs op, attrs o2, attrs* res){
 }
 
 // Realiza la comprobación de la operación *, /
-void tsOpMul(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 		printf("Semantic Error(%d): Expressions must be same types.", line);
@@ -552,7 +551,25 @@ void tsOpMul(attrs o1, attrs op, attrs o2, attrs* res){
 }
 
 // Realiza la comprobación de la operación &&
-void tsOpAnd(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
+
+    if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error (%d): Expressions must be same types.", line);
+		return;
+	}
+	if (o1.tipoDato!= booleano || isList(o1) || isList(o2)) {
+		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects booleano", line);
+		return;
+	}
+
+	res->tipoDato= booleano;
+	res->nDim = 0;
+	res->tamDimen1 = 0;
+	res->tamDimen2 = 0;
+
+}
+
+void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 		printf("Semantic Error (%d): Expressions must be same types.", line);
@@ -571,7 +588,7 @@ void tsOpAnd(attrs o1, attrs op, attrs o2, attrs* res){
 }
 
 // Realiza la comprobación de la operación ||
-void tsOpOr(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 		printf("Semantic Error (%d): Expressions must be same types.", line);
@@ -590,7 +607,7 @@ void tsOpOr(attrs o1, attrs op, attrs o2, attrs* res){
 }
 
 // Realiza la comprobación de la operación ==, !=
-void tsOpEqual(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 		printf("Semantic Error (%d): Expressions must be same types.", line);
@@ -609,7 +626,7 @@ void tsOpEqual(attrs o1, attrs op, attrs o2, attrs* res){
 }
 
 // Realiza la comprobación de la operación <, >, <=, >=, <>
-void tsOpRel(attrs o1, attrs op, attrs o2, attrs* res){
+void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 
@@ -634,7 +651,7 @@ void tsOpRel(attrs o1, attrs op, attrs o2, attrs* res){
 
 
 // Realiza la comprobación de la llamada a una función
-void tsfuncionCall(attrs id, attrs* res){
+void tsfuncionCall(atributos id, atributos* res){
 
     int index = tsSearchName(id);
 
@@ -664,7 +681,7 @@ void tsfuncionCall(attrs id, attrs* res){
 }
 
 // Realiza la comprobación de cada parámetro de una función
-void tsCheckParam(attrs param, int checkParam){
+void tsCheckParam(atributos param, int checkParam){
 
     int posParam = (currentfuncion + ts[currentfuncion].nParam) - (checkParam - 1);
 
@@ -692,21 +709,21 @@ void tsCheckParam(attrs param, int checkParam){
 // Muestra una in de la tabla de símbolos
 void printIn(int row){
 
-    inTS e = ts[row];
+    entradaTS e = ts[row];
 	printf("\n\nTipo Entrada: %d\nLexema: %s\nTipo Dato: %d\nNum Parametros: %d\nDimensiones[i][j]: %d[%d][%d]\n",
 		e.entrada, e.nombre, e.tipoDato, e.nParam, e.nDim, e.tamDimen1, e.tamDimen2);
 
 }
 
 // Muestra el tipoDatode la in
-void printInType(tIn tipoDato){
+void printInType(tipoEntrada tipoDato){
 
 
 
 }
 
 // Muestra el tipoDatodel dato recibido
-void printDataType(tData tipoDato){
+void printDataType(dtipo tipoDato){
 
 
 
@@ -731,7 +748,7 @@ void printTS(){
 		if(ts[j].tipoDato== 3) { t = "booleano"; }
 		if(ts[j].tipoDato== 4) { t = "lista"; }
 		if(ts[j].tipoDato== 5) { t = "desconocido"; }
-		if(ts[j].tipoDato== 6) { t = "no_asignado"; }
+		if(ts[j].tipoDato== 6) { t = "na"; }
 		printf("----ELEMENTO %d-----------------\n", j);
 		printf("-Entrada: %-12s", e);
 		printf("-Lexema: %-12s", ts[j].nombre);
@@ -747,7 +764,7 @@ void printTS(){
 }
 
 // Muestra un atributo recibido
-void printAttr(attrs e, char *msg){
+void printAttr(atributos e, char *msg){
 
     char *t;
 
@@ -758,7 +775,7 @@ void printAttr(attrs e, char *msg){
 	if(e.tipoDato== 3) { t = "booleano"; }
 	if(e.tipoDato== 4) { t = "lista"; }
 	if(e.tipoDato== 5) { t = "desconocido"; }
-	if(e.tipoDato== 6) { t = "no_asignado"; }
+	if(e.tipoDato== 6) { t = "na"; }
 	printf("------%s-------------------------\n", msg);
 	printf("-Atributos: %-4d", e.attr);
 	printf("-Lexema: %-12s", e.nombre);
