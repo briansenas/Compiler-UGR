@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "y.tab.h"
+#include "/include/scansemantic.h"
 
 int yylex();
 void yyerror(const char * mensaje);
@@ -69,38 +70,44 @@ void yyerror(const char * mensaje);
 programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
         | error;
 
-bloque: INI_BLOQUE declar_de_variables_locales declar_de_subprogs sentencias FIN_BLOQUE
-      | INI_BLOQUE declar_de_variables_locales declar_de_subprogs FIN_BLOQUE;
+bloque: INI_BLOQUE 
+        {tsAddMark();}
+        bloque2
+        FIN_BLOQUE
+        {tsCleanIn();}
+      
+bloque2: declar_de_variables_locales declar_de_subprogs sentencias
+       | declar_de_variables_locales declar_de_subprogs;
 
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog: cabecera_subprog bloque;
+declar_subprog: cabecera_subprog {subProg=1;} bloque {subProg=0;};
 
-declar_de_variables_locales: INI_VAR variables_locales FIN_VAR
+declar_de_variables_locales: INI_VAR {decVar=1;} variables_locales FIN_VAR {decVar=0;}
                            |;
 
 variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables;
 
-cuerpo_declar_variables: tipo varios_identificador PYC
+cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
                        | error;
 
-varios_identificador: IDENT
+varios_identificador: IDENT {tsUpdateNparam($1); nParam=0, decParam=0;} {$1.nDim=0;}
     | varios_identificador COMA IDENT;
 
 tipo: TIPO_DATO
     | LISTA TIPO_DATO;
 
-cabecera_subprog: tipo IDENT  PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA
+cabecera_subprog: tipo IDENT {decParam=1;} {tsAddSubprog($2);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA
                 | error ;
 
 lista_parametros: tipo IDENT
     | lista_parametros COMA tipo IDENT
     |;
 
-sentencias: sentencias sentencia
-    | sentencia;
+sentencias: sentencias {decVar=2;} sentencia
+    |{decVar=2;} sentencia;
 
 
 sentencia: bloque
@@ -111,7 +118,15 @@ sentencia: bloque
     | sentencia_salida
     | sentencia_retorno;
 
-sentencia_asignacion: IDENT OP_ASIGNACION expresion PYC;
+sentencia_asignacion: IDENT OP_ASIGNACION expresion PYC{
+    if($1.tipoDato != $3.tipoDato){
+        printf("they are not equal \n");
+    }
+    if(!equalSize($1,$3){
+        printf("size is not equal \n");
+    }
+
+};
 
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia ;
