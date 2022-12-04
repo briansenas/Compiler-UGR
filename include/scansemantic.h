@@ -151,8 +151,11 @@ void tsOpUnary(atributos op, atributos o, atributos* res);
 // Realiza la comprobación de la operación +, -
 void tsOpSign(atributos op, atributos o, atributos* res);
 
-// Realiza la comprobación de la operación +, - binaria
-void tsOpSignBin(atributos o1, atributos op, atributos o2, atributos* res);
+// Realiza la comprobación de la operación sigsig
+void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res);
+
+// Realiza la comprobación de la operación additivo
+void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res);
 
 // Realiza la comprobación de la operación *, /
 void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res);

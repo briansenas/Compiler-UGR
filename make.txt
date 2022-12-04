@@ -1,0 +1,22 @@
+gcc -o obj/y.tab.o -c ./src/y.tab.c -I./include
+src/y.tab.c: In function ‘yyparse’:
+src/y.tab.c:1481:16: warning: implicit declaration of function ‘yylex’ [-Wimplicit-function-declaration]
+ 1481 |       yychar = yylex ();
+      |                ^~~~~
+./src/scanner.y:174:75: error: incompatible type for argument 3 of ‘tsOpSignSign’
+  174 |     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
+      |                                                                           ^  
+      |                                                                           |
+      |                                                                           atributos
+In file included from ./src/scanner.y:6:
+./src/../include/scansemantic.h:155:57: note: expected ‘atributos *’ but argument is of type ‘atributos’
+  155 | void tsOpSignSign(atributos op, atributos o, atributos* res);
+      |                                              ~~~~~~~~~~~^~~
+./src/scanner.y:174:35: error: too many arguments to function ‘tsOpSignSign’
+  174 |     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
+      |                                   ^~~~~~~~~~~~
+In file included from ./src/scanner.y:6:
+./src/../include/scansemantic.h:155:6: note: declared here
+  155 | void tsOpSignSign(atributos op, atributos o, atributos* res);
+      |      ^~~~~~~~~~~~
+make: *** [Makefile:21: obj/y.tab.o] Error 1

@@ -1,0 +1,23 @@
+principal()
+{
+    ini_var
+        entero pe, pe2, p4;
+        real pf, pf2, p1;
+        car pc, pc2, al, pe;
+    fin_var
+
+    real funcionA (bool c1, entero c2)
+    {
+        ini_var
+            real x1;
+        fin_var
+
+        x1 = 3.3;
+
+        devolver x1;
+    }
+
+    pe = pf;
+     
+    devolver 0;
+}

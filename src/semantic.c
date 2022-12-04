@@ -9,7 +9,7 @@ int decfuncion = 0;
 int subProg = 0;
 dtipo globaltipoDato= na;
 int nParam = 0;
-int currentfuncion = -1;
+int currentFunction = -1;
 int aux = 0;
 
 // Devuelve si el atributo es lista o no
@@ -259,7 +259,7 @@ void tsAddSubprog(atributos e){
 	inSubProg.tamDimen2 = 0;
 	inSubProg.tipoDato= e.tipoDato;
 
-	currentfuncion = TOPE;
+	currentFunction = TOPE;
 	tsAddIn(inSubProg);
 
 }
@@ -269,7 +269,7 @@ void tsAddParam(atributos e){
 
     int j = TOPE - 1, found = 0;
 
-	while((j != currentfuncion)  && (!found) ){
+	while((j != currentFunction)  && (!found) ){
 
 		if(strcmp(ts[j].nombre, e.nombre) != 0) {
 
@@ -303,10 +303,10 @@ void tsAddParam(atributos e){
 // Actualiza el número de parámetros de la función
 void tsUpdateNparam(atributos e){
 
-    ts[currentfuncion].nParam = nParam;
-	ts[currentfuncion].nDim=e.nDim;
-	ts[currentfuncion].tamDimen1=e.tamDimen1;
-	ts[currentfuncion].tamDimen2=e.tamDimen2;
+    ts[currentFunction].nParam = nParam;
+	ts[currentFunction].nDim=e.nDim;
+	ts[currentFunction].tamDimen1=e.tamDimen1;
+	ts[currentFunction].tamDimen2=e.tamDimen2;
 
 }
 
@@ -348,6 +348,7 @@ void tsCheckReturn(atributos expr, atributos* res){
 
 
 	if (index > -1) {
+		printf("Ha encontrado una funcion en la pila\n");
 
 		if (expr.tipoDato!= ts[index].tipoDato) {
 			printf("Semantic Error(%d): Return not equal to return funcion.\n", line);
@@ -364,7 +365,7 @@ void tsCheckReturn(atributos expr, atributos* res){
 			return;
 		}
 
-		res->tipoDato= expr.tipoDato;
+		res->tipoDato = expr.tipoDato;
 		res->nDim = expr.nDim;
 		res->tamDimen1 = expr.tamDimen1;
 		res->tamDimen2 = expr.tamDimen2;
@@ -427,7 +428,7 @@ void tsOpSign(atributos op, atributos o, atributos* res){
 }
 
 // Realiza la comprobación de la operación +, - binaria
-void tsOpSignBin(atributos o1, atributos op, atributos o2, atributos* res){
+void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
 	    printf("Semantic Error(%d): Expressions must be equals types.", line);
@@ -485,6 +486,47 @@ void tsOpSignBin(atributos o1, atributos op, atributos o2, atributos* res){
 		}
 
 	}
+
+}
+
+
+// Realiza la comprobación de la operación ++, --
+void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
+
+    if (o1.tipoDato!= o2.tipoDato) {
+	    printf("Semantic Error(%d): Expressions must be equals types.", line);
+  		return;
+  	}
+
+	if (o1.tipoDato!= entero && o1.tipoDato!= real) {
+		printf("Semantic Error%d): Invalid tipoDatoin op. Both must be equals.", line);
+		return;
+	}
+
+	if (isList(o1) && isList(o2)){
+
+		if(equalSize(o1,o2)){
+
+			res->tipoDato= o1.tipoDato;
+			res->nDim = o1.nDim;
+			res->tamDimen1 = o1.tamDimen1;
+			res->tamDimen2 = o1.tamDimen2;
+
+		} else {
+
+            printf("Semantic Error(%d): Size arrays must be same", line);
+			return;
+
+		}
+
+	} else {
+
+		if (!isList(o1) || !isList(o2)) {
+				printf("Semantic Error(%d): Operation not allowed.", line);
+				return;
+			}
+
+		}
 
 }
 
@@ -651,13 +693,13 @@ void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
 
 // Realiza la comprobación de la llamada a una función
-void tsfuncionCall(atributos id, atributos* res){
+void tsFunctionCall(atributos id, atributos* res){
 
     int index = tsSearchName(id);
 
 	if(index==-1) {
 
-		currentfuncion = -1;
+		currentFunction = -1;
 
 		printf("\nSemantic Error(%d)): funcion: Id not found %s.\n", line, id.nombre);
 
@@ -667,7 +709,7 @@ void tsfuncionCall(atributos id, atributos* res){
 			printf("Semantic Error(%d): Number of param not valid.\n", line);
 		} else {
 
-			currentfuncion = index;
+			currentFunction = index;
 			res->nombre = strdup(ts[index].nombre);
 			res->tipoDato= ts[index].tipoDato;
 			res->nDim = ts[index].nDim;
@@ -683,9 +725,9 @@ void tsfuncionCall(atributos id, atributos* res){
 // Realiza la comprobación de cada parámetro de una función
 void tsCheckParam(atributos param, int checkParam){
 
-    int posParam = (currentfuncion + ts[currentfuncion].nParam) - (checkParam - 1);
+    int posParam = (currentFunction + ts[currentFunction].nParam) - (checkParam - 1);
 
-	int error = ts[currentfuncion].nParam - checkParam + 1;
+	int error = ts[currentFunction].nParam - checkParam + 1;
 
 	if (param.tipoDato!= ts[posParam].tipoDato) {
 		printf("Semantic Error(%d): Param tipoDato(%d) not valid.\n", line, error);
