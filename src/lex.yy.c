@@ -885,7 +885,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 28 "./src/scanner.l"
-{ ECHO; return(PRINCIPAL);}
+{ ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -900,27 +900,27 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 31 "./src/scanner.l"
-{ ECHO; printf("%d",entero); yylval.tipoDato=entero; return(TIPO_DATO);}
+{ ECHO; yylval.tipoDato=ENTERO; return(TIPO_DATO);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 32 "./src/scanner.l"
-{ ECHO; yylval.tipoDato=real; return(TIPO_DATO);}
+{ ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 33 "./src/scanner.l"
-{ ECHO;      yylval.tipoDato=caracter;return(TIPO_DATO);}
+{ ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 34 "./src/scanner.l"
-{ ECHO;     yylval.tipoDato=booleano;return(TIPO_DATO);}
+{ ECHO;     yylval.tipoDato=TIPOBOOL;return(TIPO_DATO);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 35 "./src/scanner.l"
-{ ECHO;    yylval.tipoDato=lista; return(LISTA);}
+{ ECHO;    yylval.tipoDato=TIPOLISTA; return(LISTA);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP

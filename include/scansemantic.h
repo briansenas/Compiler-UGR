@@ -3,23 +3,21 @@
 #include <string.h>
 
 typedef enum {
-
-	marca = 0,//MARK = 0,
-	funcion,//FUNCTION,
-	variable,//VAR,
-	parametro_formal,//FORM
+	MARCA = 0,//MARK = 0,
+	FUNCION,//FUNCTION,
+	VARIABLE,//VAR,
+	PARAMETRO_FORMAL,//FORM
 
 } tipoEntrada;
 
 typedef enum {
-
-    na = 0,
-	entero,//NOT_ASIG = 0,
-	real,//ENTERO,
-	caracter,//CARACTER,
-	booleano,//BOOLEANO,
-	lista,
-	desconocido,
+	ENTERO=0,//NOT_ASIG = 0,
+	REAL,//ENTERO,
+	CARACTER,//CARACTER,
+	TIPOBOOL,//BOOLEANO,
+	TIPOLISTA,
+	DESCONOCIDO,
+    NA
 
 } dtipo;
 

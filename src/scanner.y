@@ -67,7 +67,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: PRINCIPAL PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
+programa: PRINCIPAL {tsAddSubprog($1);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA {subProg=1;} bloque{subProg=0;}
         | error;
 
 bloque: INI_BLOQUE
@@ -91,7 +91,7 @@ variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables ;
 
 cuerpo_declar_variables: tipo {setType($1);
-                printf("El globaltipoDato es: (%s)", $1.tipoDato);
+                //printf("El globaltipoDato es: (%d)", $1.tipoDato);
             } varios_identificador PYC
                        | error;
 
@@ -99,12 +99,12 @@ identificador: IDENT {
 					//printf("pila 1 \n");
                     //printTS();
                     if(decvariable == 1){
-                        //printf("Antes: Se quiere declarar:  (%i) (%s) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
+                        //printf("Antes: Se quiere declarar:  (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
                         //printf("Se ha declarado una variable.\n");
 						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1);
                         //printf("pila 2 \n");
-                        printTS();
-                        //printf("Despues: Se ha declarado: (%i) (%s) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
+                        //printTS();
+                        //printf("Despues: Se ha declarado: (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
 					}else{
 						if(decParam == 0)
 							tsGetId($1, &$$);
@@ -114,7 +114,7 @@ identificador: IDENT {
 varios_identificador: identificador
     | varios_identificador COMA identificador;
 
-tipo: TIPO_DATO {printf("tumadre"); $$.tipoDato = $1.tipoDato; printf("aslkjdfaskldjf");}
+tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;}
     | LISTA TIPO_DATO {$$.tipoDato = $1.tipoDato;};
 
 cabecera_subprog: tipo identificador {tsAddSubprog($2);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA
@@ -137,8 +137,8 @@ sentencia: bloque
     | sentencia_retorno;
 
 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
-    printf("el $1 es: (%s)",$1.tipoDato);
-    printf("el $3 es: (%s)", $3.tipoDato);
+    //printf("el $1 es: (%d)",$1.tipoDato);
+    //printf("el $3 es: (%d)", $3.tipoDato);
     if($1.tipoDato != $3.tipoDato){
         printf("Semantic Error(%d): No son del mismo tipo.\n", line);
     }
@@ -148,17 +148,17 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
 
 };
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
-        if ($3.tipoDato != booleano){
+        if ($3.tipoDato != TIPOBOOL){
             printf("Expression are not logic. \n");
         }}
             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia{
-                if($3.tipoDato != booleano){
+                if($3.tipoDato != TIPOBOOL){
                     printf("Expression are not logic");
                 }
             } ;
 
 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
-        if($3.tipoDato != booleano){
+        if($3.tipoDato != TIPOBOOL){
                 printf("Semantic Error(%d): Expression are not logic.\n", line);
         }
 };
@@ -231,10 +231,10 @@ lista_constante_car : CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA;
 contenido_lista_car : CONSTANTE_CAR
     | CONSTANTE_CAR COMA contenido_lista_car;
 
-constante: BOOLEANO { $$.tipoDato = booleano; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_NUM { $$.tipoDato = entero; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_FLOAT { $$.tipoDato = real; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_CAR { $$.tipoDato = caracter; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
+constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
 
 %%
 

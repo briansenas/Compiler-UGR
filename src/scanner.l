@@ -25,14 +25,14 @@ ESPACIO					[" "]
 
 "ini_var"                { ECHO;       return(INI_VAR);}
 "fin_var"                { ECHO;       return(FIN_VAR);}
-"principal"             { ECHO; return(PRINCIPAL);}
+"principal"             { ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 "}"                       { ECHO;       return(FIN_BLOQUE);}
 "{"                       { ECHO;       return(INI_BLOQUE);}
-"entero"                  { ECHO; printf("%d",entero); yylval.tipoDato=entero; return(TIPO_DATO);}
-"real"                    { ECHO; yylval.tipoDato=real; return(TIPO_DATO);}
-"car"                { ECHO;      yylval.tipoDato=caracter;return(TIPO_DATO);}
-"bool"                { ECHO;     yylval.tipoDato=booleano;return(TIPO_DATO);}
-"listade"                { ECHO;    yylval.tipoDato=lista; return(LISTA);}
+"entero"                  { ECHO; yylval.tipoDato=ENTERO; return(TIPO_DATO);}
+"real"                    { ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
+"car"                { ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}
+"bool"                { ECHO;     yylval.tipoDato=TIPOBOOL;return(TIPO_DATO);}
+"listade"                { ECHO;    yylval.tipoDato=TIPOLISTA; return(LISTA);}
 "si"                      { ECHO;       return(SI);}
 "sino"                      { ECHO;       return(SINO);}
 "devolver"                { ECHO;       return(DEVOLVER);}
