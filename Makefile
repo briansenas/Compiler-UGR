@@ -24,7 +24,7 @@ $(SRC)/y.tab.c: $(SRC)/scanner.y $(SRC)/lex.yy.c
 	bison -v -d -o $@ $(SRC)/scanner.y
 
 $(SRC)/lex.yy.c: $(SRC)/scanner.l
-	flex -o $@ $(SRC)/scanner.l
+	lex -o $@ $(SRC)/scanner.l
 
 $(OBJ)/semantic.o: $(SRC)/semantic.c
 	gcc -o $@ -c $(SRC)/semantic.c -I$(INCLUDE)

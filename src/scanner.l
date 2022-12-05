@@ -28,7 +28,7 @@ ESPACIO					[" "]
 "principal"             { ECHO; return(PRINCIPAL);}
 "}"                       { ECHO;       return(FIN_BLOQUE);}
 "{"                       { ECHO;       return(INI_BLOQUE);}
-"entero"                  { ECHO; yylval.tipoDato=entero; return(TIPO_DATO);}
+"entero"                  { ECHO; printf("%d",entero); yylval.tipoDato=entero; return(TIPO_DATO);}
 "real"                    { ECHO; yylval.tipoDato=real; return(TIPO_DATO);}
 "car"                { ECHO;      yylval.tipoDato=caracter;return(TIPO_DATO);}
 "bool"                { ECHO;     yylval.tipoDato=booleano;return(TIPO_DATO);}

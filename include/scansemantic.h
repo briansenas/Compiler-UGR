@@ -4,7 +4,7 @@
 
 typedef enum {
 
-	marca,//MARK = 0,
+	marca = 0,//MARK = 0,
 	funcion,//FUNCTION,
 	variable,//VAR,
 	parametro_formal,//FORM
@@ -13,13 +13,13 @@ typedef enum {
 
 typedef enum {
 
+    na = 0,
 	entero,//NOT_ASIG = 0,
 	real,//ENTERO,
 	caracter,//CARACTER,
 	booleano,//BOOLEANO,
 	lista,
 	desconocido,
-    na,
 
 } dtipo;
 
@@ -77,7 +77,7 @@ extern int decParam;
 extern int decFunction;
 
 // Variable global que almacena el tipo en las declaraciones
-extern dtipo globalType;
+extern dtipo globaltipoDato;
 
 // Cuenta el número de parámetros de una función
 extern int nParam;

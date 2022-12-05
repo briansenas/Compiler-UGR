@@ -900,7 +900,7 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 31 "./src/scanner.l"
-{ ECHO; yylval.tipoDato=entero; return(TIPO_DATO);}
+{ ECHO; printf("%d",entero); yylval.tipoDato=entero; return(TIPO_DATO);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
