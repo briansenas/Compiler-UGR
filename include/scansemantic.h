@@ -40,6 +40,7 @@ typedef struct {
 typedef struct {
 
 	int attr;
+	tipoEntrada tipoEnt;
 	char *nombre;
 	dtipo tipoDato;
 	unsigned int nDim;

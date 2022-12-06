@@ -1,3 +1,4 @@
+leyendo entrada estándar.
 principal()
 {
     ini_var
@@ -49,8 +50,12 @@ principal()
     
     pe=pe2;
     pe2=pe3;
-    vl=vc;
+Semantic Error(1): Id not found pe3.
+
+    vl=vc;Semantic Error(1): No son del mismo tipo.
+
     vf = 1.3;
 
-    devolver 0;
+    devolver 0;Semantic Error(1): Return not equal to return FUNCION.
+
 }

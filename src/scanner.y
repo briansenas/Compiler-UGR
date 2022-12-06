@@ -67,7 +67,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: PRINCIPAL {tsAddSubprog($1);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA {subProg=1;} bloque{subProg=0;}
+programa: PRINCIPAL {tsAddSubprog($1);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
         | error;
 
 bloque: INI_BLOQUE
@@ -82,7 +82,7 @@ cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog: cabecera_subprog {subProg=1;} bloque {subProg=0;};
+declar_subprog:  {subProg=1;} cabecera_subprog {subProg=0;} INI_BLOQUE cuerpo_bloque FIN_BLOQUE;
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
                            |;
@@ -98,16 +98,25 @@ cuerpo_declar_variables: tipo {setType($1);
 identificador: IDENT {
 					//printf("pila 1 \n");
                     //printTS();
+                    //printf("decvariable tiene (%i)\n", decvariable);
                     if(decvariable == 1){
                         //printf("Antes: Se quiere declarar:  (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
                         //printf("Se ha declarado una variable.\n");
-						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1);
+						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1); $1.tipoEnt = 2;
                         //printf("pila 2 \n");
                         //printTS();
                         //printf("Despues: Se ha declarado: (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
 					}else{
-						if(decParam == 0)
-							tsGetId($1, &$$);
+                        //printf("NO ESTA ENTRANDO AQUI");
+                        tsGetId($1, &$$);
+					}
+				};
+
+
+identificador_fun: IDENT {
+                    //printf("SUBPROG: %i", subProg);
+                    if(subProg == 0){
+                        tsFunctionCall($1, &$$);
 					}
 				};
 
@@ -117,11 +126,11 @@ varios_identificador: identificador
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;}
     | LISTA TIPO_DATO {$$.tipoDato = $1.tipoDato;};
 
-cabecera_subprog: tipo identificador {tsAddSubprog($2);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA
+cabecera_subprog: tipo identificador_fun {tsAddSubprog($2);} PARENTESIS_ABRE {decvariable=1;} lista_parametros PARENTESIS_CIERRA {decvariable=0;}
                 | error ;
 
-lista_parametros: tipo identificador
-    | lista_parametros COMA tipo identificador
+lista_parametros: tipo {setType($1);} identificador
+    | lista_parametros COMA tipo {setType($3);}  identificador
     |;
 
 sentencias: sentencias {decvariable=2;} sentencia
@@ -140,6 +149,7 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     //printf("el $1 es: (%d)",$1.tipoDato);
     //printf("el $3 es: (%d)", $3.tipoDato);
     if($1.tipoDato != $3.tipoDato){
+        
         printf("Semantic Error(%d): No son del mismo tipo.\n", line);
     }
     if(!equalSize($1,$3)){
@@ -186,7 +196,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDa
     | expresion OP_OR expresion {tsOpOr($1, $2, $3, &$$); }
     | expresion OP_AND expresion {tsOpAnd($1, $2, $3, &$$); }
     | expresion OP_XOR expresion {tsOpXOr($1, $2, $3, &$$); }
-    | expresion OP_RELACION expresion {tsOpRel($1, $2, $3, &$$); }
+    | expresion OP_RELACION expresion {tsOpRel($1, $2, $3, &$$);}
     | expresion OP_MULTIPLICATIVO expresion {tsOpMul($1, $2, $3, &$$); }
     | expresion OP_IGUALDAD expresion {tsOpEqual($1, $2, $3, &$$); }
     | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); }
@@ -196,12 +206,12 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDa
         //printf("Se ha usado un identificador en la expresion\n");
     }
     | constante {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; $$.tamDimen2 = $0.tamDimen2; }
-    | funcion {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $0.tamDimen1; $$.tamDimen2 = $0.tamDimen2; currentFunction = -1;}
+    | funcion {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $0.tamDimen1; $$.tamDimen2 = $0.tamDimen2;}
     | lista_constantes
     | error ;
 
-funcion: identificador PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA { tsFunctionCall($1, &$$); }
-       | identificador PARENTESIS_ABRE PARENTESIS_CIERRA { tsFunctionCall($1, &$$); };
+funcion: identificador_fun PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
+       | identificador_fun PARENTESIS_ABRE PARENTESIS_CIERRA;
 
 lista_expresiones: lista_expresiones COMA expresion
                  | expresion;

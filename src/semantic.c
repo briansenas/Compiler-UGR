@@ -344,7 +344,7 @@ void tsCheckReturn(atributos expr, atributos* res){
     int index = tsGetNextfuncion();
 
 	if (index > -1) {
-		printf("Ha encontrado una FUNCION en la pila\n");
+		//printf("Ha encontrado una FUNCION en la pila\n");
 
 		if (expr.tipoDato!= ts[index].tipoDato) {
 			printf("Semantic Error(%d): Return not equal to return FUNCION.\n", line);
@@ -384,6 +384,7 @@ void tsGetId(atributos id, atributos* res){
         if(ts[index].entrada != FUNCION)
 		      printf("\nSemantic Error(%d): Id not found %s.\n", line, id.nombre);
 	} else {
+		//printf("El indice es %i", index);
 
 		res->nombre = strdup(ts[index].nombre);
 		res->tipoDato= ts[index].tipoDato;
@@ -690,7 +691,7 @@ void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
 // Realiza la comprobación de la llamada a una función
 void tsFunctionCall(atributos id, atributos* res){
-
+	
     int index = tsSearchName(id);
 
 	if(index==-1) {
@@ -704,6 +705,7 @@ void tsFunctionCall(atributos id, atributos* res){
 		if (nParam != ts[index].nParam) {
 			printf("Semantic Error(%d): Number of param not valid.\n", line);
 		} else {
+			
 
 			currentFunction = index;
 			res->nombre = strdup(ts[index].nombre);
