@@ -43,6 +43,8 @@ typedef struct {
 	tipoEntrada tipoEnt;
 	char *nombre;
 	dtipo tipoDato;
+    int lista;
+    int es_constante;
 	unsigned int nDim;
 	// Tamaño de la dimensión 1
 	int tamDimen1;
@@ -54,10 +56,15 @@ typedef struct {
 #define YYSTYPE atributos
 
 #define MAX_IN 500
+#define MAX_SUBPROG 50
 
-extern long int TOPE;//LIMIT;
+extern unsigned long int TOPE;//LIMIT;
+                     //
+extern int callSub;
 
 extern entradaTS ts[MAX_IN];
+extern unsigned long int TOPE_SUBPROG;
+extern atributos ts_subprog[MAX_SUBPROG];
 
 // Línea del fichero que se está analizando
 extern int line;
@@ -174,6 +181,9 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res);
 // Realiza la comprobación de la operación <, >, <=, >=, <>
 void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res);
 
+// Inserta los parámetros de la llamada a función
+void TS_subprog_params(atributos atrib);
+
 // Realiza la comprobación de la llamada a una función
 void tsFunctionCall(atributos id, atributos* res);
 
@@ -198,6 +208,7 @@ void printDataType(dtipo type);
 
 // Muestra la tabla de símbolos
 void printTS();
+void printSPTS();
 
 // Muestra un atributo recibido
 void printAttr(atributos e, char *t);

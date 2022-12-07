@@ -68,17 +68,17 @@ ESPACIO					[" "]
 "%"                       { ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
 "**"                      { ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 ","                       { ECHO;       return(COMA);}
-{DIGITO}+				  { ECHO;    yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
-{DIGITO}+"."{DIGITO}+	  { ECHO;    yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
-\'[^\"\']?\'               { ECHO;   yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
-"Verdadero"                 { ECHO; yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
-"Falso"                 { ECHO; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
-\"[^\"]*\"				  { ECHO;       return(CADENA);}
-{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; yylval.nombre=strdup(yytext); return(IDENT);}
+{DIGITO}+				  { ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{DIGITO}+"."{DIGITO}+	  { ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+\'[^\"\']?\'               { ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+"Verdadero"                 { ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+"Falso"                 { ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+\"[^\"]*\"				  { ECHO;   yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
+{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
 
 
-"//".*                           { /* DO NOTHING */ }
-[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ }
+"//".*                           { /* DO NOTHING */ ECHO;}
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ ECHO;}
 [/][*]                                    {
     printf(" \n [Linea %d]: lexical error: comentario sin cerrar'%s'. ", yylineno, yytext);
 }

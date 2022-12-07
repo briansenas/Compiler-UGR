@@ -1100,50 +1100,50 @@ YY_RULE_SETUP
 case 46:
 YY_RULE_SETUP
 #line 71 "./src/scanner.l"
-{ ECHO;    yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 72 "./src/scanner.l"
-{ ECHO;    yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
 #line 73 "./src/scanner.l"
-{ ECHO;   yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+{ ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 74 "./src/scanner.l"
-{ ECHO; yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 75 "./src/scanner.l"
-{ ECHO; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
 #line 76 "./src/scanner.l"
-{ ECHO;       return(CADENA);}
+{ ECHO;   yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 77 "./src/scanner.l"
-{ ECHO; yylval.nombre=strdup(yytext); return(IDENT);}
+{ ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
 #line 80 "./src/scanner.l"
-{ /* DO NOTHING */ }
+{ /* DO NOTHING */ ECHO;}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
 #line 81 "./src/scanner.l"
-{ /* DO NOTHING */ }
+{ /* DO NOTHING */ ECHO;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP

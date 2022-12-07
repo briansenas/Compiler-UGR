@@ -67,7 +67,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: PRINCIPAL {tsAddSubprog($1);} PARENTESIS_ABRE lista_parametros PARENTESIS_CIERRA bloque
+programa: PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros {subProg=1;} bloque {subProg=0;}
         | error;
 
 bloque: INI_BLOQUE
@@ -82,7 +82,7 @@ cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog:  {subProg=1;} cabecera_subprog {subProg=0;} INI_BLOQUE cuerpo_bloque FIN_BLOQUE;
+declar_subprog:  cabecera_subprog {subProg=1;} bloque {subProg=0;};
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
                            |;
@@ -90,52 +90,19 @@ declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR 
 variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables ;
 
+
 cuerpo_declar_variables: tipo {setType($1);
-                //printf("El globaltipoDato es: (%d)", $1.tipoDato);
             } varios_identificador PYC
                        | error;
 
-identificador: IDENT {
-					//printf("pila 1 \n");
-                    //printTS();
-                    //printf("decvariable tiene (%i)\n", decvariable);
-                    if(decvariable == 1){
-                        //printf("Antes: Se quiere declarar:  (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
-                        //printf("Se ha declarado una variable.\n");
-						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1); $1.tipoEnt = 2;
-                        //printf("pila 2 \n");
-                        //printTS();
-                        //printf("Despues: Se ha declarado: (%i) (%d) (%i) (%i).\n", $1.attr, $1.nombre, $1.tipoDato, $1.nDim);
-					}else{
-                        //printf("NO ESTA ENTRANDO AQUI");
-                        tsGetId($1, &$$);
-					}
-				};
-
-
-identificador_fun: IDENT {
-                    //printf("SUBPROG: %i", subProg);
-                    if(subProg == 0){
-                        tsFunctionCall($1, &$$);
-					}
-				};
-
-varios_identificador: identificador
-    | varios_identificador COMA identificador;
-
-tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;}
-    | LISTA TIPO_DATO {$$.tipoDato = $1.tipoDato;};
-
-cabecera_subprog: tipo identificador_fun {tsAddSubprog($2);} PARENTESIS_ABRE {decvariable=1;} lista_parametros PARENTESIS_CIERRA {decvariable=0;}
+cabecera_subprog: tipo IDENT {decParam = 1;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros
                 | error ;
 
-lista_parametros: tipo {setType($1);} identificador
-    | lista_parametros COMA tipo {setType($3);}  identificador
-    |;
+parametros: lista_parametros PARENTESIS_CIERRA {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
+          | PARENTESIS_CIERRA {decParam=0;};
 
 sentencias: sentencias {decvariable=2;} sentencia
     |{decvariable=2;} sentencia;
-
 
 sentencia: bloque
     | sentencia_asignacion
@@ -149,7 +116,7 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     //printf("el $1 es: (%d)",$1.tipoDato);
     //printf("el $3 es: (%d)", $3.tipoDato);
     if($1.tipoDato != $3.tipoDato){
-        
+
         printf("Semantic Error(%d): No son del mismo tipo.\n", line);
     }
     if(!equalSize($1,$3)){
@@ -157,6 +124,7 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     }
 
 };
+
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
         if ($3.tipoDato != TIPOBOOL){
             printf("Expression are not logic. \n");
@@ -177,15 +145,6 @@ sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
 
 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
 
-lista_variables: identificador
-               | DIRECCION lista_variables
-               | identificador DIRECCION identificador;
-
-lista_expresiones_o_cadena: expresion
-    | DIRECCION lista_expresiones_o_cadena
-    | CADENA
-    | CADENA DIRECCION lista_expresiones_o_cadena;
-
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$);} PYC;
 
 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
@@ -203,23 +162,67 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDa
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
-        //printf("Se ha usado un identificador en la expresion\n");
+        if(callSub)
+            TS_subprog_params($1);
     }
-    | constante {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; $$.tamDimen2 = $0.tamDimen2; }
-    | funcion {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $0.tamDimen1; $$.tamDimen2 = $0.tamDimen2;}
+    | constante {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; $$.tamDimen2 = $0.tamDimen2;
+        if(callSub)
+            TS_subprog_params($1);
+    }
+    | funcion {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $0.tamDimen1; $$.tamDimen2 = $0.tamDimen2; currentFunction=-1;
+        if(callSub)
+            TS_subprog_params($1);
+    }
     | lista_constantes
     | error ;
 
-funcion: identificador_fun PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
-       | identificador_fun PARENTESIS_ABRE PARENTESIS_CIERRA;
+varios_identificador: identificador
+    | varios_identificador COMA identificador;
 
-lista_expresiones: lista_expresiones COMA expresion
-                 | expresion;
+identificador: IDENT {
+                    if(decvariable == 1){
+						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1); $1.tipoEnt = 2;
+					}else{
+                        if(decParam==0)
+                            tsGetId($1, &$$);
+					}
+				};
 
-lista_constantes: lista_constante_booleano
-    | lista_constante_entero
-    | lista_constante_flotante
-    | lista_constante_car;
+
+
+lista_parametros:
+    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);}
+    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);}
+    | lista_parametros error tipo identificador;
+
+lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena {nParam++; tsCheckParam($1,nParam);}
+                          | expresion_o_cadena{nParam=1;tsCheckParam($1,nParam);};
+
+expresion_o_cadena: expresion
+                  | CADENA ;
+
+constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
+| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
+
+tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;}
+    | LISTA TIPO_DATO {$$.tipoDato = $1.tipoDato;};
+
+lista_variables: identificador
+               | DIRECCION lista_variables
+               | identificador DIRECCION identificador;
+
+funcion: IDENT PARENTESIS_ABRE {callSub=1;}lista_expresiones PARENTESIS_CIERRA {tsFunctionCall($1,&$$);callSub=0;}
+       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {tsFunctionCall($1,&$$);};
+
+lista_expresiones: lista_expresiones COMA expresion {nParam++;}
+                 | expresion {nParam=1;}
+
+lista_constantes: lista_constante_booleano {$1.lista=1;}
+    | lista_constante_entero{$1.lista=1;}
+    | lista_constante_flotante{$1.lista=1;}
+    | lista_constante_car{$1.lista=1;};
 
 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA;
 
@@ -240,11 +243,6 @@ lista_constante_car : CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA;
 
 contenido_lista_car : CONSTANTE_CAR
     | CONSTANTE_CAR COMA contenido_lista_car;
-
-constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
 
 %%
 

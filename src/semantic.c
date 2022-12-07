@@ -1,8 +1,10 @@
 #include "../include/scansemantic.h"
 
 entradaTS ts[MAX_IN];
+atributos ts_subprog[MAX_SUBPROG];
 int line = 1;
-long int TOPE = 0;
+unsigned long int TOPE = 0;
+unsigned long int TOPE_SUBPROG=0;
 int decvariable = 0;
 int decParam = 0;
 int decfuncion = 0;
@@ -11,6 +13,7 @@ dtipo globaltipoDato= NA;
 int nParam = 0;
 int currentFunction = -1;
 int aux = 0;
+int callSub = 0;
 
 // Devuelve si el atributo es lista o no
 int isList(atributos e){
@@ -97,12 +100,15 @@ void tsCleanIn(){
 		TOPE--;
 	}
 
-    if (ts[TOPE-1].entrada == PARAMETRO_FORMAL) {
+    /*
+    if (ts[TOPE-1].entrada == MARCA) {
         while(ts[TOPE-1].entrada != FUNCION && TOPE > 0){
     		TOPE--;
     	}
         TOPE--;
 	}
+    */
+    // printTS();
 
 }
 
@@ -137,6 +143,7 @@ int tsSearchName(atributos e){
 
 
 	while (i > 0 && !found /*&& ts[i].entrada != MARCA*/) {
+        // printf("\n[%s - %s]\n", e.nombre, ts[i].nombre);
 		if (ts[i].entrada == FUNCION && strcmp(e.nombre, ts[i].nombre) == 0) {
 			found = 1;
 		} else{
@@ -161,7 +168,7 @@ void tsAddId(atributos e){
 	int j = TOPE-1;
 	int found = 0;
 
-	if(j >= 0 && decvariable == 1){
+	if(j > 0 && decvariable == 1){
 		// Se obtiene la posición de la MARCA del bloque
 		while((ts[j].entrada != MARCA) && (j >= 0) && !found){
 
@@ -249,6 +256,7 @@ void tsAddMark(){
 void tsAddSubprog(atributos e){
 
     entradaTS inSubProg;
+    //printf("\nAddingSubProg:%s\n",e.nombre);
 	inSubProg.entrada = FUNCION;
 	inSubProg.nombre = e.nombre;
 	inSubProg.nParam = 0;
@@ -321,16 +329,18 @@ int tsGetNextfuncion(){
     int i = TOPE - 1;
 	int found = 0;
 
-	while (i >=0 && !found) {
+	while (i >=0 && found!=2) {
 		if (ts[i].entrada == FUNCION) {
-			found = 1;
+			found++;
+            i--;
 		} else {
 			i--;
 		}
 
 	}
+    i++;
 
-	if(!found) {
+	if(found!=2) {
 		return -1;
 	} else {
 		return i;
@@ -342,11 +352,13 @@ int tsGetNextfuncion(){
 void tsCheckReturn(atributos expr, atributos* res){
 
     int index = tsGetNextfuncion();
-
+    //printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
+    //printTS();
 	if (index > -1) {
 		//printf("Ha encontrado una FUNCION en la pila\n");
 
 		if (expr.tipoDato!= ts[index].tipoDato) {
+            printf("\n%d-%d\n",expr.tipoDato, ts[index].tipoDato);
 			printf("Semantic Error(%d): Return not equal to return FUNCION.\n", line);
 			return;
 		}
@@ -685,14 +697,26 @@ void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 }
 
 
+void TS_subprog_params(atributos atrib) {
 
+	if ( TOPE_SUBPROG == MAX_SUBPROG ) {
+		printf("ERROR: Tope de la pila alcanzado. Demasiadas entradas en la tabla de símbolos. Abortando compilación");
+	} else {
+		ts_subprog[TOPE_SUBPROG] = atrib;
 
+		TOPE_SUBPROG++;
 
+	}
+
+    //printSPTS();
+
+}
 
 // Realiza la comprobación de la llamada a una función
 void tsFunctionCall(atributos id, atributos* res){
-	
+
     int index = tsSearchName(id);
+    //printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
 
 	if(index==-1) {
 
@@ -701,23 +725,40 @@ void tsFunctionCall(atributos id, atributos* res){
 		printf("\nSemantic Error(%d)): FUNCION: Id not found %s.\n", line, id.nombre);
 
     } else {
-
 		if (nParam != ts[index].nParam) {
 			printf("Semantic Error(%d): Number of param not valid.\n", line);
-		} else {
-			
+		}
+        else {
+            int pos_limit = index + ts[index].nParam;
+            if(ts[index].nParam != TOPE_SUBPROG){
+                printf("Semantic Error(%d): La funcion %s necesita %d parámetros y se han proporcionado %ld\n", line, ts[index].nombre, ts[index].nParam, TOPE_SUBPROG);
+            }else{
+                TOPE_SUBPROG--;
+                while(TOPE_SUBPROG>0){
+                    entradaTS tempTS;
+                    tempTS.tipoDato = ts_subprog[TOPE_SUBPROG].tipoDato;
+                    if(!ts_subprog[TOPE_SUBPROG].es_constante){
+                        tempTS = ts[tsSearchName(ts_subprog[TOPE_SUBPROG])];
+                    }
 
-			currentFunction = index;
-			res->nombre = strdup(ts[index].nombre);
-			res->tipoDato= ts[index].tipoDato;
-			res->nDim = ts[index].nDim;
-			res->tamDimen1 = ts[index].tamDimen1;
-			res->tamDimen2 = ts[index].tamDimen2;
+                    if(ts[pos_limit].tipoDato != tempTS.tipoDato){
+                        printf("\nSemantic Error(%d): El parámetro %d es de tipo %d pero se espera un tipo %d \n",
+                                line ,ts[pos_limit].tipoDato,
+                                ts_subprog[TOPE_SUBPROG].tipoDato );
+                    }
+                    pos_limit--;
+                    TOPE_SUBPROG--;
+                }
+                currentFunction = index;
+                res->nombre = strdup(ts[index].nombre);
+                res->tipoDato= ts[index].tipoDato;
+                res->nDim = ts[index].nDim;
+                res->tamDimen1 = ts[index].tamDimen1;
+                res->tamDimen2 = ts[index].tamDimen2;
+            }
 
 		}
-
 	}
-
 }
 
 // Realiza la comprobación de cada parámetro de una función
@@ -797,6 +838,28 @@ void printTS(){
 		printf("-nDim: %-4d", ts[j].nDim);
 		printf("-tamDimen1: %-4d", ts[j].tamDimen1);
 		printf("-tamDimen2: %-4d\n", ts[j].tamDimen2);
+		j++;
+	}
+	printf("--------------------------------\n");
+
+}
+
+void printSPTS(){
+
+    int j = 0;
+	char *t, *e;
+
+	printf("\n--------------------------------\n");
+	while(j <= TOPE_SUBPROG-1) {
+		if(ts_subprog[j].tipoDato== 0) { t = "entero"; }
+		if(ts_subprog[j].tipoDato== 1) { t = "real"; }
+		if(ts_subprog[j].tipoDato== 2) { t = "caracter"; }
+		if(ts_subprog[j].tipoDato== 3) { t = "booleano"; }
+		if(ts_subprog[j].tipoDato== 4) { t = "lista"; }
+		if(ts_subprog[j].tipoDato== 5) { t = "desconocido"; }
+		if(ts_subprog[j].tipoDato== 6) { t = "na"; }
+		printf("----ELEMENTO %d-----------------\n", j);
+		printf("-type: %-10s", t);
 		j++;
 	}
 	printf("--------------------------------\n");
