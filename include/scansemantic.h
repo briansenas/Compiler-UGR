@@ -65,6 +65,7 @@ extern int callSub;
 extern entradaTS ts[MAX_IN];
 extern unsigned long int TOPE_SUBPROG;
 extern atributos ts_subprog[MAX_SUBPROG];
+extern char* tipoAstring(dtipo tipo);
 
 // Línea del fichero que se está analizando
 extern int line;

@@ -113,10 +113,7 @@ sentencia: bloque
     | sentencia_retorno;
 
 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
-    //printf("el $1 es: (%d)",$1.tipoDato);
-    //printf("el $3 es: (%d)", $3.tipoDato);
     if($1.tipoDato != $3.tipoDato){
-
         printf("Semantic Error(%d): No son del mismo tipo.\n", line);
     }
     if(!equalSize($1,$3)){

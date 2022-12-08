@@ -1,4 +1,5 @@
 #include "../include/scansemantic.h"
+#include <string.h>
 
 entradaTS ts[MAX_IN];
 atributos ts_subprog[MAX_SUBPROG];
@@ -14,6 +15,25 @@ int nParam = 0;
 int currentFunction = -1;
 int aux = 0;
 int callSub = 0;
+
+char* tipoAstring(dtipo tipo){
+
+	char tipo_str[255] = "desconocido";
+
+	if ( tipo == REAL ) {
+        strncpy(tipo_str,"real",255);
+	} else if (tipo == ENTERO) {
+        strncpy(tipo_str,"entero",255);
+	} else if ( tipo == TIPOBOOL ) {
+        strncpy(tipo_str,"booleano",255);
+	} else if ( tipo == CARACTER ) {
+        strncpy(tipo_str,"caracter",255);
+	}
+
+    printf("\n%s\n",tipo_str);
+
+	return tipo_str;
+}
 
 // Devuelve si el atributo es lista o no
 int isList(atributos e){
@@ -127,7 +147,7 @@ int tsSearchId(atributos e){
 	}
 
 	if(!found) {
-		//printf("Semantic Error(%d): Ident not declared: %s\n", line, e.nombre);
+		printf("Semantic Error(%d): Identifier not declared: %s\n", line, e.nombre);
 		return -1;
 	} else {
 		return i;
@@ -152,7 +172,7 @@ int tsSearchName(atributos e){
 	}
 
 	if(!found) {
-		//printf("Semantic Error(%d): Ident not declared: %s\n", line, e.nombre);
+		printf("Semantic Error(%d): Ident not declared: %s\n", line, e.nombre);
 		return -1;
 	} else {
 		return i;
@@ -179,7 +199,7 @@ void tsAddId(atributos e){
 			} else{
 
 				found = 1;
-				printf("Semantic Error(%d): Exist ident: %s\n", line, e.nombre);
+				printf("Semantic Error(%d): Identifier already exists: %s\n", line, e.nombre);
 
 	 		}
 
@@ -284,7 +304,7 @@ void tsAddParam(atributos e){
 		} else{
 
 			found = 1;
-			printf("Semantic Error(%d): Exist param: %s\n", line, e.nombre);
+			printf("Semantic Error(%d): Param name already exists: %s\n", line, e.nombre);
 
         }
 
@@ -365,8 +385,8 @@ void tsCheckReturn(atributos expr, atributos* res){
 		//printf("Ha encontrado una FUNCION en la pila\n");
 
 		if (expr.tipoDato!= ts[index].tipoDato) {
-            printf("\n%d-%d\n",expr.tipoDato, ts[index].tipoDato);
-			printf("Semantic Error(%d): Return not equal to return FUNCION.\n", line);
+			printf("Semantic Error(%d): Return of type %s does not equal return type %s of function %s.\n",
+                    line, tipoAstring(expr.tipoDato),tipoAstring(ts[index].tipoDato),ts[index].nombre);
 			return;
 		}
 
@@ -376,7 +396,8 @@ void tsCheckReturn(atributos expr, atributos* res){
 		tmp.tamDimen2 = ts[index].tamDimen2;
 
 		if (!equalSize(expr,tmp)) {
-			printf("Semantic Error(%d): Return expresion not same size than return FUNCION.\n", line);
+			printf("Semantic Error(%d): Return expresion not same size than return of function %s\n",
+                    line,ts[index].nombre);
 			return;
 		}
 
@@ -386,12 +407,9 @@ void tsCheckReturn(atributos expr, atributos* res){
 		res->tamDimen2 = expr.tamDimen2;
 
 	} else {
-
-		printf("Semantic Error(%d-%d): res not declared into FUNCION.\n", line, index);
+		printf("Semantic Error(%d-%d): res not declared inside a function.\n", line, index);
 		return;
-
 	}
-
 }
 
 // Devuelve el identificar
@@ -447,12 +465,13 @@ void tsOpSign(atributos op, atributos o, atributos* res){
 void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types.", line);
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
   		return;
   	}
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
-		printf("Semantic Error%d): Invalid tipoDatoin op. Both must be equals.", line);
+		printf("Semantic Error%d): Invalid tipoDato in op. Operation must be with real or entero", line);
 		return;
 	}
 
@@ -466,16 +485,14 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 			res->tamDimen2 = o1.tamDimen2;
 
 		} else {
-
-            printf("Semantic Error(%d): Size arrays must be same", line);
+            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
+                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
 			return;
-
 		}
 
 	} else {
 
 		if (isList(o1) && !isList(o2)) {
-
 			res->tipoDato= o1.tipoDato;
 			res->nDim = o1.nDim;
 			res->tamDimen1 = o1.tamDimen1;
@@ -510,12 +527,13 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types.", line);
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
   		return;
   	}
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
-		printf("Semantic Error%d): Invalid tipoDatoin op. Both must be equals.", line);
+		printf("Semantic Error%d): Invalid tipoDato in op. Operation must be with real or entero", line);
 		return;
 	}
 
@@ -530,7 +548,8 @@ void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 
 		} else {
 
-            printf("Semantic Error(%d): Size arrays must be same", line);
+            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
+                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
 			return;
 
 		}
@@ -550,12 +569,13 @@ void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
-		printf("Semantic Error%d): Invalid tipoDatoin op. Both must be same.", line);
+		printf("Semantic Error%d): Invalid tipoDato in op. Operation must be with real or entero", line);
 		return;
 	}
 
@@ -570,7 +590,8 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 
 		} else {
 
-            printf("Semantic Error(%d): Size arrays must be same", line);
+            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
+                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
 			return;
 
 		}
@@ -612,9 +633,11 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error (%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
+
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
 		return;
@@ -630,9 +653,10 @@ void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error (%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
 		return;
@@ -649,9 +673,10 @@ void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error (%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
 		return;
@@ -668,9 +693,10 @@ void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error (%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
 	if (isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects ENTERO or REAL.", line);
 		return;
@@ -687,10 +713,10 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
     if (o1.tipoDato!= o2.tipoDato) {
-
-		printf("Semantic Error (%d): Expressions must be same types.", line);
-		return;
-	}
+	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+  		return;
+  	}
 	if ((o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects ENTERO or REAL.", line);
 		return;
@@ -749,9 +775,9 @@ void tsFunctionCall(atributos id, atributos* res){
                     }
 
                     if(ts[pos_limit].tipoDato != tempTS.tipoDato){
-                        printf("\nSemantic Error(%d): El parámetro %d es de tipo %d pero se espera un tipo %d \n",
-                                line ,ts[pos_limit].tipoDato,
-                                ts_subprog[TOPE_SUBPROG].tipoDato );
+                        printf("\nSemantic Error(%d): El parámetro %s es de tipo %s pero se espera un tipo %s \n",
+                                line ,ts[pos_limit].nombre, tipoAstring(ts[pos_limit].tipoDato),
+                                tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato) );
                     }
                     pos_limit--;
                     TOPE_SUBPROG--;
