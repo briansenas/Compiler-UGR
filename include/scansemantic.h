@@ -26,6 +26,8 @@ typedef struct {
 	tipoEntrada entrada;//in;
 	char *nombre;//*lex;
 	dtipo tipoDato;//type;
+	int lista; 
+	int es_constante; 
 	unsigned int nParam;
 	unsigned int nDim;
 
@@ -35,16 +37,16 @@ typedef struct {
 	// Tamaño de la dimensión 2
 	int tamDimen2;//tDim2;
 
+
 } entradaTS;
 
 typedef struct {
 
 	int attr;
-	tipoEntrada tipoEnt;
 	char *nombre;
 	dtipo tipoDato;
-    int lista;
-    int es_constante;
+	int lista;		// indica si es una lista
+	int es_constante;		// indica si es constante
 	unsigned int nDim;
 	// Tamaño de la dimensión 1
 	int tamDimen1;
@@ -56,16 +58,19 @@ typedef struct {
 #define YYSTYPE atributos
 
 #define MAX_IN 500
-#define MAX_SUBPROG 50
+#define MAX_SUBPROG 50					// número máximo de parámetros en un subprograma
 
 extern unsigned long int TOPE;//LIMIT;
-                     //
+
+// Indica si se esta comprobando un subprograma
 extern int callSub;
 
+// Declaración de una segunda pila de atributos auxiliar para realizar las comprobaciones de los parámetros de un subprograma
 extern entradaTS ts[MAX_IN];
 extern unsigned long int TOPE_SUBPROG;
 extern atributos ts_subprog[MAX_SUBPROG];
 extern char* tipoAstring(dtipo tipo);
+extern void tsCheckLeftList(atributos l, atributos o, atributos* ref);
 
 // Línea del fichero que se está analizando
 extern int line;
@@ -81,10 +86,11 @@ extern int subProg;
 // Indica si se están declarando parámetros formales en una función
 extern int decParam;
 
-extern int decFunction;
+//extern int decFunction;
 
 // Variable global que almacena el tipo en las declaraciones
 extern dtipo globaltipoDato;
+extern int globalLista;
 
 // Cuenta el número de parámetros de una función
 extern int nParam;

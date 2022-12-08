@@ -8,9 +8,10 @@ unsigned long int TOPE = 0;
 unsigned long int TOPE_SUBPROG=0;
 int decvariable = 0;
 int decParam = 0;
-int decfuncion = 0;
+//int decfuncion = 0;
 int subProg = 0;
 dtipo globaltipoDato= NA;
+int globalLista = 0; 
 int nParam = 0;
 int currentFunction = -1;
 int aux = 0;
@@ -18,27 +19,30 @@ int callSub = 0;
 
 char* tipoAstring(dtipo tipo){
 
-	char tipo_str[255] = "desconocido";
+	char *tipo_str = malloc(255);
+	if(!tipo_str)
+		return NULL; 
 
 	if ( tipo == REAL ) {
-        strncpy(tipo_str,"real",255);
+        strcpy(tipo_str,"real");
 	} else if (tipo == ENTERO) {
-        strncpy(tipo_str,"entero",255);
+        strcpy(tipo_str,"entero");
 	} else if ( tipo == TIPOBOOL ) {
-        strncpy(tipo_str,"booleano",255);
+        strcpy(tipo_str,"booleano");
 	} else if ( tipo == CARACTER ) {
-        strncpy(tipo_str,"caracter",255);
+        strcpy(tipo_str,"caracter");
+	}else if (tipo== DESCONOCIDO){
+		strcpy(tipo_str,"desconocido");
+	}else if (tipo== NA){
+		strcpy(tipo_str,"na");
 	}
-
-    printf("\n%s\n",tipo_str);
 
 	return tipo_str;
 }
 
 // Devuelve si el atributo es lista o no
 int isList(atributos e){
-
-    return (e.nDim!=0);
+	return e.lista;
 }
 
 // Devuelve si los dos posibles arrays que recibe tienen el mismo tamaño
@@ -52,7 +56,8 @@ int equalSize(atributos e1, atributos e2){
 
 // Guarda el tipoDatode la variableiable
 int setType(atributos value){
-    globaltipoDato= value.tipoDato;
+	globaltipoDato= value.tipoDato;
+	globalLista = value.lista; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,6 +74,8 @@ int tsAddIn(entradaTS in){
 		ts[TOPE].entrada=in.entrada;
 		ts[TOPE].nombre=in.nombre;
 		ts[TOPE].tipoDato=in.tipoDato;
+		ts[TOPE].lista = in.lista; 
+		ts[TOPE].es_constante = in.es_constante; 
 		ts[TOPE].nParam=in.nParam;
 		ts[TOPE].nDim=in.nDim;
 		ts[TOPE].tamDimen1=in.tamDimen1;
@@ -208,11 +215,14 @@ void tsAddId(atributos e){
 		// Si no se ha encontrado significa que no existe, por lo que se añade
         // a la pila
 		if(!found) {
+			// printf("ADDING: %s - %d", e.nombre, e.lista);
 			entradaTS newIn;
 			newIn.entrada = VARIABLE;
 			newIn.nombre = e.nombre;
 			newIn.tipoDato= globaltipoDato;
 			newIn.nParam = 0;
+			newIn.lista = globalLista;
+			newIn.es_constante = e.es_constante;
 			newIn.nDim=e.nDim;
 			newIn.tamDimen1=e.tamDimen1;
 			newIn.tamDimen2=e.tamDimen2;
@@ -226,12 +236,14 @@ void tsAddId(atributos e){
 // Añade una MARCA de tope
 void tsAddMark(){
 
-    entradaTS inInitScope;
+	entradaTS inInitScope;
 
 	inInitScope.entrada = MARCA;
 	inInitScope.nombre = "{";
 	inInitScope.tipoDato= NA;
 	inInitScope.nParam = 0;
+	inInitScope.lista = 0; 
+	inInitScope.es_constante = 0; 
 	inInitScope.nDim = 0;
 	inInitScope.tamDimen1 = 0;
 	inInitScope.tamDimen2 = 0;
@@ -258,6 +270,8 @@ void tsAddMark(){
 				newIn.tipoDato= ts[j].tipoDato;
 				newIn.nParam = ts[j].nParam;
 				newIn.nDim = ts[j].nDim;
+				newIn.lista = ts[j].lista;
+				newIn.es_constante = ts[j].es_constante;
 				newIn.tamDimen1 = ts[j].tamDimen1;
 				newIn.tamDimen2 = ts[j].tamDimen2;
 				tsAddIn(newIn);
@@ -275,12 +289,14 @@ void tsAddMark(){
 // Añade una in de subprograma
 void tsAddSubprog(atributos e){
 
-    entradaTS inSubProg;
+	entradaTS inSubProg;
     //printf("\nAddingSubProg:%s\n",e.nombre);
 	inSubProg.entrada = FUNCION;
 	inSubProg.nombre = e.nombre;
 	inSubProg.nParam = 0;
 	inSubProg.nDim = 0;
+	inSubProg.lista = e.lista; 
+	inSubProg.es_constante = e.es_constante; 
 	inSubProg.tamDimen1 = 0;
 	inSubProg.tamDimen2 = 0;
 	inSubProg.tipoDato= e.tipoDato;
@@ -293,7 +309,7 @@ void tsAddSubprog(atributos e){
 // Añade una in de param PARAMETRO_FORMALAL
 void tsAddParam(atributos e){
 
-    int j = TOPE - 1, found = 0;
+	int j = TOPE - 1, found = 0;
 
 	while((j != currentFunction)  && (!found) ){
 
@@ -306,7 +322,7 @@ void tsAddParam(atributos e){
 			found = 1;
 			printf("Semantic Error(%d): Param name already exists: %s\n", line, e.nombre);
 
-        }
+		}
 
 	}
 
@@ -318,6 +334,8 @@ void tsAddParam(atributos e){
 		newIn.tipoDato= globaltipoDato;
 		newIn.nParam = 0;
 		newIn.nDim = e.nDim;
+		newIn.lista = globalLista; 
+		newIn.es_constante = e.es_constante; 
 		newIn.tamDimen1 = e.tamDimen1;
 		newIn.tamDimen2 = e.tamDimen2;
 		tsAddIn(newIn);
@@ -329,7 +347,7 @@ void tsAddParam(atributos e){
 // Actualiza el número de parámetros de la función
 void tsUpdateNparam(atributos e){
 
-    ts[currentFunction].nParam = nParam;
+	ts[currentFunction].nParam = nParam;
 	ts[currentFunction].nDim=e.nDim;
 	ts[currentFunction].tamDimen1=e.tamDimen1;
 	ts[currentFunction].tamDimen2=e.tamDimen2;
@@ -346,7 +364,7 @@ void tsUpdateNparam(atributos e){
 // Devuelve la in que sea función más cercana
 int tsGetNextfuncion(){
 
-    int i = TOPE - 1;
+	int i = TOPE - 1;
 	int found = 0;
 
 	while (i >=0 && !found) {
@@ -378,9 +396,9 @@ int tsGetNextfuncion(){
 // Comprueba si el tipoDatode la expresión coincide con lo que devuelve la función
 void tsCheckReturn(atributos expr, atributos* res){
 
-    int index = tsGetNextfuncion();
-    //printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
-    //printTS();
+	int index = tsGetNextfuncion();
+	//printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
+	//printTS();
 	if (index > -1) {
 		//printf("Ha encontrado una FUNCION en la pila\n");
 
@@ -415,11 +433,11 @@ void tsCheckReturn(atributos expr, atributos* res){
 // Devuelve el identificar
 void tsGetId(atributos id, atributos* res){
 
-    int index = tsSearchId(id);
+	int index = tsSearchId(id);
 
 	if(index==-1) {
-        if(ts[index].entrada != FUNCION)
-		      printf("\nSemantic Error(%d): Id not found %s.\n", line, id.nombre);
+		if(ts[index].entrada != FUNCION)
+			printf("Semantic Error(%d): Id not found %s.\n", line, id.nombre);
 	} else {
 		//printf("El indice es %i", index);
 
@@ -435,22 +453,46 @@ void tsGetId(atributos id, atributos* res){
 
 // Realiza la comprobación de la operación !, &, ~
 void tsOpUnary(atributos op, atributos o, atributos* res){
-
-    if (o.tipoDato!= TIPOBOOL || isList(o)) {
+	int index = tsSearchId(o);
+	if (!ts[index].lista && ts[index].tipoDato!=TIPOBOOL) {
 		printf("Semantic Error(%d): Not operator expects logic expression.", line);
+	}else if (ts[index].lista){
+		if(op.attr==0){
+			// Se esta aplicando el operador ! con una lista
+			printf("Semantic Error(%d): Not operator expects logic expression.", line);
+		}else{
+			res->tipoDato= ts[index].tipoDato;
+			res->lista = ts[index].lista;
+			res->nDim = 0;
+			res->tamDimen1 = 0;
+			res->tamDimen2 = 0;
+		}
+	}else{
+		res->tipoDato= TIPOBOOL;
+		res->nDim = 0;
+		res->tamDimen1 = 0;
+		res->tamDimen2 = 0;
+	}
+}
+
+void tsCheckLeftList(atributos l, atributos a, atributos* res){
+
+	int index = tsSearchId(l);
+	if(!ts[index].lista || a.tipoDato!=ENTERO){
+		printf("Semantic Error(%d): Ternary operator only works with lists and integer",line);
 	}
 
-	res->tipoDato= TIPOBOOL;
+	res->tipoDato = ts[index].tipoDato; 
 	res->nDim = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
-
 }
+
 
 // Realiza la comprobación de la operación +, -
 void tsOpSign(atributos op, atributos o, atributos* res){
 
-    if ((o.tipoDato!= REAL && o.tipoDato!= ENTERO) || isList(o)) {
+	if ((o.tipoDato!= REAL && o.tipoDato!= ENTERO) || isList(o)) {
 		printf("Semantic Error(%d): Operator expects integer or REAL expression.", line);
 	}
 
@@ -464,11 +506,11 @@ void tsOpSign(atributos op, atributos o, atributos* res){
 // Realiza la comprobación de la operación +, - binaria
 void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
 		printf("Semantic Error%d): Invalid tipoDato in op. Operation must be with real or entero", line);
@@ -485,8 +527,8 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 			res->tamDimen2 = o1.tamDimen2;
 
 		} else {
-            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
-                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
+			printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
+							line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
 			return;
 		}
 
@@ -537,42 +579,23 @@ void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 		return;
 	}
 
-	if (isList(o1) && isList(o2)){
+	if (!isList(o1) && o2.tipoDato != ENTERO){
+		printf("Semantic Error(%d): Operation not allowed.", line);
+		return;
 
-		if(equalSize(o1,o2)){
-
-			res->tipoDato= o1.tipoDato;
-			res->nDim = o1.nDim;
-			res->tamDimen1 = o1.tamDimen1;
-			res->tamDimen2 = o1.tamDimen2;
-
-		} else {
-
-            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
-                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
-			return;
-
-		}
-
-	} else {
-
-		if (!isList(o1) || !isList(o2)) {
-				printf("Semantic Error(%d): Operation not allowed.", line);
-				return;
-			}
-
-		}
+	} 
+	
 
 }
 
 // Realiza la comprobación de la operación *, /
 void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
 		printf("Semantic Error%d): Invalid tipoDato in op. Operation must be with real or entero", line);
@@ -589,17 +612,14 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 			res->tamDimen2 = o1.tamDimen2;
 
 		} else {
-
-            printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
-                    line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
+				printf("Semantic Error(%d): Size arrays must be same. Index 0 has size %dx%d and index 1 has size %dx%d",
+								line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
 			return;
-
 		}
 
 	} else {
 
 		if (isList(o1) && !isList(o2)) {
-
 			res->tipoDato= o1.tipoDato;
 			res->nDim = o1.nDim;
 			res->tamDimen1 = o1.tamDimen1;
@@ -608,12 +628,9 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 		}
 
 		if (!isList(o1) && isList(o2)){
-
 			if (strcmp(op.nombre,"-")==0){
-
 				printf("Semantic Error(%d): Operation not allowed.", line);
 				return;
-
 			} else {
 
 				res->tipoDato= o2.tipoDato;
@@ -632,11 +649,11 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación &&
 void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
@@ -652,11 +669,11 @@ void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
 void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
 		return;
@@ -672,11 +689,11 @@ void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación ||
 void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects TIPOBOOL", line);
 		return;
@@ -692,11 +709,11 @@ void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación ==, !=
 void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 	if (isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects ENTERO or REAL.", line);
 		return;
@@ -712,11 +729,11 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación <, >, <=, >=, <>
 void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
-    if (o1.tipoDato!= o2.tipoDato) {
-	    printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
-                line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-  		return;
-  	}
+	if (o1.tipoDato!= o2.tipoDato) {
+		printf("Semantic Error(%d): Expressions must be equals types. %s does not match %s",
+							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
+		return;
+	}
 	if ((o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Invalid tipoDatoin op. Both must be same. Expects ENTERO or REAL.", line);
 		return;
@@ -738,7 +755,6 @@ void TS_subprog_params(atributos atrib) {
 		ts_subprog[TOPE_SUBPROG] = atrib;
 
 		TOPE_SUBPROG++;
-
 	}
 
     //printSPTS();
@@ -748,14 +764,14 @@ void TS_subprog_params(atributos atrib) {
 // Realiza la comprobación de la llamada a una función
 void tsFunctionCall(atributos id, atributos* res){
 
-    int index = tsSearchName(id);
-    //printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
+	int index = tsSearchName(id);
+	//printf("\nFOUND_FUNCTION:%s\n",ts[index].nombre);
 
 	if(index==-1) {
 
 		currentFunction = -1;
 
-		printf("\nSemantic Error(%d)): FUNCION: Id not found %s.\n", line, id.nombre);
+		printf("Semantic Error(%d)): FUNCION: Id not found %s.\n", line, id.nombre);
 
     } else {
 		if (nParam != ts[index].nParam) {
@@ -771,13 +787,13 @@ void tsFunctionCall(atributos id, atributos* res){
                     entradaTS tempTS;
                     tempTS.tipoDato = ts_subprog[TOPE_SUBPROG].tipoDato;
                     if(!ts_subprog[TOPE_SUBPROG].es_constante){
-                        tempTS = ts[tsSearchName(ts_subprog[TOPE_SUBPROG])];
+											tempTS = ts[tsSearchName(ts_subprog[TOPE_SUBPROG])];
                     }
 
                     if(ts[pos_limit].tipoDato != tempTS.tipoDato){
-                        printf("\nSemantic Error(%d): El parámetro %s es de tipo %s pero se espera un tipo %s \n",
-                                line ,ts[pos_limit].nombre, tipoAstring(ts[pos_limit].tipoDato),
-                                tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato) );
+											printf("Semantic Error(%d): El parámetro %s es de tipo %s pero se inserta un tipo %s \n",
+															line ,ts[pos_limit].nombre, tipoAstring(ts[pos_limit].tipoDato),
+															tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato) );
                     }
                     pos_limit--;
                     TOPE_SUBPROG--;
@@ -792,12 +808,13 @@ void tsFunctionCall(atributos id, atributos* res){
 
 		}
 	}
+	TOPE_SUBPROG = 0;
 }
 
 // Realiza la comprobación de cada parámetro de una función
 void tsCheckParam(atributos param, int checkParam){
 
-    int posParam = (currentFunction + ts[currentFunction].nParam) - (checkParam - 1);
+	int posParam = (currentFunction + ts[currentFunction].nParam) - (checkParam - 1);
 
 	int error = ts[currentFunction].nParam - checkParam + 1;
 
@@ -823,7 +840,7 @@ void tsCheckParam(atributos param, int checkParam){
 // Muestra una in de la tabla de símbolos
 void printIn(int row){
 
-    entradaTS e = ts[row];
+	entradaTS e = ts[row];
 	printf("\n\nTipo Entrada: %d\nLexema: %s\nTipo Dato: %d\nNum Parametros: %d\nDimensiones[i][j]: %d[%d][%d]\n",
 		e.entrada, e.nombre, e.tipoDato, e.nParam, e.nDim, e.tamDimen1, e.tamDimen2);
 
@@ -867,6 +884,7 @@ void printTS(){
 		printf("-Entrada: %-12s", e);
 		printf("-Lexema: %-12s", ts[j].nombre);
 		printf("-type: %-10s", t);
+		printf("-lista %-10d",ts[j].lista);
 		printf("-nParam: %-4d", ts[j].nParam);
 		printf("-nDim: %-4d", ts[j].nDim);
 		printf("-tamDimen1: %-4d", ts[j].tamDimen1);
@@ -916,6 +934,7 @@ void printAttr(atributos e, char *msg){
 	printf("-Atributos: %-4d", e.attr);
 	printf("-Lexema: %-12s", e.nombre);
 	printf("-type: %-10s", t);
+	printf("-lista %-10d",e.lista);
 	printf("-nDim: %-4d", e.nDim);
 	printf("-tamDimen1: %-4d", e.tamDimen1);
 	printf("-tamDimen2: %-4d\n", e.tamDimen2);

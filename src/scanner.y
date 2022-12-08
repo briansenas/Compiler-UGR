@@ -91,11 +91,10 @@ variables_locales: variables_locales cuerpo_declar_variables
     | cuerpo_declar_variables ;
 
 
-cuerpo_declar_variables: tipo {setType($1);
-            } varios_identificador PYC
+cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
                        | error;
 
-cabecera_subprog: tipo IDENT {decParam = 1;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros
+cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros
                 | error ;
 
 parametros: lista_parametros PARENTESIS_CIERRA {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
@@ -114,7 +113,8 @@ sentencia: bloque
 
 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     if($1.tipoDato != $3.tipoDato){
-        printf("Semantic Error(%d): No son del mismo tipo.\n", line);
+        printf("Semantic Error(%d): No son del mismo tipo.[%s - %s]\n", 
+        line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
     }
     if(!equalSize($1,$3)){
         printf("Semantic Error(%d): No son del mismo tamanio.\n",line);
@@ -144,11 +144,12 @@ sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
 
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$);} PYC;
 
-expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
+expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { 
+    $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
     | OP_UNARIO expresion {tsOpUnary($1, $2, &$$); }
     | expresion OP_UNARIO {tsOpUnary($2, $1, &$$); }
     | identificador DIRECCION
-    | expresion OP_TERNARIO CONSTANTE_NUM
+    | expresion OP_TERNARIO CONSTANTE_NUM {tsCheckLeftList($1,$3,&$$);}
     | expresion OP_OR expresion {tsOpOr($1, $2, $3, &$$); }
     | expresion OP_AND expresion {tsOpAnd($1, $2, $3, &$$); }
     | expresion OP_XOR expresion {tsOpXOr($1, $2, $3, &$$); }
@@ -157,20 +158,25 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA { $$.tipoDato = $2.tipoDa
     | expresion OP_IGUALDAD expresion {tsOpEqual($1, $2, $3, &$$); }
     | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); }
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
+
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
         if(callSub)
             TS_subprog_params($1);
     }
-    | constante {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; $$.tamDimen2 = $0.tamDimen2;
+    | constante {
+        $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; 
+        $$.tamDimen2 = $1.tamDimen2; 
         if(callSub)
             TS_subprog_params($1);
     }
-    | funcion {$$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $0.tamDimen1; $$.tamDimen2 = $0.tamDimen2; currentFunction=-1;
+    | funcion {
+        $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1; 
+        $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista; 
         if(callSub)
             TS_subprog_params($1);
     }
-    | lista_constantes
+    | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;}
     | error ;
 
 varios_identificador: identificador
@@ -178,7 +184,9 @@ varios_identificador: identificador
 
 identificador: IDENT {
                     if(decvariable == 1){
-						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; tsAddId($1); $1.tipoEnt = 2;
+						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0; 
+                        $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
+                        tsAddId($1);
 					}else{
                         if(decParam==0)
                             tsGetId($1, &$$);
@@ -192,8 +200,8 @@ lista_parametros:
     | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);}
     | lista_parametros error tipo identificador;
 
-lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena {nParam++; tsCheckParam($1,nParam);}
-                          | expresion_o_cadena{nParam=1;tsCheckParam($1,nParam);};
+lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena 
+                          | expresion_o_cadena;
 
 expresion_o_cadena: expresion
                   | CADENA ;
@@ -203,8 +211,8 @@ constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.
 | CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
 | CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
 
-tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;}
-    | LISTA TIPO_DATO {$$.tipoDato = $1.tipoDato;};
+tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
+    | LISTA TIPO_DATO {$$.tipoDato = $2.tipoDato; $$.lista=1;};
 
 lista_variables: identificador
                | DIRECCION lista_variables
@@ -216,10 +224,10 @@ funcion: IDENT PARENTESIS_ABRE {callSub=1;}lista_expresiones PARENTESIS_CIERRA {
 lista_expresiones: lista_expresiones COMA expresion {nParam++;}
                  | expresion {nParam=1;}
 
-lista_constantes: lista_constante_booleano {$1.lista=1;}
-    | lista_constante_entero{$1.lista=1;}
-    | lista_constante_flotante{$1.lista=1;}
-    | lista_constante_car{$1.lista=1;};
+lista_constantes: lista_constante_booleano {$$.lista=1;}
+    | lista_constante_entero{$$.lista=1;}
+    | lista_constante_flotante{$$.lista=1;}
+    | lista_constante_car{$$.lista=1;};
 
 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA;
 

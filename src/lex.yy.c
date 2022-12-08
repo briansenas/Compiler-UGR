@@ -439,7 +439,7 @@ static const YY_CHAR yy_ec[256] =
 static const YY_CHAR yy_meta[51] =
     {   0,
         1,    1,    2,    1,    1,    3,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    4,    1,    1,    4,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    4,
         1,    1,    1,    1,    1,    1,    4,    4,    4,    1,
         4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
         4,    4,    4,    4,    4,    4,    4,    1,    1,    1
@@ -1100,28 +1100,28 @@ YY_RULE_SETUP
 case 46:
 YY_RULE_SETUP
 #line 71 "./src/scanner.l"
-{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{ ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 72 "./src/scanner.l"
-{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+{ ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
 #line 73 "./src/scanner.l"
-{ ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+{ ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 74 "./src/scanner.l"
-{ ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 75 "./src/scanner.l"
-{ ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 case 52:
 YY_RULE_SETUP
 #line 77 "./src/scanner.l"
-{ ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
+{ ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre=strdup(yytext); return(IDENT);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
@@ -1165,21 +1165,22 @@ YY_RULE_SETUP
 #line 89 "./src/scanner.l"
 {
     ECHO;
+    line++;
 }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 93 "./src/scanner.l"
+#line 94 "./src/scanner.l"
 {
     printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 97 "./src/scanner.l"
+#line 98 "./src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 1183 "src/lex.yy.c"
+#line 1184 "src/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2196,7 +2197,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 97 "./src/scanner.l"
+#line 98 "./src/scanner.l"
 
 
 
