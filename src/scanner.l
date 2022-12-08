@@ -19,12 +19,10 @@
 DIGITO					[0-9]
 FLOTANTE				[0-9]+([.][0-9]*)
 LETRA					[a-zA-Z]
-GUIONES                 [-_]
+GUIONES                 [_]
 ESPACIO					[" "]
 
 %%
-
-
 "ini_var"                { if(DEBUGGING) ECHO;       return(INI_VAR);}
 "fin_var"                { if(DEBUGGING) ECHO;       return(FIN_VAR);}
 "principal"             { if(DEBUGGING) ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
@@ -70,27 +68,24 @@ ESPACIO					[" "]
 "%"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
 "**"                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 ","                       { if(DEBUGGING) ECHO;       return(COMA);}
-{DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
-{DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
-\'[^\"\']?\'               { if(DEBUGGING) ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
-"Verdadero"                 { if(DEBUGGING) ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
-"Falso"                 { if(DEBUGGING) ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
-\"[^\"]*\"				  { if(DEBUGGING) ECHO;   yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
-{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { if(DEBUGGING) ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
-
-
-"//".*                           { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
-[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
+{DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+\'[^\"\']?\'               { if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+"Verdadero"                 { if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+"Falso"                 { if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+\"[^\"]*\"				  { if(DEBUGGING) ECHO;   yylval.tipoDato=CADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
+{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre=strdup(yytext); return(IDENT);}
+"//".*                           { /* DO NOTHING */ if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;}
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;}
 [/][*]                                    {
     printf(" \n [Linea %d]: lexical error: comentario sin cerrar'%s'. ", yylineno, yytext);
 }
 
 [ \t] {
-    if(DEBUGGING) ECHO;
+    if(DEBUGGING) if(DEBUGGING) ECHO;
 }
 [\n\r] {
-    if(DEBUGGING || COMMENTS) ECHO;
-
+    if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;
 }
 
 . {

@@ -130,6 +130,6 @@ principal()
     a  = x * lx;
     lx = lx / x;
 
-    // Probamos devolver un caracteres para principal() que es entero
-    devolver 'hola';
+    // Probamos devolver un booleano para principal() que es entero
+    devolver pl;
 }
