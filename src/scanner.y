@@ -1,3 +1,4 @@
+
 %{
 #include <stdlib.h>
 #include <stdio.h>
@@ -119,7 +120,12 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     if(!equalSize($1,$3)){
         printf("Semantic Error(%d): El valor a asignar no es del mismo tamanio.\n",line);
     }
-
+    if(tsCheckList($1)){
+        if(!$3.lista){
+            printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
+        }
+    }
+   
 };
 
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
@@ -158,7 +164,6 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | expresion OP_IGUALDAD expresion {tsOpEqual($1, $2, $3, &$$); }
     | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); }
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
-
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
         if(callSub)
@@ -186,6 +191,8 @@ identificador: IDENT {
                     if(decvariable == 1){
 						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0;
                         $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
+						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
+                        $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
                         tsAddId($1);
 					}else{
                         if(decParam==0)

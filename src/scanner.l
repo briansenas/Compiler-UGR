@@ -86,6 +86,7 @@ ESPACIO					[" "]
 }
 [\n\r] {
     if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;
+    line++;
 }
 
 . {
