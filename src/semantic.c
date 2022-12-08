@@ -329,18 +329,25 @@ int tsGetNextfuncion(){
     int i = TOPE - 1;
 	int found = 0;
 
-	while (i >=0 && found!=2) {
-		if (ts[i].entrada == FUNCION) {
+	while (i >=0 && !found) {
+		if (ts[i].entrada == MARCA) {
 			found++;
-            i--;
 		} else {
 			i--;
 		}
 
 	}
-    i++;
+    found = 0;
+    while(i>=0 && !found){
+        if(ts[i].entrada==FUNCION){
+            found++;
+        }
+        else{
+            i--;
+        }
+    }
 
-	if(found!=2) {
+	if(!found) {
 		return -1;
 	} else {
 		return i;

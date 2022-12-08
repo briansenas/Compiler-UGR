@@ -37,6 +37,7 @@ principal()
                     devolver x1;
                 }
 
+
             xf = functionC(Verdadero, 10);
             x2 = xf*(funcionC(Falso,1)-funcionC(Verdadero,23))/10.0;
 
