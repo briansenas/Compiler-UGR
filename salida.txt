@@ -4,158 +4,108 @@ leyendo entrada estándar.
 principal()
 {
     ini_var
-        entero ve,v, c, g, n;
-        real vf, x, z, m, j;
+        entero ve;
+        real vf;
         car vc;
         bool vl;
         entero pe, pe2;
         real pf, pf2;
         car pc, pc2;
         bool pl, pl2;
-        listade entero lx, lz, a;
+        listade entero lx,lz, a;
+        entero x;
     fin_var
 
-    real funcionB (car b1, bool b2)
+    entero funcionA(entero a1, real a2, car a3)
     {
         ini_var
-        // Declaramos una variable con el mismo nombre que en principal()
-            real vf;
-            car vc;
-            bool vl;
-            real xf, x2;
+            entero x1, x2;
         fin_var
 
-        real funcionC (bool c1, entero c2)
+        car funcionB (car b1, bool b2)
         {
             ini_var
-                real x1;
-                entero aux;
+                real xf, x2;
             fin_var
 
-            x1 = 1.3;
+                real funcionC (bool c1, entero c2)
+                {
+                    ini_var
+                        real x1;
+                    fin_var
 
+                    x1 = 1.3;
+                    si (c2>10)
+                        c2 = c2 - 1;
+                    sino
+                        x1=3.1;
+                    devolver x1;
+                }
 
-            si (c2>10)
-                 c2 = c2 - 1;
-            sino
-                x1=3.1;
+            // xf = functionC(Verdadero, 10);
+            x2 = xf*funcionC(Falso,1)-funcionC(Verdadero,23)/10.0;
 
+            mientras(x2*funcionC(Falso,10)-xf<10.0)
+                x2=x2*xf;
 
-
-            devolver x1;
         }
-        // Probamos definir dos funciones en un mismo bloque.
-        real funcionD (bool c1, entero c2)
+
+        real funcionD (real d1)
         {
             ini_var
-                real x1;
+                car dato;
+                entero valor;
             fin_var
 
-            x1 = 1.3;
-            si (c2>10)
-                c2 = c2 - 1;
-            sino
-                x1=3.1;
-            devolver x1;
+                car funcionE(car e1, car e2)
+                {
+                    imprimir << "introduzca dos caracteres: ";
+                    entrada >> e1 >> e2;
+                    si(e1=='a')
+                        devolver e1;
+                    sino si (e1=='b')
+                        devolver e2;
+                    sino
+                        devolver ' ';
+                }
+
+            imprimir << "introduzca un valor entero: ";
+            entrada >> valor;
+
+            si (d1>0.0)
+            {
+                ini_var
+                    entero dato;
+                fin_var
+
+                dato = 2;
+                dato = valor*20/dato;
+            }
+            sino {
+                valor=valor*100;
+                d1=d1/1000.0;
+            }
+
+            devolver d1;
         }
 
-        // Probamos utilizar llamadas a las funciones definidas
-        // Recordatorio: xf es de tipo real, funcionC y D devuelven real;
-        xf = funcionC(Verdadero, 10);
-        xf = funcionD(Falso,-2);
-
-        // Probamos multiples llamadas en una línea
-        x2 = xf*(funcionC(Falso,1)-funcionC(Verdadero,23))/10.0;
-
-        // Probemos asignarle un valor erróneo por ejemplo:
-        xf = "Esto no debería funcionar";Semantic Error(68): El valor a asignar no es del mismo tipo.[Expected: Real - Got:Desconocido]
-
-
-        // Parámetros invertidos -> debería dar error
-        x2 = funcionC(10,Verdadero)Semantic Error(71): El parámetro c2 es de tipo Entero pero se espera un tipo Booleano 
-;
-
-        mientras(x2*funcionC(Falso,2)-xf<10.0)
-            x2=x2*xf;
-
-        // Devolvemos un tipo real para nuestra funcionB que es de tipo real
-        devolver x2;
+       lx = lx>>;
+       lx = lx<<;
+       lx = $lx;
+       lx = #lx;
+       lx = ?lx;
+       a = lx@1;
+       lz = lx++a@2;
+       lx = lx--1;
+       lx = lx%0;
+       lx = lx**lz;
+       lx = lx+1;
+       a = 1 + lx;
+       lx = lx - 1;
+       lx = lx * 1;
+       a  = x * lx;
+       lx = lx / x;
     }
 
-
-    pe=pe2;
-    // pe3 no existe -> debería dar error
-    pe2=pe3;Semantic Error(83): Identifier not declared: pe3
-Semantic Error(83): Id not found pe3.
-Semantic Error(83): Id not found pe3.
-Semantic Error(83): El valor a asignar no es del mismo tipo.[Expected: Entero - Got:Desconocido]
-
-    // vl y vc no son del mismo tipo -> debería dar error
-    vl=vc;Semantic Error(85): El valor a asignar no es del mismo tipo.[Expected: Booleano - Got:Caracter]
-
-    vf = 1.3;
-
-    // Probemos operadores con listas:
-    // Operaciones de desplazamientos correctas:
-    lx = lx>>;
-    lx = lx<<;
-    // Operaciones de desplazamiento erróneas:
-    // pe es de tipo entero
-    //lx = pe<<;
-    //lx = pe>>;
-    // Operacion unaria de lista correcta:
-    lx = $lx;
-    lx = ?lx;
-    lx = #lx;
-    // Operacion incorrecta de unario de lista:
-    lx = $pe;Semantic Error(101): Not operator expects logic expression.Semantic Error(101): El valor a asignar no es del mismo tipo.[Expected: Entero - Got:Desconocido]
-Semantic Error(101): No se puede asignar porque tienen que ser de tipo lista.
-
-    lx = ?pe;Semantic Error(102): Not operator expects logic expression.Semantic Error(102): El valor a asignar no es del mismo tipo.[Expected: Entero - Got:Desconocido]
-Semantic Error(102): No se puede asignar porque tienen que ser de tipo lista.
-
-    lx = #pe;Semantic Error(103): Not operator expects logic expression.Semantic Error(103): El valor a asignar no es del mismo tipo.[Expected: Entero - Got:Desconocido]
-Semantic Error(103): No se puede asignar porque tienen que ser de tipo lista.
-
-    // Operacion correcta con arroba:
-    a = lx@1;
-    // Operacion incorrecta con arroba:
-    a = pe@1Semantic Error(107): El operador @ solo funciona con listas y enteros;Semantic Error(107): No se puede asignar porque tienen que ser de tipo lista.
-
-    //Operacion correcta con ++ y --:
-    lz = lx++a@2;
-    lx = lx--1;
-    // Operacion incorrecta con ++ y --:
-    lz = lx++pe@2Semantic Error(112): El operador @ solo funciona con listas y enteros;
-    lz = pe++a@2;Semantic Error(113): No se puede asignar porque tienen que ser de tipo lista.
-
-    lx = lx--'h';Semantic Error(114): Las expresión deben ser del mismo tipo. Entero no es igual a Caracter
-    lx = pe--1;Semantic Error(115): No se puede asignar porque tienen que ser de tipo lista.
-
-    // Operacion correcta con %:
-    lx = lx%0;
-    // Operacoin incorrecta con %
-    lx = lx%'h';Semantic Error(119): Las expresión deben ser del mismo tipo. Entero no es igual a Caracter
-    lx = pe%0;Semantic Error(120): No se puede asignar porque tienen que ser de tipo lista.
-
-    // Operacion correcta con **:
-    lx = lx**lz;
-    // Operacion incorrecta con **:
-    lx = pe**lz;Semantic Error(124): Esa operación solo es válida con Listas
-Semantic Error(124): No se puede asignar porque tienen que ser de tipo lista.
-
-    // Operaciones correctas con listas:
-    lx = lx+1;
-    a = 1 + lx;
-    lx = lx - 1;
-    lx = lx * 1;
-    // Operaciones incorrectas con listas: 
-    a  = x * lx;Semantic Error(131): Las expresión deben ser del mismo tipo. Real no es igual a EnteroSemantic Error(131): El valor a asignar no es del mismo tipo.[Expected: Entero - Got:Real]
-Semantic Error(131): No se puede asignar porque tienen que ser de tipo lista.
-
-    lx = lx / x;Semantic Error(132): Las expresión deben ser del mismo tipo. Entero no es igual a Real
-
-    // Probamos devolver un booleano para principal() que es entero
-    devolver pl;Semantic Error(135): Return of type Booleano does not equal return type Entero of function principal.
-
+    devolver 0;
 }
