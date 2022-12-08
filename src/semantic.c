@@ -30,7 +30,6 @@ char* tipoAstring(dtipo tipo){
         strncpy(tipo_str,"caracter",255);
 	}
 
-    printf("\n%s\n",tipo_str);
 
 	return tipo_str;
 }
@@ -419,7 +418,7 @@ void tsGetId(atributos id, atributos* res){
 
 	if(index==-1) {
         if(ts[index].entrada != FUNCION)
-		      printf("\nSemantic Error(%d): Id not found %s.\n", line, id.nombre);
+		      printf("Semantic Error(%d): Id not found %s.\n", line, id.nombre);
 	} else {
 		//printf("El indice es %i", index);
 
@@ -755,7 +754,7 @@ void tsFunctionCall(atributos id, atributos* res){
 
 		currentFunction = -1;
 
-		printf("\nSemantic Error(%d)): FUNCION: Id not found %s.\n", line, id.nombre);
+		printf("Semantic Error(%d)): FUNCION: Id not found %s.\n", line, id.nombre);
 
     } else {
 		if (nParam != ts[index].nParam) {
@@ -775,7 +774,7 @@ void tsFunctionCall(atributos id, atributos* res){
                     }
 
                     if(ts[pos_limit].tipoDato != tempTS.tipoDato){
-                        printf("\nSemantic Error(%d): El parámetro %s es de tipo %s pero se espera un tipo %s \n",
+                        printf("Semantic Error(%d): El parámetro %s es de tipo %s pero se espera un tipo %s \n",
                                 line ,ts[pos_limit].nombre, tipoAstring(ts[pos_limit].tipoDato),
                                 tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato) );
                     }

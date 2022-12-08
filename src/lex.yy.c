@@ -578,13 +578,15 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define DEBUGGING 1
+#define COMMENTS 0
 // #include "./../include/scanner.h"
 // #include "y.tab.h"
 
 // using namespace std;
-#line 586 "src/lex.yy.c"
-/* SECCIÓN DE DEFINCIONES */
 #line 588 "src/lex.yy.c"
+/* SECCIÓN DE DEFINCIONES */
+#line 590 "src/lex.yy.c"
 
 #define INITIAL 0
 
@@ -801,11 +803,11 @@ YY_DECL
 		}
 
 	{
-#line 23 "./src/scanner.l"
+#line 25 "./src/scanner.l"
 
 
 
-#line 809 "src/lex.yy.c"
+#line 811 "src/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -874,312 +876,313 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 26 "./src/scanner.l"
-{ ECHO;       return(INI_VAR);}
+#line 28 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(INI_VAR);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 27 "./src/scanner.l"
-{ ECHO;       return(FIN_VAR);}
+#line 29 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(FIN_VAR);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 28 "./src/scanner.l"
-{ ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
+#line 30 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 29 "./src/scanner.l"
-{ ECHO;       return(FIN_BLOQUE);}
+#line 31 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(FIN_BLOQUE);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 30 "./src/scanner.l"
-{ ECHO;       return(INI_BLOQUE);}
+#line 32 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(INI_BLOQUE);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 31 "./src/scanner.l"
-{ ECHO; yylval.tipoDato=ENTERO; return(TIPO_DATO);}
+#line 33 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.tipoDato=ENTERO; return(TIPO_DATO);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 32 "./src/scanner.l"
-{ ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
+#line 34 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 33 "./src/scanner.l"
-{ ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}
+#line 35 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 34 "./src/scanner.l"
-{ ECHO;     yylval.tipoDato=TIPOBOOL;return(TIPO_DATO);}
+#line 36 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;     yylval.tipoDato=TIPOBOOL;return(TIPO_DATO);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 35 "./src/scanner.l"
-{ ECHO;    yylval.tipoDato=TIPOLISTA; return(LISTA);}
+#line 37 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;    yylval.tipoDato=TIPOLISTA; return(LISTA);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 36 "./src/scanner.l"
-{ ECHO;       return(SI);}
+#line 38 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(SI);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 37 "./src/scanner.l"
-{ ECHO;       return(SINO);}
+#line 39 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(SINO);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 38 "./src/scanner.l"
-{ ECHO;       return(DEVOLVER);}
+#line 40 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(DEVOLVER);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 39 "./src/scanner.l"
-{ ECHO;       return(MIENTRAS);}
+#line 41 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(MIENTRAS);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 40 "./src/scanner.l"
-{ ECHO;       return(IMPRIMIR);}
+#line 42 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(IMPRIMIR);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 41 "./src/scanner.l"
-{ ECHO; return(ENTRADA);}
+#line 43 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(ENTRADA);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 42 "./src/scanner.l"
-{ ECHO; return(DIRECCION);}
+#line 44 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(DIRECCION);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 43 "./src/scanner.l"
-{ ECHO; return(DIRECCION);}
+#line 45 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(DIRECCION);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 44 "./src/scanner.l"
-{ ECHO; return(PARENTESIS_CIERRA);}
+#line 46 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(PARENTESIS_CIERRA);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 45 "./src/scanner.l"
-{ ECHO; return(PARENTESIS_ABRE);}
+#line 47 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(PARENTESIS_ABRE);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 46 "./src/scanner.l"
-{ ECHO; return(PYC);}
+#line 48 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(PYC);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 47 "./src/scanner.l"
-{ ECHO; return(SIGSIG);}
+#line 49 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(SIGSIG);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 48 "./src/scanner.l"
-{ ECHO; return(SIGSIG);}
+#line 50 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(SIGSIG);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 49 "./src/scanner.l"
-{ ECHO; return(OP_TERNARIO);}
+#line 51 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; return(OP_TERNARIO);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 50 "./src/scanner.l"
-{ ECHO; yylval.attr=0; return(OP_UNARIO);}
+#line 52 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.attr=0; return(OP_UNARIO);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 51 "./src/scanner.l"
-{ ECHO; yylval.attr=1; return(OP_UNARIO);}
+#line 53 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.attr=1; return(OP_UNARIO);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 52 "./src/scanner.l"
-{ ECHO;       yylval.attr=2; return(OP_UNARIO);}
+#line 54 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_UNARIO);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 53 "./src/scanner.l"
-{ ECHO;       yylval.attr=3; return(OP_UNARIO);}
+#line 55 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_UNARIO);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 54 "./src/scanner.l"
-{ ECHO;       yylval.attr=1; return(OP_ADITIVO);}
+#line 56 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_ADITIVO);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 55 "./src/scanner.l"
-{ ECHO;       yylval.attr=0; return(OP_ADITIVO);}
+#line 57 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_ADITIVO);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 56 "./src/scanner.l"
-{ ECHO;       return(OP_ASIGNACION);}
+#line 58 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(OP_ASIGNACION);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 57 "./src/scanner.l"
-{ ECHO;       yylval.attr=0; return(OP_MULTIPLICATIVO);}
+#line 59 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 58 "./src/scanner.l"
-{ ECHO;       yylval.attr=1; return(OP_MULTIPLICATIVO);}
+#line 60 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 59 "./src/scanner.l"
-{ ECHO;       return(OP_AND);}
+#line 61 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(OP_AND);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 60 "./src/scanner.l"
-{ ECHO;       return(OP_OR);}
+#line 62 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(OP_OR);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 61 "./src/scanner.l"
-{ ECHO;       return(OP_XOR);}
+#line 63 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(OP_XOR);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 62 "./src/scanner.l"
-{ ECHO;       yylval.attr=0; return(OP_RELACION);}
+#line 64 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_RELACION);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 63 "./src/scanner.l"
-{ ECHO;       yylval.attr=1; return(OP_RELACION);}
+#line 65 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_RELACION);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 64 "./src/scanner.l"
-{ ECHO;       yylval.attr=2; return(OP_RELACION);}
+#line 66 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_RELACION);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 65 "./src/scanner.l"
-{ ECHO;       yylval.attr=3; return(OP_RELACION);}
+#line 67 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_RELACION);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 66 "./src/scanner.l"
-{ ECHO;       yylval.attr=0; return(OP_IGUALDAD);}
+#line 68 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_IGUALDAD);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 67 "./src/scanner.l"
-{ ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
+#line 69 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 68 "./src/scanner.l"
-{ ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
+#line 70 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 69 "./src/scanner.l"
-{ ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
+#line 71 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 70 "./src/scanner.l"
-{ ECHO;       return(COMA);}
+#line 72 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;       return(COMA);}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 71 "./src/scanner.l"
-{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+#line 73 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 72 "./src/scanner.l"
-{ ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+#line 74 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;    yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 73 "./src/scanner.l"
-{ ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+#line 75 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;   yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 74 "./src/scanner.l"
-{ ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+#line 76 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 75 "./src/scanner.l"
-{ ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+#line 77 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;  yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 76 "./src/scanner.l"
-{ ECHO;   yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
+#line 78 "./src/scanner.l"
+{ if(DEBUGGING) ECHO;   yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 77 "./src/scanner.l"
-{ ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
+#line 79 "./src/scanner.l"
+{ if(DEBUGGING) ECHO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); return(IDENT);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 80 "./src/scanner.l"
-{ /* DO NOTHING */ ECHO;}
+#line 82 "./src/scanner.l"
+{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 81 "./src/scanner.l"
-{ /* DO NOTHING */ ECHO;}
+#line 83 "./src/scanner.l"
+{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 82 "./src/scanner.l"
+#line 84 "./src/scanner.l"
 {
     printf(" \n [Linea %d]: lexical error: comentario sin cerrar'%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 86 "./src/scanner.l"
+#line 88 "./src/scanner.l"
 {
-    ECHO;
+    if(DEBUGGING) ECHO;
 }
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 89 "./src/scanner.l"
+#line 91 "./src/scanner.l"
 {
-    ECHO;
+    if(DEBUGGING || COMMENTS) ECHO;
+
 }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 93 "./src/scanner.l"
+#line 96 "./src/scanner.l"
 {
     printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 97 "./src/scanner.l"
+#line 100 "./src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 1183 "src/lex.yy.c"
+#line 1186 "src/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2196,7 +2199,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 97 "./src/scanner.l"
+#line 100 "./src/scanner.l"
 
 
 

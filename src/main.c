@@ -8,7 +8,7 @@ int yyparse(void);
 
 FILE * abrir_entrada(int argc, char * argv[] ) {
 	FILE * f= NULL;
-
+    printf("\n############# COMPILER UGR ###############\n");
 	if( argc > 1 ) {
 		f = fopen(argv[1],"r");
 		if (f == NULL) {
