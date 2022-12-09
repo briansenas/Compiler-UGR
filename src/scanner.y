@@ -178,20 +178,14 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
-        if(callSub)
-            TS_subprog_params($1);
     }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
         $$.tamDimen2 = $1.tamDimen2;
-        if(callSub)
-            TS_subprog_params($1);
     }
     | funcion {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
         $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista;
-        if(callSub)
-            TS_subprog_params($1);
     }
     | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;}
     | error ;
@@ -236,8 +230,8 @@ lista_variables: identificador
 funcion: IDENT PARENTESIS_ABRE {callSub=1;}lista_expresiones PARENTESIS_CIERRA {tsFunctionCall($1,&$$);callSub=0;}
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {tsFunctionCall($1,&$$);};
 
-lista_expresiones: lista_expresiones COMA expresion {nParam++;}
-                 | expresion {nParam=1;}
+lista_expresiones: lista_expresiones COMA expresion {nParam++; TS_subprog_params($3);}
+                 | expresion {nParam=1; TS_subprog_params($1);}
 
 lista_constantes: lista_constante_booleano {$$.lista=1; $$.tipoDato=TIPOBOOL;}
     | lista_constante_entero{$$.lista=1;$$.tipoDato=ENTERO;}
