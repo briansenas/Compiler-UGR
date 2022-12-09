@@ -5,12 +5,10 @@ principal()
         real vf;
         car vc;
         bool vl;
-        entero pe, pe2;
-        real pf, pf2;
-        car pc, pc2;
-        bool pl, pl2;
-        listade entero lx,lz, a;
-        entero x;
+        listade entero pe, pe2;
+        listade real pf, pf2;
+        listade car pc, pc2;
+        listade bool  pl, pl2;
     fin_var
 
     entero funcionA(entero a1, real a2, car a3)
@@ -86,26 +84,24 @@ principal()
             devolver d1;
         }
 
-       lx>>;
-       lx<<;
-       $lx;
+       pe>>;
+       pe<<;
+       $pe;
 
-       ve<<;
+       ve = #pe;
+       ve = ?pe;
+       ve = pe@1;
 
-       ve = #lx;
-       ve = ?lx;
-       ve = lx@1;
-
-       lz = lx++a@2;
-       lx = lx--1;
-       lx = lx%0;
-       lx = lx**lz;
-       lx = lx+1;
-       a = 1 + lx;
-       lx = lx - 1;
-       lx = lx * 1;
-       a  = x * lx;
-       lx = lx / x;
+       pe = pe++pe2@2;
+       pe = pe--1;
+       pe = pe%0;
+       pe = pe**pe2;
+       pe = pe+1;
+       pe2 = 1 + pe;
+       pe = pe - 1;
+       pe = pe * 1;
+       pe2  = ve * pe;
+       pe = pe / ve;
     }
 
     devolver 0;

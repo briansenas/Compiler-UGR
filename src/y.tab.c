@@ -1968,25 +1968,25 @@ yyreduce:
 
   case 92: /* lista_constantes: lista_constante_booleano  */
 #line 242 "./src/scanner.y"
-                                           {yyval.lista=1;}
+                                           {yyval.lista=1; yyval.tipoDato=TIPOBOOL;}
 #line 1973 "src/y.tab.c"
     break;
 
   case 93: /* lista_constantes: lista_constante_entero  */
 #line 243 "./src/scanner.y"
-                            {yyval.lista=1;}
+                            {yyval.lista=1;yyval.tipoDato=ENTERO;}
 #line 1979 "src/y.tab.c"
     break;
 
   case 94: /* lista_constantes: lista_constante_flotante  */
 #line 244 "./src/scanner.y"
-                              {yyval.lista=1;}
+                              {yyval.lista=1;yyval.tipoDato=REAL;}
 #line 1985 "src/y.tab.c"
     break;
 
   case 95: /* lista_constantes: lista_constante_car  */
 #line 245 "./src/scanner.y"
-                         {yyval.lista=1;}
+                         {yyval.lista=1;yyval.tipoDato=CARACTER;}
 #line 1991 "src/y.tab.c"
     break;
 

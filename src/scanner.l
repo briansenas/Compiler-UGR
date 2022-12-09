@@ -28,6 +28,8 @@ ESPACIO					[" "]
 "principal"             { if(DEBUGGING) ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 "}"                       { if(DEBUGGING) ECHO;       return(FIN_BLOQUE);}
 "{"                       { if(DEBUGGING) ECHO;       return(INI_BLOQUE);}
+"["                       { if(DEBUGGING) ECHO;       return(CORCHETE_ABRE);}
+"]"                       { if(DEBUGGING) ECHO;       return(CORCHETE_CIERRA);}
 "entero"                  { if(DEBUGGING) ECHO; yylval.tipoDato=ENTERO; return(TIPO_DATO);}
 "real"                    { if(DEBUGGING) ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
 "car"                { if(DEBUGGING) ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}

@@ -239,10 +239,10 @@ funcion: IDENT PARENTESIS_ABRE {callSub=1;}lista_expresiones PARENTESIS_CIERRA {
 lista_expresiones: lista_expresiones COMA expresion {nParam++;}
                  | expresion {nParam=1;}
 
-lista_constantes: lista_constante_booleano {$$.lista=1;}
-    | lista_constante_entero{$$.lista=1;}
-    | lista_constante_flotante{$$.lista=1;}
-    | lista_constante_car{$$.lista=1;};
+lista_constantes: lista_constante_booleano {$$.lista=1; $$.tipoDato=TIPOBOOL;}
+    | lista_constante_entero{$$.lista=1;$$.tipoDato=ENTERO;}
+    | lista_constante_flotante{$$.lista=1;$$.tipoDato=REAL;}
+    | lista_constante_car{$$.lista=1;$$.tipoDato=CARACTER;};
 
 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA;
 
