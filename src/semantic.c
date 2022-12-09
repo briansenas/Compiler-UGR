@@ -459,7 +459,7 @@ void tsGetId(atributos id, atributos* res){
 		res->tipoDato= ts[index].tipoDato;
 		res->nDim = ts[index].nDim;
 		res->lista = ts[index].lista;
-		res->es_constante = ts[index].es_constante; 
+		res->es_constante = ts[index].es_constante;
 		res->tamDimen1 = ts[index].tamDimen1;
 		res->tamDimen2 = ts[index].tamDimen2;
 
@@ -478,8 +478,8 @@ void tsOpUnary(atributos op, atributos o, atributos* res){
 			printf("Semantic Error(%d): Not operator expects logic expression.", line);
 		}else{
 			res->tipoDato= ts[index].tipoDato;
-			res->lista = ts[index].lista;
-			res->es_constante = ts[index].es_constante;
+			res->lista = 0;
+			res->es_constante = 1;
 			res->nDim = 0;
 			res->tamDimen1 = 0;
 			res->tamDimen2 = 0;
@@ -487,8 +487,8 @@ void tsOpUnary(atributos op, atributos o, atributos* res){
 	}else{
 		res->tipoDato= TIPOBOOL;
 		res->nDim = 0;
-		res->lista = 0; 
-		res->es_constante = 0; 
+		res->lista = 0;
+		res->es_constante = 0;
 		res->tamDimen1 = 0;
 		res->tamDimen2 = 0;
 	}
@@ -503,8 +503,8 @@ void tsCheckLeftList(atributos l, atributos a, atributos* res){
 	}
 
 	res->tipoDato = ts[index].tipoDato;
-	res->lista = ts[index].lista;
-	res->es_constante = ts[index].es_constante;
+	res->lista = 0;
+	res->es_constante = 1;
 	res->nDim = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
@@ -620,7 +620,7 @@ void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 
 // Realiza la comprobación de la operación *, /, **, %
 void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
-	
+
 	if (o1.tipoDato!= o2.tipoDato) {
 		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
 							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
@@ -636,7 +636,7 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 		if(equalSize(o1,o2)){
 			res->tipoDato= o1.tipoDato;
 			res->nDim = o1.nDim;
-			res->lista = o1.lista; 
+			res->lista = o1.lista;
 			res->es_constante = o1.es_constante;
 			res->tamDimen1 = o1.tamDimen1;
 			res->tamDimen2 = o1.tamDimen2;
@@ -695,8 +695,8 @@ void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
 	res->tipoDato= TIPOBOOL;
 	res->nDim = 0;
-	res->lista = 0; 
-	res->es_constante = 0; 
+	res->lista = 0;
+	res->es_constante = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
 
@@ -739,8 +739,8 @@ void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 
 	res->tipoDato= TIPOBOOL;
 	res->nDim = 0;
-	res->lista = 0; 
-	res->es_constante = 0; 
+	res->lista = 0;
+	res->es_constante = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
 
@@ -766,7 +766,7 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 	res->es_constante = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
-	
+
 
 }
 
@@ -787,7 +787,7 @@ void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 	res->tipoDato= TIPOBOOL;
 	res->nDim = 0;
 	res->lista = 0;
-	res->es_constante = 0; 
+	res->es_constante = 0;
 	res->tamDimen1 = 0;
 	res->tamDimen2 = 0;
 
@@ -849,7 +849,7 @@ void tsFunctionCall(atributos id, atributos* res){
                 res->nombre = strdup(ts[index].nombre);
                 res->tipoDato= ts[index].tipoDato;
                 res->nDim = ts[index].nDim;
-								res->lista = ts[index].lista; 
+								res->lista = ts[index].lista;
 								res->es_constante = ts[index].es_constante;
                 res->tamDimen1 = ts[index].tamDimen1;
                 res->tamDimen2 = ts[index].tamDimen2;

@@ -87,24 +87,19 @@ principal()
 
     // Probemos operadores con listas:
     // Operaciones de desplazamientos correctas:
-    lx = lx>>;
-    lx = lx<<;
-    // Operaciones de desplazamiento erróneas:
-    // pe es de tipo entero
-    //lx = pe<<;
-    //lx = pe>>;
+    lx>>;
+    lx<<;
     // Operacion unaria de lista correcta:
-    lx = $lx;
-    lx = ?lx;
-    lx = #lx;
+    $lx;
+    ve = ?lx;
+    ve = #lx;
     // Operacion incorrecta de unario de lista:
-    lx = $pe;
     lx = ?pe;
     lx = #pe;
     // Operacion correcta con arroba:
-    a = lx@1;
+    ve = lx@1;
     // Operacion incorrecta con arroba:
-    a = pe@1;
+    ve = pe@1;
     //Operacion correcta con ++ y --:
     lz = lx++a@2;
     lx = lx--1;
@@ -127,7 +122,7 @@ principal()
     a = 1 + lx;
     lx = lx - 1;
     lx = lx * 1;
-    // Operaciones incorrectas con listas: 
+    // Operaciones incorrectas con listas:
     a  = x * lx;
     lx = lx / x;
 

@@ -68,7 +68,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros {subProg=1;} bloque {subProg=0;}
+programa: PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros {subProg=1;} PARENTESIS_CIERRA bloque {subProg=0;}
         | error;
 
 bloque: INI_BLOQUE
@@ -95,11 +95,14 @@ variables_locales: variables_locales cuerpo_declar_variables
 cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
                        | error;
 
-cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros
+cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros PARENTESIS_CIERRA
                 | error ;
 
-parametros: lista_parametros PARENTESIS_CIERRA {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
-          | PARENTESIS_CIERRA {decParam=0;};
+parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
+
+lista_parametros:
+    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);}
+    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);};
 
 sentencias: sentencias {decvariable=2;} sentencia
     |{decvariable=2;} sentencia;
@@ -110,7 +113,17 @@ sentencia: bloque
     | sentencia_mientras
     | sentencia_entrada
     | sentencia_salida
-    | sentencia_retorno;
+    | sentencia_retorno
+    | identificador DIRECCION PYC {
+    if(!tsCheckList($1)){
+        printf("Semantic Error(%d): Esta operación solamente de listas", line);
+    }
+    }
+    | DIRECCION identificador PYC {
+    if(!tsCheckList($2)){
+        printf("Semantic Error(%d): Esta operación solamente de listas", line);
+    }
+    } ;
 
 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     if($1.tipoDato != $3.tipoDato){
@@ -125,7 +138,7 @@ sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
             printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
         }
     }
-   
+
 };
 
 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
@@ -154,7 +167,6 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
     | OP_UNARIO expresion {tsOpUnary($1, $2, &$$); }
     | expresion OP_UNARIO {tsOpUnary($2, $1, &$$); }
-    | identificador DIRECCION
     | expresion OP_TERNARIO CONSTANTE_NUM {tsCheckLeftList($1,$3,&$$);}
     | expresion OP_OR expresion {tsOpOr($1, $2, $3, &$$); }
     | expresion OP_AND expresion {tsOpAnd($1, $2, $3, &$$); }
@@ -202,10 +214,6 @@ identificador: IDENT {
 
 
 
-lista_parametros:
-    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);}
-    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);}
-    | lista_parametros error tipo identificador;
 
 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena
                           | expresion_o_cadena;

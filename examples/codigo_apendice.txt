@@ -86,12 +86,16 @@ principal()
             devolver d1;
         }
 
-       lx = lx>>;
-       lx = lx<<;
-       lx = $lx;
-       lx = #lx;
-       lx = ?lx;
-       a = lx@1;
+       lx>>;
+       lx<<;
+       $lx;
+
+       ve<<;
+
+       ve = #lx;
+       ve = ?lx;
+       ve = lx@1;
+
        lz = lx++a@2;
        lx = lx--1;
        lx = lx%0;

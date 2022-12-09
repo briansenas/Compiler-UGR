@@ -955,12 +955,12 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 42 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; return(DIRECCION);}
+{ if(DEBUGGING) ECHO; yylval.attr=0; return(DIRECCION);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 43 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; return(DIRECCION);}
+{ if(DEBUGGING) ECHO; yylval.attr=1; return(DIRECCION);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
@@ -1010,7 +1010,7 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 53 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_UNARIO);}
+{ if(DEBUGGING) ECHO;       yylval.attr=2; return(DIRECCION);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP

@@ -39,8 +39,8 @@ ESPACIO					[" "]
 "mientras"                { if(DEBUGGING) ECHO;       return(MIENTRAS);}
 "imprimir"                  { if(DEBUGGING) ECHO;       return(IMPRIMIR);}
 "entrada"                        { if(DEBUGGING) ECHO; return(ENTRADA);}
-"<<"                             { if(DEBUGGING) ECHO; return(DIRECCION);}
-">>"                             { if(DEBUGGING) ECHO; return(DIRECCION);}
+"<<"                             { if(DEBUGGING) ECHO; yylval.attr=0; return(DIRECCION);}
+">>"                             { if(DEBUGGING) ECHO; yylval.attr=1; return(DIRECCION);}
 ")"                              { if(DEBUGGING) ECHO; return(PARENTESIS_CIERRA);}
 "("                              { if(DEBUGGING) ECHO; return(PARENTESIS_ABRE);}
 ";"                              { if(DEBUGGING) ECHO; return(PYC);}
@@ -50,7 +50,7 @@ ESPACIO					[" "]
 "!"                              { if(DEBUGGING) ECHO; yylval.attr=0; return(OP_UNARIO);}
 "#"                              { if(DEBUGGING) ECHO; yylval.attr=1; return(OP_UNARIO);}
 "?"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_UNARIO);}
-"$"                       { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_UNARIO);}
+"$"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(DIRECCION);}
 "-"                       { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_ADITIVO);}
 "+"                       { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_ADITIVO);}
 "="                       { if(DEBUGGING) ECHO;       return(OP_ASIGNACION);}
