@@ -221,3 +221,24 @@ void printSPTS();
 
 // Muestra un atributo recibido
 void printAttr(atributos e, char *t);
+
+
+
+extern int variable_main;
+extern int num_etiqueta;
+extern int num_var;
+extern int Many;
+extern FILE* MAIN;
+
+int tsSearchParam(atributos a);
+
+char* generarEtiqueta();
+char* generarVariableTemporal();
+void abrirArchivos();
+void cerrarArchivos();
+void cMarkIn();
+void cMarkOut();
+void tipoAtipoC();
+void cSubProgParams();
+void addNewLine();
+void cWriteIdent();

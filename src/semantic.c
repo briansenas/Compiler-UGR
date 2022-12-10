@@ -7,15 +7,13 @@ int line = 1;
 unsigned long int TOPE = 0;
 unsigned long int TOPE_SUBPROG=0;
 int decvariable = 0;
+int callSub = 0;
 int decParam = 0;
-//int decfuncion = 0;
 int subProg = 0;
 dtipo globaltipoDato= NA;
 int globalLista = 0;
 int nParam = 0;
 int currentFunction = -1;
-int aux = 0;
-int callSub = 0;
 
 char* tipoAstring(dtipo tipo){
 
@@ -949,8 +947,8 @@ void printSPTS(){
     int j = 0;
 	char *t, *e;
 
-	printf("\n--------------------------------\n");
-	while(j <= TOPE_SUBPROG-1) {
+	printf("\n---------------%d-----------------\n", TOPE_SUBPROG-1);
+	while(j <= TOPE_SUBPROG-1 && TOPE_SUBPROG>0) {
 		if(ts_subprog[j].tipoDato== 0) { t = "entero"; }
 		if(ts_subprog[j].tipoDato== 1) { t = "real"; }
 		if(ts_subprog[j].tipoDato== 2) { t = "caracter"; }
@@ -989,4 +987,111 @@ void printAttr(atributos e, char *msg){
 	printf("-tamDimen2: %-4d\n", e.tamDimen2);
 	printf("-------------------------------\n");
 
+}
+
+
+int num_etiqueta = 0;
+int num_var = 0;
+int variable_main = 0;
+int Many = 0;
+FILE* MAIN;
+
+char* generarEtiqueta(){
+    char* resultado = malloc(255);
+    snprintf(resultado,255,"etiqueta_%d ",num_var);
+	num_etiqueta++;
+
+	return resultado;
+}
+
+char* generarVariableTemporal() {
+    char* resultado = malloc(255);
+    snprintf(resultado,255,"tmp_%d ",num_var);
+    num_var++;
+	return resultado;
+}
+
+void abrirArchivos(){
+    MAIN = fopen("generated.c","w");
+	fputs("#include <stdio.h>\n",MAIN);
+}
+
+void cerrarArchivos(){
+    fclose(MAIN);
+}
+
+void cMarkOut(){
+    fputs("\n}",MAIN);
+    variable_main = 0;
+}
+
+void cMarkIn(){
+    fputs("{\n",MAIN);
+}
+
+void tipoAtipoC(atributos var){
+
+    char* resultado = malloc(255);
+
+    if(var.lista)
+        strcpy(resultado,"listade<");
+    else
+        strcpy(resultado,"");
+
+    dtipo tipo = var.tipoDato;
+    if ( tipo == ENTERO ) {
+		strcat(resultado, "int ");
+	} else if ( tipo == REAL ) {
+		strcat(resultado, "float ");
+	} else if ( tipo == TIPOBOOL ) {
+		strcat(resultado, "bool ");
+	} else if ( tipo == CARACTER ) {
+		strcat(resultado, "char ");
+	}
+
+    if(var.lista)
+        strcat(resultado,">");
+
+    fputs(resultado,MAIN);
+
+    free(resultado);
+}
+
+void addNewLine(){
+    fputs("\n",MAIN);
+}
+
+int tsSearchParam(atributos a) {
+    int tope = TOPE - 1;
+    int found = 0;
+    while(tope>0 && !found){
+		if(strcmp(a.nombre, ts[tope].nombre) == 0) {
+            found = 1;
+        }else{
+            tope--;
+        }
+    }
+
+    if(!found)
+        tope = -1;
+
+    return tope;
+}
+
+void cWriteIdent(atributos a){
+    int index = -1;
+    if(decvariable)
+        index = tsSearchId(a);
+    if(decParam)
+        index = tsSearchParam(a);
+
+
+    char* tmp = malloc(255);
+    if(index<0)
+        strcpy(tmp,generarVariableTemporal());
+    else
+        strcpy(tmp,ts[index].nombre);
+    fputs(tmp,MAIN);
+
+    free(tmp);
 }

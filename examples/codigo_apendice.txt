@@ -2,7 +2,7 @@ principal()
 {
     ini_var
         entero ve;
-        ene··rot ve2;
+        entero ve2;
         real vf;
         car vc;
         bool vl;
@@ -32,8 +32,7 @@ principal()
 
                     x1 = 1.3+ve2;
                     ve = funcionA(2+4,2.5*4.3,'q');
-                    vf=funcionC(1,2,3,4,5);
-                    si ((c2>10)+2)
+                    si ((c2>10))
                         c2 = c2 - 1;
                     sino
                         x1=3.1;
@@ -86,7 +85,7 @@ principal()
 
             devolver d1;
         }
-        
+
        pe = [1, 2, 3, 4];
 
        pe>>;

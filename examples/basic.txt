@@ -1,0 +1,45 @@
+principal()
+{
+    ini_var
+        entero ve;
+        entero ve2;
+        real vf;
+        car vc;
+        bool vl;
+        listade entero pe, pe2;
+        listade real pf, pf2;
+        listade car pc, pc2;
+        listade bool  pl, pl2;
+    fin_var
+
+    entero funcionA(entero a1, real a2, car a3)
+    {
+        ini_var
+            entero x1, x2,a3;
+        fin_var
+
+            si (d1>0.0)
+            {
+                ini_var
+                    entero dato;
+                fin_var
+
+                dato = 2;
+                dato = valor*20/dato;
+            }
+            sino {
+                valor=valor*100;
+                d1=d1/1000.0;
+            }
+
+            devolver d1;
+        }
+
+    }
+       pe = pe--1;
+       pe = pe * 1;
+       pe2  = ve * pe;
+       pe = pe / ve;
+
+    devolver 0;
+}

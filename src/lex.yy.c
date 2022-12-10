@@ -986,7 +986,7 @@ YY_RULE_SETUP
 case 23:
 YY_RULE_SETUP
 #line 48 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; return(PYC);}
+{ if(DEBUGGING) ECHO; fputs(";", MAIN);return(PYC);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
@@ -1106,7 +1106,7 @@ YY_RULE_SETUP
 case 47:
 YY_RULE_SETUP
 #line 72 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;       return(COMA);}
+{ if(DEBUGGING) ECHO;       fputs(",",MAIN); return(COMA);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
@@ -1148,13 +1148,13 @@ YY_RULE_SETUP
 case 55:
 YY_RULE_SETUP
 #line 80 "./src/scanner.l"
-{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;}
+{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
 #line 81 "./src/scanner.l"
-{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;}
+{ /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
@@ -1167,31 +1167,34 @@ case 58:
 YY_RULE_SETUP
 #line 86 "./src/scanner.l"
 {
-    if(DEBUGGING) if(DEBUGGING) ECHO;
+    if(DEBUGGING || COMMENTS)
+        ECHO;
 }
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 89 "./src/scanner.l"
+#line 90 "./src/scanner.l"
 {
-    if(DEBUGGING || COMMENTS) if(DEBUGGING) ECHO;
+    if(DEBUGGING || COMMENTS)
+        ECHO;
+    fputs("\n",MAIN);
     line++;
 }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 94 "./src/scanner.l"
+#line 97 "./src/scanner.l"
 {
     printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 98 "./src/scanner.l"
+#line 101 "./src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 1195 "src/lex.yy.c"
+#line 1198 "src/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2208,7 +2211,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 98 "./src/scanner.l"
+#line 101 "./src/scanner.l"
 
 
 
