@@ -228,6 +228,7 @@ extern int variable_main;
 extern int num_etiqueta;
 extern int num_var;
 extern int Many;
+extern int principal;
 extern FILE* MAIN;
 extern int asignar;
 

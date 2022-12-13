@@ -993,6 +993,7 @@ int num_var = 0;
 int variable_main = 0;
 int Many = 0;
 int asignar = 0;
+int principal = 0;
 FILE* MAIN;
 FILE* FUNC;
 

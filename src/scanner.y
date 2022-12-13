@@ -68,18 +68,28 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {fputs("int main(",MAIN); tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {fputs(")",MAIN);addNewLine();} bloque {addNewLine(); cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
         {tsAddMark();
-        cMarkIn();}
+        if(!principal)
+            cMarkIn();
+        }
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        cMarkOut();}
+        if(!principal)
+            cMarkOut();
+        }
 
-cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
+cuerpo_bloque: declar_de_variables_locales {
+             if(principal){
+             fputs("int main(){\n",MAIN);
+             principal=0;
+            }
+             }
+             declar_de_subprogs sentencias
        | declar_de_variables_locales declar_de_subprogs;
 
 declar_de_subprogs: declar_de_subprogs declar_subprog
