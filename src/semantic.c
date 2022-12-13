@@ -1014,6 +1014,7 @@ void abrirArchivos(){
     MAIN = fopen("generado/main.c","w");
     FUNC = fopen("generado/dec_func.c","w");
 	fputs("#include <stdio.h>\n",MAIN);
+	fputs("#include \"dec_func.c\"\n",MAIN);
 	fputs("#include <stdio.h>\n",FUNC);
 }
 
