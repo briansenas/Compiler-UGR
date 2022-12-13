@@ -241,4 +241,8 @@ void cMarkOut();
 void tipoAtipoC();
 void cSubProgParams();
 void addNewLine();
+void addPYC();
+void addCOMMA();
+void addPAR_A();
+void addPAR_C();
 void cWriteIdent();

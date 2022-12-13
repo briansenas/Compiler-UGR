@@ -1076,6 +1076,33 @@ void addNewLine(){
         fputs("\n",MAIN);
 }
 
+void addPYC(){
+    if(subProg || decParam)
+        fputs(";",FUNC);
+    else
+        fputs(";",MAIN);
+}
+
+void addCOMMA(){
+    if(subProg || decParam)
+        fputs(",",FUNC);
+    else
+        fputs(",",MAIN);
+}
+void addPAR_A(){
+    if(subProg || decParam)
+        fputs("(",FUNC);
+    else
+        fputs("(",MAIN);
+}
+
+void addPAR_C(){
+    if(subProg || decParam)
+        fputs(")",FUNC);
+    else
+        fputs(")",MAIN);
+}
+
 int tsSearchParam(atributos a) {
     int tope = TOPE - 1;
     int found = 0;
@@ -1099,7 +1126,6 @@ void cWriteIdent(atributos a){
         index = tsSearchId(a);
     if(decParam)
         index = tsSearchParam(a);
-
 
     char* tmp = malloc(255);
     if(index<0)

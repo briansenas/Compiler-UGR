@@ -68,14 +68,16 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA bloque {cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
-        {tsAddMark();}
+        {tsAddMark();
+        cMarkIn();}
         cuerpo_bloque
         FIN_BLOQUE
-        {tsCleanIn();}
+        {tsCleanIn();
+        cMarkOut();}
 
 cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
        | declar_de_variables_locales declar_de_subprogs;
@@ -83,7 +85,7 @@ cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog:  cabecera_subprog {subProg=1;} bloque {subProg=0;};
+declar_subprog:  cabecera_subprog {subProg=1; addNewLine(); } bloque {addNewLine();  subProg=0; };
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
                            |;
@@ -95,14 +97,22 @@ variables_locales: variables_locales cuerpo_declar_variables
 cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
                        | error;
 
-cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros PARENTESIS_CIERRA
+cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;tsAddSubprog($2); tipoAtipoC($1); cWriteIdent($2); addPAR_A(); }PARENTESIS_ABRE parametros PARENTESIS_CIERRA{decParam=1; addPAR_C(); decParam=0;}
                 | error ;
 
 parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
 
 lista_parametros:
-    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);}
-    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);};
+    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);
+                    addCOMMA();
+                    tipoAtipoC($3);
+                    cWriteIdent($4);
+    }
+    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);
+                    tipoAtipoC($1);
+                    cWriteIdent($2);
+};
+
 
 sentencias: sentencias {decvariable=2;} sentencia
     |{decvariable=2;} sentencia;
@@ -204,6 +214,12 @@ identificador: IDENT {
                         if(decParam==0)
                             tsGetId($1, &$$);
 					}
+                    if(!decParam) {
+                    tipoAtipoC($1);
+                    cWriteIdent($1);
+                    addPYC();
+                    addNewLine();
+                    }
 				};
 
 
