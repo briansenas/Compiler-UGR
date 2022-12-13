@@ -68,47 +68,41 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE {fputs("int main(",MAIN);}parametros PARENTESIS_CIERRA bloque {fputs(")",MAIN);cerrarArchivos();}
-    | error;
+programa: {abrirArchivos();}PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA bloque {cerrarArchivos();}
+        | error;
 
 bloque: INI_BLOQUE
-    {tsAddMark();
-    cMarkIn();
-    }
-    cuerpo_bloque
-    FIN_BLOQUE {cMarkOut();}
-    {tsCleanIn();}
+        {tsAddMark();}
+        cuerpo_bloque
+        FIN_BLOQUE
+        {tsCleanIn();}
 
 cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias
-   | declar_de_variables_locales declar_de_subprogs;
+       | declar_de_variables_locales declar_de_subprogs;
 
 declar_de_subprogs: declar_de_subprogs declar_subprog
-              |;
+                  |;
 
 declar_subprog:  cabecera_subprog {subProg=1;} bloque {subProg=0;};
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
-                       |;
+                           |;
 
 variables_locales: variables_locales cuerpo_declar_variables
-| cuerpo_declar_variables ;
+    | cuerpo_declar_variables ;
 
 
-cuerpo_declar_variables: tipo { setType($1); Many=1;} varios_identificador {Many=0;}PYC
-                   | error;
+cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
+                       | error;
 
-cabecera_subprog: tipo IDENT {$2.tipoDato = $1.tipoDato;tsAddSubprog($2);tipoAtipoC($1);  decParam = 1; cWriteIdent($2); } PARENTESIS_ABRE {fputs("(",MAIN);} parametros PARENTESIS_CIERRA{fputs(")",MAIN);}
+cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;} {tsAddSubprog($2);} PARENTESIS_ABRE parametros PARENTESIS_CIERRA
                 | error ;
 
 parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
 
 lista_parametros:
-    | lista_parametros COMA tipo identificador {
-    $4.nDim=0; nParam++; setType($3); tsAddParam($4); tipoAtipoC($3); cWriteIdent($4);
-    }
-    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);
-    tipoAtipoC($1); cWriteIdent($2);
-    };
+    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);}
+    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);};
 
 sentencias: sentencias {decvariable=2;} sentencia
     |{decvariable=2;} sentencia;
@@ -129,7 +123,7 @@ sentencia: bloque
     if(!tsCheckList($2)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
-    }
+    } ;
 
 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
     if($1.tipoDato != $3.tipoDato){
@@ -183,7 +177,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); }
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
-    | identificador { decvariable = 0; }
+    | identificador { decvariable = 0;
+    }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
         $$.tamDimen2 = $1.tamDimen2;
@@ -204,19 +199,11 @@ identificador: IDENT {
                         $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
 						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
-                        if(Many){
-                            tipoAtipoC($1);
-                            Many = 0;
-                        }
-
                         tsAddId($1);
 					}else{
                         if(decParam==0)
                             tsGetId($1, &$$);
-
 					}
-                    if(!decParam)
-                        cWriteIdent($1);
 				};
 
 
@@ -240,8 +227,8 @@ lista_variables: identificador
                | DIRECCION lista_variables
                | identificador DIRECCION identificador;
 
-funcion: IDENT PARENTESIS_ABRE {fputs("(",MAIN);} lista_expresiones PARENTESIS_CIERRA {fputs(")",MAIN);tsFunctionCall($1,&$$);}
-       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {fputs("()",MAIN); tsFunctionCall($1,&$$);};
+funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {tsFunctionCall($1,&$$);}
+       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {tsFunctionCall($1,&$$);};
 
 lista_expresiones: lista_expresiones COMA expresion {nParam++; TS_subprog_params($3);}
                  | expresion {nParam=1; TS_subprog_params($1);}

@@ -986,7 +986,7 @@ YY_RULE_SETUP
 case 23:
 YY_RULE_SETUP
 #line 48 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; fputs(";", MAIN);return(PYC);}
+{ if(DEBUGGING) ECHO; return(PYC);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
@@ -1106,7 +1106,7 @@ YY_RULE_SETUP
 case 47:
 YY_RULE_SETUP
 #line 72 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;       fputs(",",MAIN); return(COMA);}
+{ if(DEBUGGING) ECHO;       return(COMA);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
@@ -1178,23 +1178,22 @@ YY_RULE_SETUP
 {
     if(DEBUGGING || COMMENTS)
         ECHO;
-    fputs("\n",MAIN);
     line++;
 }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 97 "./src/scanner.l"
+#line 96 "./src/scanner.l"
 {
     printf(" \n [Linea %d]: lexical error: no se reconoce la entrada '%s'. ", yylineno, yytext);
 }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 101 "./src/scanner.l"
+#line 100 "./src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 1198 "src/lex.yy.c"
+#line 1197 "src/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2211,7 +2210,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 101 "./src/scanner.l"
+#line 100 "./src/scanner.l"
 
 
 

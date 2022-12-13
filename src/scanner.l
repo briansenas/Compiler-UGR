@@ -45,7 +45,7 @@ ESPACIO					[" "]
 ">>"                             { if(DEBUGGING) ECHO; yylval.attr=1; return(DIRECCION);}
 ")"                              { if(DEBUGGING) ECHO; return(PARENTESIS_CIERRA);}
 "("                              { if(DEBUGGING) ECHO; return(PARENTESIS_ABRE);}
-";"                              { if(DEBUGGING) ECHO; fputs(";", MAIN);return(PYC);}
+";"                              { if(DEBUGGING) ECHO; return(PYC);}
 "++"                             { if(DEBUGGING) ECHO; return(SIGSIG);}
 "--"                             { if(DEBUGGING) ECHO; return(SIGSIG);}
 "@"                              { if(DEBUGGING) ECHO; return(OP_TERNARIO);}
@@ -69,7 +69,7 @@ ESPACIO					[" "]
 "!="                      { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
 "%"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
 "**"                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
-","                       { if(DEBUGGING) ECHO;       fputs(",",MAIN); return(COMA);}
+","                       { if(DEBUGGING) ECHO;       return(COMA);}
 {DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 {DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
 \'[^\"\']?\'               { if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
@@ -90,7 +90,6 @@ ESPACIO					[" "]
 [\n\r] {
     if(DEBUGGING || COMMENTS)
         ECHO;
-    fputs("\n",MAIN);
     line++;
 }
 
