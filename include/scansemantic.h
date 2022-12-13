@@ -229,6 +229,7 @@ extern int num_etiqueta;
 extern int num_var;
 extern int Many;
 extern FILE* MAIN;
+extern int asignar;
 
 int tsSearchParam(atributos a);
 
@@ -245,4 +246,8 @@ void addPYC();
 void addCOMMA();
 void addPAR_A();
 void addPAR_C();
+void addASSIGN();
+char* getADD(int a);
+void addADD(atributos a);
 void cWriteIdent();
+void cWriteName();

@@ -11,4 +11,6 @@ principal()
             entero d, e;
         fin_var
     }
+
+    ve = 1 + 1 ;
 }

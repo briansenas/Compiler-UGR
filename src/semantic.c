@@ -992,6 +992,7 @@ int num_etiqueta = 0;
 int num_var = 0;
 int variable_main = 0;
 int Many = 0;
+int asignar = 0;
 FILE* MAIN;
 FILE* FUNC;
 
@@ -1103,6 +1104,29 @@ void addPAR_C(){
         fputs(")",MAIN);
 }
 
+void addASSIGN(){
+    if(subProg || decParam)
+        fputs("=",FUNC);
+    else
+        fputs("=",MAIN);
+}
+
+char* getADD(int a){
+    char* tmp = malloc(1);
+    if(a==0)
+        tmp[0] = '+';
+    else
+        tmp[0] = '-';
+    return tmp;
+}
+
+void addADD(atributos a){
+    if(subProg || decParam)
+        fputs(getADD(a.attr),FUNC);
+    else
+        fputs(getADD(a.attr),MAIN);
+}
+
 int tsSearchParam(atributos a) {
     int tope = TOPE - 1;
     int found = 0;
@@ -1139,4 +1163,11 @@ void cWriteIdent(atributos a){
         fputs(tmp,MAIN);
 
     free(tmp);
+}
+
+void cWriteName(atributos a){
+    if(subProg || decParam)
+        fputs(a.nombre,FUNC);
+    else
+        fputs(a.nombre,MAIN);
 }

@@ -68,7 +68,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {fputs("int main(",MAIN); tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {fputs(")",MAIN);addNewLine();} bloque {addNewLine(); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
@@ -135,7 +135,11 @@ sentencia: bloque
     }
     } ;
 
-sentencia_asignacion: identificador OP_ASIGNACION expresion PYC{
+sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
+        cWriteIdent($1);
+        addASSIGN();
+        cWriteName($3);
+        addPYC();
     if($1.tipoDato != $3.tipoDato){
         printf("Semantic Error(%d): El valor a asignar no es del mismo tipo.[Expected: %s - Got:%s]\n",
         line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
@@ -184,14 +188,14 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | expresion OP_RELACION expresion {tsOpRel($1, $2, $3, &$$);}
     | expresion OP_MULTIPLICATIVO expresion {tsOpMul($1, $2, $3, &$$); }
     | expresion OP_IGUALDAD expresion {tsOpEqual($1, $2, $3, &$$); }
-    | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); }
+    | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); $1.nombre=strcat($1.nombre,getADD($2.attr)); $$.nombre=strcat($1.nombre,$3.nombre);}
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
     }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
-        $$.tamDimen2 = $1.tamDimen2;
+        $$.tamDimen2 = $1.tamDimen2; $$.nombre = $1.nombre;
     }
     | funcion {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
@@ -210,16 +214,16 @@ identificador: IDENT {
 						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
                         tsAddId($1);
+                        if(!decParam) {
+                        tipoAtipoC($1);
+                        cWriteIdent($1);
+                        addPYC();
+                        addNewLine();
+                        }
 					}else{
                         if(decParam==0)
                             tsGetId($1, &$$);
 					}
-                    if(!decParam) {
-                    tipoAtipoC($1);
-                    cWriteIdent($1);
-                    addPYC();
-                    addNewLine();
-                    }
 				};
 
 
