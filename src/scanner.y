@@ -146,10 +146,12 @@ sentencia: bloque
     } ;
 
 sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
+        decvariable=1;
         cWriteIdent($1);
         addASSIGN();
         cWriteName($3);
         addPYC();
+        decvariable=2;
     if($1.tipoDato != $3.tipoDato){
         printf("Semantic Error(%d): El valor a asignar no es del mismo tipo.[Expected: %s - Got:%s]\n",
         line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
@@ -225,10 +227,10 @@ identificador: IDENT {
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
                         tsAddId($1);
                         if(!decParam) {
-                        tipoAtipoC($1);
-                        cWriteIdent($1);
-                        addPYC();
-                        addNewLine();
+                            tipoAtipoC($1);
+                            cWriteIdent($1);
+                            addPYC();
+                            addNewLine();
                         }
 					}else{
                         if(decParam==0)

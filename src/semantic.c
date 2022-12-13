@@ -1016,7 +1016,11 @@ void abrirArchivos(){
     MAIN = fopen("generado/main.c","w");
     FUNC = fopen("generado/dec_func.c","w");
 	fputs("#include <stdio.h>\n",MAIN);
+	fputs("#include <stdlib.h>\n", MAIN);
+	fputs("#include <string.h>\n", MAIN);
+	fputs("#include <stdbool.h>\n", MAIN);
 	fputs("#include \"dec_func.c\"\n",MAIN);
+    fputs("\n",MAIN);
 	fputs("#include <stdio.h>\n",FUNC);
 }
 
@@ -1147,7 +1151,7 @@ int tsSearchParam(atributos a) {
 
 void cWriteIdent(atributos a){
     int index = -1;
-    if(decvariable)
+    if(decvariable==1)
         index = tsSearchId(a);
     if(decParam)
         index = tsSearchParam(a);
