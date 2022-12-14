@@ -332,6 +332,15 @@ identificador: IDENT {
                             cWriteIdent($1);
                             addPYC();
                             addNewLine();
+                            if(principal){
+                            subProg=1;
+                            cWriteCode("extern ");
+                            tipoAtipoC($1);
+                            cWriteIdent($1);
+                            addPYC();
+                            addNewLine();
+                            subProg=0;
+                            }
                         }
 					}else{
                         if(decParam==0)
@@ -365,34 +374,34 @@ tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             int index = tsSearchName($1);
-            atributos a; 
-            a.lista = ts[index].lista; 
-            a.nombre = ts[index].nombre; 
-            a.tipoDato = ts[index].tipoDato; 
+            atributos a;
+            a.lista = ts[index].lista;
+            a.nombre = ts[index].nombre;
+            a.tipoDato = ts[index].tipoDato;
             generaCodigoVariableTemporal(a,&$$);
             char* resultado = malloc(255);
             strcpy(resultado,$$.nombre);
             strcat(resultado," = ");
             strcat(resultado,generarFuncion($1.nombre));
-            cWriteCode(resultado); 
-            strcpy(resultado,$$.nombre); 
+            cWriteCode(resultado);
+            strcpy(resultado,$$.nombre);
             tsFunctionCall($1,&$$);
             strcpy($$.nombre, resultado);
         };
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             int index = tsSearchName($1);
-            atributos a; 
-            a.lista = ts[index].lista; 
-            a.nombre = ts[index].nombre; 
-            a.tipoDato = ts[index].tipoDato; 
+            atributos a;
+            a.lista = ts[index].lista;
+            a.nombre = ts[index].nombre;
+            a.tipoDato = ts[index].tipoDato;
             generaCodigoVariableTemporal(a,&$$);
             char* resultado = malloc(255);
             strcpy(resultado,$$.nombre);
             strcat(resultado," = ");
             strcat(resultado,generarFuncion($1.nombre));
-            cWriteCode(resultado); 
-            strcpy(resultado,$$.nombre); 
+            cWriteCode(resultado);
+            strcpy(resultado,$$.nombre);
             tsFunctionCall($1,&$$);
             strcpy($$.nombre, resultado);
        };

@@ -1,18 +1,11 @@
-
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
-
-
-int ve;
-int ve2;
-int ve3;
-bool bol;
-bool A;
-bool B;
-
+extern int ve;
+extern int ve2;
+extern int ve3;
+extern bool bol;
+extern bool A;
+extern bool B;
 int funcionA(int add)
 {
 int tmp_0;

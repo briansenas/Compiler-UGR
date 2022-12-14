@@ -1048,6 +1048,7 @@ void abrirArchivos(){
 	fputs("#include \"dec_func.c\"\n",MAIN);
     fputs("\n",MAIN);
 	fputs("#include <stdio.h>\n",FUNC);
+	fputs("#include <stdbool.h>\n", FUNC);
 }
 
 void cerrarArchivos(){
@@ -1379,6 +1380,6 @@ char* generarFuncion(char* nombre){
         i++;
     }
     strcat(res,");\n");
-  
+
 	return res;
 }
