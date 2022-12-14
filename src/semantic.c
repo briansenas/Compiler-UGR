@@ -994,13 +994,14 @@ int variable_main = 0;
 int Many = 0;
 int asignar = 0;
 int principal = 0;
+int cond = 0;
 int isIf = 0;
 FILE* MAIN;
 FILE* FUNC;
 
 char* generarEtiqueta(){
     char* resultado = malloc(255);
-    snprintf(resultado,255,"etiqueta_%d ",num_etiqueta);
+    snprintf(resultado,255,"etiqueta_%d",num_etiqueta);
 	num_etiqueta++;
 
 	return resultado;
@@ -1008,7 +1009,7 @@ char* generarEtiqueta(){
 
 char* generarVariableTemporal() {
     char* resultado = malloc(255);
-    snprintf(resultado,255,"tmp_%d ",num_var);
+    snprintf(resultado,255,"tmp_%d",num_var);
     num_var++;
 	return resultado;
 }
@@ -1282,5 +1283,19 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
 
     snprintf(res->codigo,255,_code,res->nombre, a.nombre);
     cWriteCode(res->codigo);
+    free(_code);
+}
+
+void generaCodigoSi(atributos* a, atributos exp){
+    char* _code = malloc(255);
+    strcpy(_code,"if(!");
+    strcat(_code,exp.nombre);
+    strcat(_code,") goto ");
+    a->nombre = malloc(255);
+    strcpy(a->nombre,generarEtiqueta());
+    strcat(_code,a->nombre);
+    strcat(a->nombre,":");
+    strcat(_code,";\n");
+    cWriteCode(_code);
     free(_code);
 }

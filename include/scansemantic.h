@@ -233,6 +233,7 @@ extern int principal;
 extern FILE* MAIN;
 extern int asignar;
 extern int isIf;
+extern int cond;
 
 
 
@@ -266,3 +267,4 @@ void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* r
 void generaCodigoReturn(atributos a);
 void generaCodigo(char* pattern, char* a, char* b, char* c);
 void generaCodigoUnario(atributos op, atributos a, atributos* res);
+void generaCodigoSi(atributos* a, atributos exp);

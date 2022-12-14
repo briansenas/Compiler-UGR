@@ -1,4 +1,4 @@
-State 165 conflicts: 1 shift/reduce
+State 179 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -66,144 +66,162 @@ Grammar
 
    35 sentencia: bloque
    36          | sentencia_asignacion
-   37          | sentencia_si
-   38          | sentencia_mientras
-   39          | sentencia_entrada
-   40          | sentencia_salida
-   41          | sentencia_retorno
-   42          | identificador DIRECCION PYC
-   43          | DIRECCION identificador PYC
 
-   44 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC
+   37 $@13: ε
 
-   45 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
-   46             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia
+   38 sentencia: $@13 sentencia_si
 
-   47 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
+   39 $@14: ε
 
-   48 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC
+   40 sentencia: $@14 sentencia_mientras
+   41          | sentencia_entrada
+   42          | sentencia_salida
+   43          | sentencia_retorno
+   44          | identificador DIRECCION PYC
+   45          | DIRECCION identificador PYC
 
-   49 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC
+   46 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC
 
-   50 @13: ε
+   47 $@15: ε
 
-   51 sentencia_retorno: DEVOLVER expresion @13 PYC
+   48 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@15 posibles
 
-   52 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-   53          | OP_UNARIO expresion
-   54          | expresion OP_UNARIO
-   55          | expresion OP_TERNARIO CONSTANTE_NUM
-   56          | expresion OP_OR expresion
-   57          | expresion OP_AND expresion
-   58          | expresion OP_XOR expresion
-   59          | expresion OP_RELACION expresion
-   60          | expresion OP_MULTIPLICATIVO expresion
-   61          | expresion OP_IGUALDAD expresion
-   62          | expresion OP_ADITIVO expresion
-   63          | OP_ADITIVO expresion
-   64          | expresion SIGSIG expresion
-   65          | identificador
-   66          | constante
-   67          | funcion
-   68          | lista_constantes
-   69          | error
+   49 posibles: sentencia
+   50         | sentencia SINO sentencia
 
-   70 varios_identificador: identificador
-   71                     | varios_identificador COMA identificador
+   51 $@16: ε
 
-   72 identificador: IDENT
+   52 sentencia_mientras: MIENTRAS $@16 cond_mientras
 
-   73 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena
-   74                           | expresion_o_cadena
+   53 @17: ε
 
-   75 expresion_o_cadena: expresion
-   76                   | CADENA
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 cuerpo_mientras
 
-   77 constante: BOOLEANO
-   78          | CONSTANTE_NUM
-   79          | CONSTANTE_FLOAT
-   80          | CONSTANTE_CAR
+   55 cuerpo_mientras: sentencia
 
-   81 tipo: TIPO_DATO
-   82     | LISTA TIPO_DATO
+   56 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC
 
-   83 lista_variables: identificador
-   84                | DIRECCION lista_variables
-   85                | identificador DIRECCION identificador
+   57 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC
 
-   86 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
-   87        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA
+   58 @18: ε
 
-   88 lista_expresiones: lista_expresiones COMA expresion
-   89                  | expresion
+   59 sentencia_retorno: DEVOLVER expresion @18 PYC
 
-   90 lista_constantes: lista_constante_booleano
-   91                 | lista_constante_entero
-   92                 | lista_constante_flotante
-   93                 | lista_constante_car
+   60 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+   61          | OP_UNARIO expresion
+   62          | expresion OP_UNARIO
+   63          | expresion OP_TERNARIO CONSTANTE_NUM
+   64          | expresion OP_OR expresion
+   65          | expresion OP_AND expresion
+   66          | expresion OP_XOR expresion
+   67          | expresion OP_RELACION expresion
+   68          | expresion OP_MULTIPLICATIVO expresion
+   69          | expresion OP_IGUALDAD expresion
+   70          | expresion OP_ADITIVO expresion
+   71          | OP_ADITIVO expresion
+   72          | expresion SIGSIG expresion
+   73          | identificador
+   74          | constante
+   75          | funcion
+   76          | lista_constantes
+   77          | error
 
-   94 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA
+   78 varios_identificador: identificador
+   79                     | varios_identificador COMA identificador
 
-   95 contenido_lista_booleano: BOOLEANO
-   96                         | BOOLEANO COMA contenido_lista_booleano
+   80 identificador: IDENT
 
-   97 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA
+   81 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena
+   82                           | expresion_o_cadena
 
-   98 contenido_lista_entero: CONSTANTE_NUM
-   99                       | CONSTANTE_NUM COMA contenido_lista_entero
+   83 expresion_o_cadena: expresion
+   84                   | CADENA
 
-  100 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA
+   85 constante: BOOLEANO
+   86          | CONSTANTE_NUM
+   87          | CONSTANTE_FLOAT
+   88          | CONSTANTE_CAR
 
-  101 contenido_lista_flotante: CONSTANTE_FLOAT
-  102                         | CONSTANTE_FLOAT COMA contenido_lista_flotante
+   89 tipo: TIPO_DATO
+   90     | LISTA TIPO_DATO
 
-  103 lista_constante_car: CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA
+   91 lista_variables: identificador
+   92                | DIRECCION lista_variables
+   93                | identificador DIRECCION identificador
 
-  104 contenido_lista_car: CONSTANTE_CAR
-  105                    | CONSTANTE_CAR COMA contenido_lista_car
+   94 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
+   95        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA
+
+   96 lista_expresiones: lista_expresiones COMA expresion
+   97                  | expresion
+
+   98 lista_constantes: lista_constante_booleano
+   99                 | lista_constante_entero
+  100                 | lista_constante_flotante
+  101                 | lista_constante_car
+
+  102 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA
+
+  103 contenido_lista_booleano: BOOLEANO
+  104                         | BOOLEANO COMA contenido_lista_booleano
+
+  105 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA
+
+  106 contenido_lista_entero: CONSTANTE_NUM
+  107                       | CONSTANTE_NUM COMA contenido_lista_entero
+
+  108 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA
+
+  109 contenido_lista_flotante: CONSTANTE_FLOAT
+  110                         | CONSTANTE_FLOAT COMA contenido_lista_flotante
+
+  111 lista_constante_car: CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA
+
+  112 contenido_lista_car: CONSTANTE_CAR
+  113                    | CONSTANTE_CAR COMA contenido_lista_car
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    error (256) 6 22 25 69
+    error (256) 6 22 25 77
     INI_VAR (258) 16
     FIN_VAR (259) 16
     PRINCIPAL (260) 5
     INI_BLOQUE (261) 8
     FIN_BLOQUE (262) 8
-    OP_OR (263) 56
-    OP_AND (264) 57
-    OP_XOR (265) 58
-    OP_IGUALDAD (266) 61
-    OP_RELACION (267) 59
-    OP_ADITIVO (268) 62 63
-    SIGSIG (269) 64
-    OP_MULTIPLICATIVO (270) 60
-    OP_UNARIO (271) 53 54
-    OP_TERNARIO (272) 55
-    OP_ASIGNACION (273) 44
-    BOOLEANO (274) 77 95 96
-    CONSTANTE_NUM (275) 55 78 98 99
-    CONSTANTE_CAR (276) 80 104 105
-    CONSTANTE_FLOAT (277) 79 101 102
-    TIPO_DATO (278) 81 82
-    CADENA (279) 76
-    LISTA (280) 82
-    MIENTRAS (281) 47
-    SI (282) 45 46
-    SINO (283) 46
-    ENTRADA (284) 48
-    IMPRIMIR (285) 49
-    DEVOLVER (286) 51
-    DIRECCION (287) 42 43 48 49 73 84 85
-    IDENT (288) 24 72 86 87
-    PARENTESIS_ABRE (289) 5 24 45 46 47 52 86 87
-    PARENTESIS_CIERRA (290) 5 24 45 46 47 52 86 87
-    CORCHETE_ABRE (291) 94 97 100 103
-    CORCHETE_CIERRA (292) 94 97 100 103
-    COMA (293) 29 71 88 96 99 102 105
-    PYC (294) 21 42 43 44 48 49 51
+    OP_OR (263) 64
+    OP_AND (264) 65
+    OP_XOR (265) 66
+    OP_IGUALDAD (266) 69
+    OP_RELACION (267) 67
+    OP_ADITIVO (268) 70 71
+    SIGSIG (269) 72
+    OP_MULTIPLICATIVO (270) 68
+    OP_UNARIO (271) 61 62
+    OP_TERNARIO (272) 63
+    OP_ASIGNACION (273) 46
+    BOOLEANO (274) 85 103 104
+    CONSTANTE_NUM (275) 63 86 106 107
+    CONSTANTE_CAR (276) 88 112 113
+    CONSTANTE_FLOAT (277) 87 109 110
+    TIPO_DATO (278) 89 90
+    CADENA (279) 84
+    LISTA (280) 90
+    MIENTRAS (281) 52
+    SI (282) 48
+    SINO (283) 50
+    ENTRADA (284) 56
+    IMPRIMIR (285) 57
+    DEVOLVER (286) 59
+    DIRECCION (287) 44 45 56 57 81 92 93
+    IDENT (288) 24 80 94 95
+    PARENTESIS_ABRE (289) 5 24 48 54 60 94 95
+    PARENTESIS_CIERRA (290) 5 24 48 54 60 94 95
+    CORCHETE_ABRE (291) 102 105 108 111
+    CORCHETE_CIERRA (292) 102 105 108 111
+    COMA (293) 29 79 96 104 107 110 113
+    PYC (294) 21 44 45 46 56 57 59
 
 
 Nonterminals, with rules where they appear
@@ -283,86 +301,110 @@ Nonterminals, with rules where they appear
         on left: 33
         on right: 34
     sentencia (65)
-        on left: 35 36 37 38 39 40 41 42 43
-        on right: 32 34 45 46 47
-    sentencia_asignacion (66)
-        on left: 44
-        on right: 36
-    sentencia_si (67)
-        on left: 45 46
-        on right: 37
-    sentencia_mientras (68)
-        on left: 47
+        on left: 35 36 38 40 41 42 43 44 45
+        on right: 32 34 49 50 55
+    $@13 (66)
+        on left: 37
         on right: 38
-    sentencia_entrada (69)
-        on left: 48
-        on right: 39
-    sentencia_salida (70)
-        on left: 49
+    $@14 (67)
+        on left: 39
         on right: 40
-    sentencia_retorno (71)
+    sentencia_asignacion (68)
+        on left: 46
+        on right: 36
+    sentencia_si (69)
+        on left: 48
+        on right: 38
+    $@15 (70)
+        on left: 47
+        on right: 48
+    posibles (71)
+        on left: 49 50
+        on right: 48
+    sentencia_mientras (72)
+        on left: 52
+        on right: 40
+    $@16 (73)
         on left: 51
+        on right: 52
+    cond_mientras (74)
+        on left: 54
+        on right: 52
+    @17 (75)
+        on left: 53
+        on right: 54
+    cuerpo_mientras (76)
+        on left: 55
+        on right: 54
+    sentencia_entrada (77)
+        on left: 56
         on right: 41
-    @13 (72)
-        on left: 50
-        on right: 51
-    expresion (73)
-        on left: 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69
-        on right: 44 45 46 47 51 52 53 54 55 56 57 58 59 60 61 62 63 64 75 88 89
-    varios_identificador (74)
-        on left: 70 71
-        on right: 21 71
-    identificador (75)
-        on left: 72
-        on right: 29 30 42 43 44 65 70 71 83 85
-    lista_expresiones_o_cadena (76)
-        on left: 73 74
-        on right: 49 73
-    expresion_o_cadena (77)
-        on left: 75 76
-        on right: 73 74
-    constante (78)
-        on left: 77 78 79 80
-        on right: 66
-    tipo (79)
+    sentencia_salida (78)
+        on left: 57
+        on right: 42
+    sentencia_retorno (79)
+        on left: 59
+        on right: 43
+    @18 (80)
+        on left: 58
+        on right: 59
+    expresion (81)
+        on left: 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77
+        on right: 46 48 54 59 60 61 62 63 64 65 66 67 68 69 70 71 72 83 96 97
+    varios_identificador (82)
+        on left: 78 79
+        on right: 21 79
+    identificador (83)
+        on left: 80
+        on right: 29 30 44 45 46 73 78 79 91 93
+    lista_expresiones_o_cadena (84)
         on left: 81 82
+        on right: 57 81
+    expresion_o_cadena (85)
+        on left: 83 84
+        on right: 81 82
+    constante (86)
+        on left: 85 86 87 88
+        on right: 74
+    tipo (87)
+        on left: 89 90
         on right: 21 24 29 30
-    lista_variables (80)
-        on left: 83 84 85
-        on right: 48 84
-    funcion (81)
-        on left: 86 87
-        on right: 67
-    lista_expresiones (82)
-        on left: 88 89
-        on right: 86 88
-    lista_constantes (83)
-        on left: 90 91 92 93
-        on right: 68
-    lista_constante_booleano (84)
-        on left: 94
-        on right: 90
-    contenido_lista_booleano (85)
-        on left: 95 96
+    lista_variables (88)
+        on left: 91 92 93
+        on right: 56 92
+    funcion (89)
+        on left: 94 95
+        on right: 75
+    lista_expresiones (90)
+        on left: 96 97
         on right: 94 96
-    lista_constante_entero (86)
-        on left: 97
-        on right: 91
-    contenido_lista_entero (87)
-        on left: 98 99
-        on right: 97 99
-    lista_constante_flotante (88)
-        on left: 100
-        on right: 92
-    contenido_lista_flotante (89)
-        on left: 101 102
-        on right: 100 102
-    lista_constante_car (90)
-        on left: 103
-        on right: 93
-    contenido_lista_car (91)
-        on left: 104 105
-        on right: 103 105
+    lista_constantes (91)
+        on left: 98 99 100 101
+        on right: 76
+    lista_constante_booleano (92)
+        on left: 102
+        on right: 98
+    contenido_lista_booleano (93)
+        on left: 103 104
+        on right: 102 104
+    lista_constante_entero (94)
+        on left: 105
+        on right: 99
+    contenido_lista_entero (95)
+        on left: 106 107
+        on right: 105 107
+    lista_constante_flotante (96)
+        on left: 108
+        on right: 100
+    contenido_lista_flotante (97)
+        on left: 109 110
+        on right: 108 110
+    lista_constante_car (98)
+        on left: 111
+        on right: 101
+    contenido_lista_car (99)
+        on left: 112 113
+        on right: 111 113
 
 
 State 0
@@ -446,14 +488,14 @@ State 8
 
 State 9
 
-   81 tipo: TIPO_DATO •
+   89 tipo: TIPO_DATO •
 
-    $default  reduce using rule 81 (tipo)
+    $default  reduce using rule 89 (tipo)
 
 
 State 10
 
-   82 tipo: LISTA • TIPO_DATO
+   90 tipo: LISTA • TIPO_DATO
 
     TIPO_DATO  shift, and go to state 14
 
@@ -488,9 +530,9 @@ State 13
 
 State 14
 
-   82 tipo: LISTA TIPO_DATO •
+   90 tipo: LISTA TIPO_DATO •
 
-    $default  reduce using rule 82 (tipo)
+    $default  reduce using rule 90 (tipo)
 
 
 State 15
@@ -521,9 +563,9 @@ State 17
 
 State 18
 
-   72 identificador: IDENT •
+   80 identificador: IDENT •
 
-    $default  reduce using rule 72 (identificador)
+    $default  reduce using rule 80 (identificador)
 
 
 State 19
@@ -735,30 +777,31 @@ State 40
    34 sentencias: $@12 • sentencia
 
     INI_BLOQUE  shift, and go to state 22
-    MIENTRAS    shift, and go to state 47
-    SI          shift, and go to state 48
-    ENTRADA     shift, and go to state 49
-    IMPRIMIR    shift, and go to state 50
-    DEVOLVER    shift, and go to state 51
-    DIRECCION   shift, and go to state 52
+    ENTRADA     shift, and go to state 47
+    IMPRIMIR    shift, and go to state 48
+    DEVOLVER    shift, and go to state 49
+    DIRECCION   shift, and go to state 50
     IDENT       shift, and go to state 18
 
-    bloque                go to state 53
-    sentencia             go to state 54
+    MIENTRAS  reduce using rule 39 ($@14)
+    $default  reduce using rule 37 ($@13)
+
+    bloque                go to state 51
+    sentencia             go to state 52
+    $@13                  go to state 53
+    $@14                  go to state 54
     sentencia_asignacion  go to state 55
-    sentencia_si          go to state 56
-    sentencia_mientras    go to state 57
-    sentencia_entrada     go to state 58
-    sentencia_salida      go to state 59
-    sentencia_retorno     go to state 60
-    identificador         go to state 61
+    sentencia_entrada     go to state 56
+    sentencia_salida      go to state 57
+    sentencia_retorno     go to state 58
+    identificador         go to state 59
 
 
 State 41
 
    24 cabecera_subprog: tipo • IDENT $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA
 
-    IDENT  shift, and go to state 62
+    IDENT  shift, and go to state 60
 
 
 State 42
@@ -781,8 +824,8 @@ State 44
 
     IDENT  shift, and go to state 18
 
-    varios_identificador  go to state 63
-    identificador         go to state 64
+    varios_identificador  go to state 61
+    identificador         go to state 62
 
 
 State 45
@@ -791,7 +834,7 @@ State 45
 
     INI_BLOQUE  shift, and go to state 22
 
-    bloque  go to state 65
+    bloque  go to state 63
 
 
 State 46
@@ -799,101 +842,105 @@ State 46
    32 sentencias: sentencias $@11 • sentencia
 
     INI_BLOQUE  shift, and go to state 22
-    MIENTRAS    shift, and go to state 47
-    SI          shift, and go to state 48
-    ENTRADA     shift, and go to state 49
-    IMPRIMIR    shift, and go to state 50
-    DEVOLVER    shift, and go to state 51
-    DIRECCION   shift, and go to state 52
+    ENTRADA     shift, and go to state 47
+    IMPRIMIR    shift, and go to state 48
+    DEVOLVER    shift, and go to state 49
+    DIRECCION   shift, and go to state 50
     IDENT       shift, and go to state 18
 
-    bloque                go to state 53
-    sentencia             go to state 66
+    MIENTRAS  reduce using rule 39 ($@14)
+    $default  reduce using rule 37 ($@13)
+
+    bloque                go to state 51
+    sentencia             go to state 64
+    $@13                  go to state 53
+    $@14                  go to state 54
     sentencia_asignacion  go to state 55
-    sentencia_si          go to state 56
-    sentencia_mientras    go to state 57
-    sentencia_entrada     go to state 58
-    sentencia_salida      go to state 59
-    sentencia_retorno     go to state 60
-    identificador         go to state 61
+    sentencia_entrada     go to state 56
+    sentencia_salida      go to state 57
+    sentencia_retorno     go to state 58
+    identificador         go to state 59
 
 
 State 47
 
-   47 sentencia_mientras: MIENTRAS • PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
+   56 sentencia_entrada: ENTRADA • DIRECCION lista_variables PYC
 
-    PARENTESIS_ABRE  shift, and go to state 67
+    DIRECCION  shift, and go to state 65
 
 
 State 48
 
-   45 sentencia_si: SI • PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia
-   46             | SI • PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia
+   57 sentencia_salida: IMPRIMIR • DIRECCION lista_expresiones_o_cadena PYC
 
-    PARENTESIS_ABRE  shift, and go to state 68
+    DIRECCION  shift, and go to state 66
 
 
 State 49
 
-   48 sentencia_entrada: ENTRADA • DIRECCION lista_variables PYC
+   59 sentencia_retorno: DEVOLVER • expresion @18 PYC
 
-    DIRECCION  shift, and go to state 69
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 77
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 50
 
-   49 sentencia_salida: IMPRIMIR • DIRECCION lista_expresiones_o_cadena PYC
-
-    DIRECCION  shift, and go to state 70
-
-
-State 51
-
-   51 sentencia_retorno: DEVOLVER • expresion @13 PYC
-
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 81
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
-
-
-State 52
-
-   43 sentencia: DIRECCION • identificador PYC
+   45 sentencia: DIRECCION • identificador PYC
 
     IDENT  shift, and go to state 18
 
-    identificador  go to state 90
+    identificador  go to state 86
 
 
-State 53
+State 51
 
    35 sentencia: bloque •
 
     $default  reduce using rule 35 (sentencia)
 
 
-State 54
+State 52
 
    34 sentencias: $@12 sentencia •
 
     $default  reduce using rule 34 (sentencias)
+
+
+State 53
+
+   38 sentencia: $@13 • sentencia_si
+
+    SI  shift, and go to state 87
+
+    sentencia_si  go to state 88
+
+
+State 54
+
+   40 sentencia: $@14 • sentencia_mientras
+
+    MIENTRAS  shift, and go to state 89
+
+    sentencia_mientras  go to state 90
 
 
 State 55
@@ -905,49 +952,35 @@ State 55
 
 State 56
 
-   37 sentencia: sentencia_si •
-
-    $default  reduce using rule 37 (sentencia)
-
-
-State 57
-
-   38 sentencia: sentencia_mientras •
-
-    $default  reduce using rule 38 (sentencia)
-
-
-State 58
-
-   39 sentencia: sentencia_entrada •
-
-    $default  reduce using rule 39 (sentencia)
-
-
-State 59
-
-   40 sentencia: sentencia_salida •
-
-    $default  reduce using rule 40 (sentencia)
-
-
-State 60
-
-   41 sentencia: sentencia_retorno •
+   41 sentencia: sentencia_entrada •
 
     $default  reduce using rule 41 (sentencia)
 
 
-State 61
+State 57
 
-   42 sentencia: identificador • DIRECCION PYC
-   44 sentencia_asignacion: identificador • OP_ASIGNACION expresion PYC
+   42 sentencia: sentencia_salida •
+
+    $default  reduce using rule 42 (sentencia)
+
+
+State 58
+
+   43 sentencia: sentencia_retorno •
+
+    $default  reduce using rule 43 (sentencia)
+
+
+State 59
+
+   44 sentencia: identificador • DIRECCION PYC
+   46 sentencia_asignacion: identificador • OP_ASIGNACION expresion PYC
 
     OP_ASIGNACION  shift, and go to state 91
     DIRECCION      shift, and go to state 92
 
 
-State 62
+State 60
 
    24 cabecera_subprog: tipo IDENT • $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA
 
@@ -956,393 +989,370 @@ State 62
     $@9  go to state 93
 
 
-State 63
+State 61
 
    21 cuerpo_declar_variables: tipo $@8 varios_identificador • PYC
-   71 varios_identificador: varios_identificador • COMA identificador
+   79 varios_identificador: varios_identificador • COMA identificador
 
     COMA  shift, and go to state 94
     PYC   shift, and go to state 95
 
 
-State 64
+State 62
 
-   70 varios_identificador: identificador •
+   78 varios_identificador: identificador •
 
-    $default  reduce using rule 70 (varios_identificador)
+    $default  reduce using rule 78 (varios_identificador)
 
 
-State 65
+State 63
 
    14 declar_subprog: cabecera_subprog $@6 bloque •
 
     $default  reduce using rule 14 (declar_subprog)
 
 
-State 66
+State 64
 
    32 sentencias: sentencias $@11 sentencia •
 
     $default  reduce using rule 32 (sentencias)
 
 
+State 65
+
+   56 sentencia_entrada: ENTRADA DIRECCION • lista_variables PYC
+
+    DIRECCION  shift, and go to state 96
+    IDENT      shift, and go to state 18
+
+    identificador    go to state 97
+    lista_variables  go to state 98
+
+
+State 66
+
+   57 sentencia_salida: IMPRIMIR DIRECCION • lista_expresiones_o_cadena PYC
+
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    CADENA           shift, and go to state 99
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                   go to state 100
+    identificador               go to state 78
+    lista_expresiones_o_cadena  go to state 101
+    expresion_o_cadena          go to state 102
+    constante                   go to state 79
+    funcion                     go to state 80
+    lista_constantes            go to state 81
+    lista_constante_booleano    go to state 82
+    lista_constante_entero      go to state 83
+    lista_constante_flotante    go to state 84
+    lista_constante_car         go to state 85
+
+
 State 67
 
-   47 sentencia_mientras: MIENTRAS PARENTESIS_ABRE • expresion PARENTESIS_CIERRA sentencia
+   77 expresion: error •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 96
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 77 (expresion)
 
 
 State 68
 
-   45 sentencia_si: SI PARENTESIS_ABRE • expresion PARENTESIS_CIERRA sentencia
-   46             | SI PARENTESIS_ABRE • expresion PARENTESIS_CIERRA sentencia SINO sentencia
+   71 expresion: OP_ADITIVO • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
-    expresion                 go to state 97
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    expresion                 go to state 103
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 69
 
-   48 sentencia_entrada: ENTRADA DIRECCION • lista_variables PYC
+   61 expresion: OP_UNARIO • expresion
 
-    DIRECCION  shift, and go to state 98
-    IDENT      shift, and go to state 18
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
-    identificador    go to state 99
-    lista_variables  go to state 100
+    expresion                 go to state 104
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 70
 
-   49 sentencia_salida: IMPRIMIR DIRECCION • lista_expresiones_o_cadena PYC
+   85 constante: BOOLEANO •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    CADENA           shift, and go to state 101
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                   go to state 102
-    identificador               go to state 82
-    lista_expresiones_o_cadena  go to state 103
-    expresion_o_cadena          go to state 104
-    constante                   go to state 83
-    funcion                     go to state 84
-    lista_constantes            go to state 85
-    lista_constante_booleano    go to state 86
-    lista_constante_entero      go to state 87
-    lista_constante_flotante    go to state 88
-    lista_constante_car         go to state 89
+    $default  reduce using rule 85 (constante)
 
 
 State 71
 
-   69 expresion: error •
+   86 constante: CONSTANTE_NUM •
 
-    $default  reduce using rule 69 (expresion)
+    $default  reduce using rule 86 (constante)
 
 
 State 72
 
-   63 expresion: OP_ADITIVO • expresion
+   88 constante: CONSTANTE_CAR •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 105
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 88 (constante)
 
 
 State 73
 
-   53 expresion: OP_UNARIO • expresion
+   87 constante: CONSTANTE_FLOAT •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 106
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 87 (constante)
 
 
 State 74
 
-   77 constante: BOOLEANO •
+   80 identificador: IDENT •
+   94 funcion: IDENT • PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
+   95        | IDENT • PARENTESIS_ABRE PARENTESIS_CIERRA
 
-    $default  reduce using rule 77 (constante)
+    PARENTESIS_ABRE  shift, and go to state 105
+
+    $default  reduce using rule 80 (identificador)
 
 
 State 75
 
-   78 constante: CONSTANTE_NUM •
+   60 expresion: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA
 
-    $default  reduce using rule 78 (constante)
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 106
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 76
 
-   80 constante: CONSTANTE_CAR •
+  102 lista_constante_booleano: CORCHETE_ABRE • contenido_lista_booleano CORCHETE_CIERRA
+  105 lista_constante_entero: CORCHETE_ABRE • contenido_lista_entero CORCHETE_CIERRA
+  108 lista_constante_flotante: CORCHETE_ABRE • contenido_lista_flotante CORCHETE_CIERRA
+  111 lista_constante_car: CORCHETE_ABRE • contenido_lista_car CORCHETE_CIERRA
 
-    $default  reduce using rule 80 (constante)
+    BOOLEANO         shift, and go to state 107
+    CONSTANTE_NUM    shift, and go to state 108
+    CONSTANTE_CAR    shift, and go to state 109
+    CONSTANTE_FLOAT  shift, and go to state 110
+
+    contenido_lista_booleano  go to state 111
+    contenido_lista_entero    go to state 112
+    contenido_lista_flotante  go to state 113
+    contenido_lista_car       go to state 114
 
 
 State 77
 
-   79 constante: CONSTANTE_FLOAT •
+   59 sentencia_retorno: DEVOLVER expresion • @18 PYC
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
 
-    $default  reduce using rule 79 (constante)
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 58 (@18)
+
+    @18  go to state 125
 
 
 State 78
 
-   72 identificador: IDENT •
-   86 funcion: IDENT • PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
-   87        | IDENT • PARENTESIS_ABRE PARENTESIS_CIERRA
+   73 expresion: identificador •
 
-    PARENTESIS_ABRE  shift, and go to state 107
-
-    $default  reduce using rule 72 (identificador)
+    $default  reduce using rule 73 (expresion)
 
 
 State 79
 
-   52 expresion: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA
+   74 expresion: constante •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 108
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 74 (expresion)
 
 
 State 80
 
-   94 lista_constante_booleano: CORCHETE_ABRE • contenido_lista_booleano CORCHETE_CIERRA
-   97 lista_constante_entero: CORCHETE_ABRE • contenido_lista_entero CORCHETE_CIERRA
-  100 lista_constante_flotante: CORCHETE_ABRE • contenido_lista_flotante CORCHETE_CIERRA
-  103 lista_constante_car: CORCHETE_ABRE • contenido_lista_car CORCHETE_CIERRA
+   75 expresion: funcion •
 
-    BOOLEANO         shift, and go to state 109
-    CONSTANTE_NUM    shift, and go to state 110
-    CONSTANTE_CAR    shift, and go to state 111
-    CONSTANTE_FLOAT  shift, and go to state 112
-
-    contenido_lista_booleano  go to state 113
-    contenido_lista_entero    go to state 114
-    contenido_lista_flotante  go to state 115
-    contenido_lista_car       go to state 116
+    $default  reduce using rule 75 (expresion)
 
 
 State 81
 
-   51 sentencia_retorno: DEVOLVER expresion • @13 PYC
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+   76 expresion: lista_constantes •
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 50 (@13)
-
-    @13  go to state 127
+    $default  reduce using rule 76 (expresion)
 
 
 State 82
 
-   65 expresion: identificador •
+   98 lista_constantes: lista_constante_booleano •
 
-    $default  reduce using rule 65 (expresion)
+    $default  reduce using rule 98 (lista_constantes)
 
 
 State 83
 
-   66 expresion: constante •
+   99 lista_constantes: lista_constante_entero •
 
-    $default  reduce using rule 66 (expresion)
+    $default  reduce using rule 99 (lista_constantes)
 
 
 State 84
 
-   67 expresion: funcion •
+  100 lista_constantes: lista_constante_flotante •
 
-    $default  reduce using rule 67 (expresion)
+    $default  reduce using rule 100 (lista_constantes)
 
 
 State 85
 
-   68 expresion: lista_constantes •
+  101 lista_constantes: lista_constante_car •
 
-    $default  reduce using rule 68 (expresion)
+    $default  reduce using rule 101 (lista_constantes)
 
 
 State 86
 
-   90 lista_constantes: lista_constante_booleano •
+   45 sentencia: DIRECCION identificador • PYC
 
-    $default  reduce using rule 90 (lista_constantes)
+    PYC  shift, and go to state 126
 
 
 State 87
 
-   91 lista_constantes: lista_constante_entero •
+   48 sentencia_si: SI • PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@15 posibles
 
-    $default  reduce using rule 91 (lista_constantes)
+    PARENTESIS_ABRE  shift, and go to state 127
 
 
 State 88
 
-   92 lista_constantes: lista_constante_flotante •
+   38 sentencia: $@13 sentencia_si •
 
-    $default  reduce using rule 92 (lista_constantes)
+    $default  reduce using rule 38 (sentencia)
 
 
 State 89
 
-   93 lista_constantes: lista_constante_car •
+   52 sentencia_mientras: MIENTRAS • $@16 cond_mientras
 
-    $default  reduce using rule 93 (lista_constantes)
+    $default  reduce using rule 51 ($@16)
+
+    $@16  go to state 128
 
 
 State 90
 
-   43 sentencia: DIRECCION identificador • PYC
+   40 sentencia: $@14 sentencia_mientras •
 
-    PYC  shift, and go to state 128
+    $default  reduce using rule 40 (sentencia)
 
 
 State 91
 
-   44 sentencia_asignacion: identificador OP_ASIGNACION • expresion PYC
+   46 sentencia_asignacion: identificador OP_ASIGNACION • expresion PYC
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 129
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 92
 
-   42 sentencia: identificador DIRECCION • PYC
+   44 sentencia: identificador DIRECCION • PYC
 
     PYC  shift, and go to state 130
 
@@ -1356,7 +1366,7 @@ State 93
 
 State 94
 
-   71 varios_identificador: varios_identificador COMA • identificador
+   79 varios_identificador: varios_identificador COMA • identificador
 
     IDENT  shift, and go to state 18
 
@@ -1372,570 +1382,550 @@ State 95
 
 State 96
 
-   47 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion • PARENTESIS_CIERRA sentencia
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+   92 lista_variables: DIRECCION • lista_variables
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-    PARENTESIS_CIERRA  shift, and go to state 133
+    DIRECCION  shift, and go to state 96
+    IDENT      shift, and go to state 18
+
+    identificador    go to state 97
+    lista_variables  go to state 133
 
 
 State 97
 
-   45 sentencia_si: SI PARENTESIS_ABRE expresion • PARENTESIS_CIERRA sentencia
-   46             | SI PARENTESIS_ABRE expresion • PARENTESIS_CIERRA sentencia SINO sentencia
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+   91 lista_variables: identificador •
+   93                | identificador • DIRECCION identificador
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-    PARENTESIS_CIERRA  shift, and go to state 134
+    DIRECCION  shift, and go to state 134
+
+    $default  reduce using rule 91 (lista_variables)
 
 
 State 98
 
-   84 lista_variables: DIRECCION • lista_variables
+   56 sentencia_entrada: ENTRADA DIRECCION lista_variables • PYC
 
-    DIRECCION  shift, and go to state 98
-    IDENT      shift, and go to state 18
-
-    identificador    go to state 99
-    lista_variables  go to state 135
+    PYC  shift, and go to state 135
 
 
 State 99
 
-   83 lista_variables: identificador •
-   85                | identificador • DIRECCION identificador
+   84 expresion_o_cadena: CADENA •
 
-    DIRECCION  shift, and go to state 136
-
-    $default  reduce using rule 83 (lista_variables)
+    $default  reduce using rule 84 (expresion_o_cadena)
 
 
 State 100
 
-   48 sentencia_entrada: ENTRADA DIRECCION lista_variables • PYC
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+   83 expresion_o_cadena: expresion •
 
-    PYC  shift, and go to state 137
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 83 (expresion_o_cadena)
 
 
 State 101
 
-   76 expresion_o_cadena: CADENA •
+   57 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena • PYC
+   81 lista_expresiones_o_cadena: lista_expresiones_o_cadena • DIRECCION expresion_o_cadena
 
-    $default  reduce using rule 76 (expresion_o_cadena)
+    DIRECCION  shift, and go to state 136
+    PYC        shift, and go to state 137
 
 
 State 102
 
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-   75 expresion_o_cadena: expresion •
+   82 lista_expresiones_o_cadena: expresion_o_cadena •
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 75 (expresion_o_cadena)
+    $default  reduce using rule 82 (lista_expresiones_o_cadena)
 
 
 State 103
 
-   49 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena • PYC
-   73 lista_expresiones_o_cadena: lista_expresiones_o_cadena • DIRECCION expresion_o_cadena
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   71          | OP_ADITIVO expresion •
+   72          | expresion • SIGSIG expresion
 
-    DIRECCION  shift, and go to state 138
-    PYC        shift, and go to state 139
+    OP_UNARIO    shift, and go to state 123
+    OP_TERNARIO  shift, and go to state 124
+
+    $default  reduce using rule 71 (expresion)
 
 
 State 104
 
-   74 lista_expresiones_o_cadena: expresion_o_cadena •
+   61 expresion: OP_UNARIO expresion •
+   62          | expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
 
-    $default  reduce using rule 74 (lista_expresiones_o_cadena)
+    OP_UNARIO    shift, and go to state 123
+    OP_TERNARIO  shift, and go to state 124
+
+    $default  reduce using rule 61 (expresion)
 
 
 State 105
 
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   63          | OP_ADITIVO expresion •
-   64          | expresion • SIGSIG expresion
+   94 funcion: IDENT PARENTESIS_ABRE • lista_expresiones PARENTESIS_CIERRA
+   95        | IDENT PARENTESIS_ABRE • PARENTESIS_CIERRA
 
-    OP_UNARIO    shift, and go to state 125
-    OP_TERNARIO  shift, and go to state 126
+    error              shift, and go to state 67
+    OP_ADITIVO         shift, and go to state 68
+    OP_UNARIO          shift, and go to state 69
+    BOOLEANO           shift, and go to state 70
+    CONSTANTE_NUM      shift, and go to state 71
+    CONSTANTE_CAR      shift, and go to state 72
+    CONSTANTE_FLOAT    shift, and go to state 73
+    IDENT              shift, and go to state 74
+    PARENTESIS_ABRE    shift, and go to state 75
+    PARENTESIS_CIERRA  shift, and go to state 138
+    CORCHETE_ABRE      shift, and go to state 76
 
-    $default  reduce using rule 63 (expresion)
+    expresion                 go to state 139
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_expresiones         go to state 140
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 106
 
-   53 expresion: OP_UNARIO expresion •
-   54          | expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+   60 expresion: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA
+   62          | expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 125
-    OP_TERNARIO  shift, and go to state 126
-
-    $default  reduce using rule 53 (expresion)
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+    PARENTESIS_CIERRA  shift, and go to state 141
 
 
 State 107
 
-   86 funcion: IDENT PARENTESIS_ABRE • lista_expresiones PARENTESIS_CIERRA
-   87        | IDENT PARENTESIS_ABRE • PARENTESIS_CIERRA
+  103 contenido_lista_booleano: BOOLEANO •
+  104                         | BOOLEANO • COMA contenido_lista_booleano
 
-    error              shift, and go to state 71
-    OP_ADITIVO         shift, and go to state 72
-    OP_UNARIO          shift, and go to state 73
-    BOOLEANO           shift, and go to state 74
-    CONSTANTE_NUM      shift, and go to state 75
-    CONSTANTE_CAR      shift, and go to state 76
-    CONSTANTE_FLOAT    shift, and go to state 77
-    IDENT              shift, and go to state 78
-    PARENTESIS_ABRE    shift, and go to state 79
-    PARENTESIS_CIERRA  shift, and go to state 140
-    CORCHETE_ABRE      shift, and go to state 80
+    COMA  shift, and go to state 142
 
-    expresion                 go to state 141
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_expresiones         go to state 142
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 103 (contenido_lista_booleano)
 
 
 State 108
 
-   52 expresion: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA
-   54          | expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+  106 contenido_lista_entero: CONSTANTE_NUM •
+  107                       | CONSTANTE_NUM • COMA contenido_lista_entero
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-    PARENTESIS_CIERRA  shift, and go to state 143
+    COMA  shift, and go to state 143
+
+    $default  reduce using rule 106 (contenido_lista_entero)
 
 
 State 109
 
-   95 contenido_lista_booleano: BOOLEANO •
-   96                         | BOOLEANO • COMA contenido_lista_booleano
+  112 contenido_lista_car: CONSTANTE_CAR •
+  113                    | CONSTANTE_CAR • COMA contenido_lista_car
 
     COMA  shift, and go to state 144
 
-    $default  reduce using rule 95 (contenido_lista_booleano)
+    $default  reduce using rule 112 (contenido_lista_car)
 
 
 State 110
 
-   98 contenido_lista_entero: CONSTANTE_NUM •
-   99                       | CONSTANTE_NUM • COMA contenido_lista_entero
+  109 contenido_lista_flotante: CONSTANTE_FLOAT •
+  110                         | CONSTANTE_FLOAT • COMA contenido_lista_flotante
 
     COMA  shift, and go to state 145
 
-    $default  reduce using rule 98 (contenido_lista_entero)
+    $default  reduce using rule 109 (contenido_lista_flotante)
 
 
 State 111
 
-  104 contenido_lista_car: CONSTANTE_CAR •
-  105                    | CONSTANTE_CAR • COMA contenido_lista_car
+  102 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano • CORCHETE_CIERRA
 
-    COMA  shift, and go to state 146
-
-    $default  reduce using rule 104 (contenido_lista_car)
+    CORCHETE_CIERRA  shift, and go to state 146
 
 
 State 112
 
-  101 contenido_lista_flotante: CONSTANTE_FLOAT •
-  102                         | CONSTANTE_FLOAT • COMA contenido_lista_flotante
+  105 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero • CORCHETE_CIERRA
 
-    COMA  shift, and go to state 147
-
-    $default  reduce using rule 101 (contenido_lista_flotante)
+    CORCHETE_CIERRA  shift, and go to state 147
 
 
 State 113
 
-   94 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano • CORCHETE_CIERRA
+  108 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante • CORCHETE_CIERRA
 
     CORCHETE_CIERRA  shift, and go to state 148
 
 
 State 114
 
-   97 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero • CORCHETE_CIERRA
+  111 lista_constante_car: CORCHETE_ABRE contenido_lista_car • CORCHETE_CIERRA
 
     CORCHETE_CIERRA  shift, and go to state 149
 
 
 State 115
 
-  100 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante • CORCHETE_CIERRA
+   64 expresion: expresion OP_OR • expresion
 
-    CORCHETE_CIERRA  shift, and go to state 150
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 150
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 116
 
-  103 lista_constante_car: CORCHETE_ABRE contenido_lista_car • CORCHETE_CIERRA
+   65 expresion: expresion OP_AND • expresion
 
-    CORCHETE_CIERRA  shift, and go to state 151
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 151
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 117
 
-   56 expresion: expresion OP_OR • expresion
+   66 expresion: expresion OP_XOR • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 152
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 118
 
-   57 expresion: expresion OP_AND • expresion
+   69 expresion: expresion OP_IGUALDAD • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 153
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 119
 
-   58 expresion: expresion OP_XOR • expresion
+   67 expresion: expresion OP_RELACION • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 154
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 120
 
-   61 expresion: expresion OP_IGUALDAD • expresion
+   70 expresion: expresion OP_ADITIVO • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 155
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 121
 
-   59 expresion: expresion OP_RELACION • expresion
+   72 expresion: expresion SIGSIG • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 156
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 122
 
-   62 expresion: expresion OP_ADITIVO • expresion
+   68 expresion: expresion OP_MULTIPLICATIVO • expresion
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
     expresion                 go to state 157
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 123
 
-   64 expresion: expresion SIGSIG • expresion
+   62 expresion: expresion OP_UNARIO •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 158
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 62 (expresion)
 
 
 State 124
 
-   60 expresion: expresion OP_MULTIPLICATIVO • expresion
+   63 expresion: expresion OP_TERNARIO • CONSTANTE_NUM
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 159
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    CONSTANTE_NUM  shift, and go to state 158
 
 
 State 125
 
-   54 expresion: expresion OP_UNARIO •
+   59 sentencia_retorno: DEVOLVER expresion @18 • PYC
 
-    $default  reduce using rule 54 (expresion)
+    PYC  shift, and go to state 159
 
 
 State 126
 
-   55 expresion: expresion OP_TERNARIO • CONSTANTE_NUM
+   45 sentencia: DIRECCION identificador PYC •
 
-    CONSTANTE_NUM  shift, and go to state 160
+    $default  reduce using rule 45 (sentencia)
 
 
 State 127
 
-   51 sentencia_retorno: DEVOLVER expresion @13 • PYC
+   48 sentencia_si: SI PARENTESIS_ABRE • expresion PARENTESIS_CIERRA $@15 posibles
 
-    PYC  shift, and go to state 161
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 160
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 128
 
-   43 sentencia: DIRECCION identificador PYC •
+   52 sentencia_mientras: MIENTRAS $@16 • cond_mientras
 
-    $default  reduce using rule 43 (sentencia)
+    PARENTESIS_ABRE  shift, and go to state 161
+
+    cond_mientras  go to state 162
 
 
 State 129
 
-   44 sentencia_asignacion: identificador OP_ASIGNACION expresion • PYC
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
+   46 sentencia_asignacion: identificador OP_ASIGNACION expresion • PYC
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-    PYC                shift, and go to state 162
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+    PYC                shift, and go to state 163
 
 
 State 130
 
-   42 sentencia: identificador DIRECCION PYC •
+   44 sentencia: identificador DIRECCION PYC •
 
-    $default  reduce using rule 42 (sentencia)
+    $default  reduce using rule 44 (sentencia)
 
 
 State 131
@@ -1947,610 +1937,733 @@ State 131
 
     $default  reduce using rule 28 (lista_parametros)
 
-    parametros        go to state 163
+    parametros        go to state 164
     lista_parametros  go to state 12
     tipo              go to state 13
 
 
 State 132
 
-   71 varios_identificador: varios_identificador COMA identificador •
+   79 varios_identificador: varios_identificador COMA identificador •
 
-    $default  reduce using rule 71 (varios_identificador)
+    $default  reduce using rule 79 (varios_identificador)
 
 
 State 133
 
-   47 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA • sentencia
+   92 lista_variables: DIRECCION lista_variables •
 
-    INI_BLOQUE  shift, and go to state 22
-    MIENTRAS    shift, and go to state 47
-    SI          shift, and go to state 48
-    ENTRADA     shift, and go to state 49
-    IMPRIMIR    shift, and go to state 50
-    DEVOLVER    shift, and go to state 51
-    DIRECCION   shift, and go to state 52
-    IDENT       shift, and go to state 18
-
-    bloque                go to state 53
-    sentencia             go to state 164
-    sentencia_asignacion  go to state 55
-    sentencia_si          go to state 56
-    sentencia_mientras    go to state 57
-    sentencia_entrada     go to state 58
-    sentencia_salida      go to state 59
-    sentencia_retorno     go to state 60
-    identificador         go to state 61
+    $default  reduce using rule 92 (lista_variables)
 
 
 State 134
 
-   45 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA • sentencia
-   46             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA • sentencia SINO sentencia
+   93 lista_variables: identificador DIRECCION • identificador
 
-    INI_BLOQUE  shift, and go to state 22
-    MIENTRAS    shift, and go to state 47
-    SI          shift, and go to state 48
-    ENTRADA     shift, and go to state 49
-    IMPRIMIR    shift, and go to state 50
-    DEVOLVER    shift, and go to state 51
-    DIRECCION   shift, and go to state 52
-    IDENT       shift, and go to state 18
+    IDENT  shift, and go to state 18
 
-    bloque                go to state 53
-    sentencia             go to state 165
-    sentencia_asignacion  go to state 55
-    sentencia_si          go to state 56
-    sentencia_mientras    go to state 57
-    sentencia_entrada     go to state 58
-    sentencia_salida      go to state 59
-    sentencia_retorno     go to state 60
-    identificador         go to state 61
+    identificador  go to state 165
 
 
 State 135
 
-   84 lista_variables: DIRECCION lista_variables •
+   56 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC •
 
-    $default  reduce using rule 84 (lista_variables)
+    $default  reduce using rule 56 (sentencia_entrada)
 
 
 State 136
 
-   85 lista_variables: identificador DIRECCION • identificador
+   81 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION • expresion_o_cadena
 
-    IDENT  shift, and go to state 18
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    CADENA           shift, and go to state 99
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
 
-    identificador  go to state 166
+    expresion                 go to state 100
+    identificador             go to state 78
+    expresion_o_cadena        go to state 166
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 137
 
-   48 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC •
+   57 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC •
 
-    $default  reduce using rule 48 (sentencia_entrada)
+    $default  reduce using rule 57 (sentencia_salida)
 
 
 State 138
 
-   73 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION • expresion_o_cadena
+   95 funcion: IDENT PARENTESIS_ABRE PARENTESIS_CIERRA •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    CADENA           shift, and go to state 101
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 102
-    identificador             go to state 82
-    expresion_o_cadena        go to state 167
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 95 (funcion)
 
 
 State 139
 
-   49 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC •
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+   97 lista_expresiones: expresion •
 
-    $default  reduce using rule 49 (sentencia_salida)
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 97 (lista_expresiones)
 
 
 State 140
 
-   87 funcion: IDENT PARENTESIS_ABRE PARENTESIS_CIERRA •
+   94 funcion: IDENT PARENTESIS_ABRE lista_expresiones • PARENTESIS_CIERRA
+   96 lista_expresiones: lista_expresiones • COMA expresion
 
-    $default  reduce using rule 87 (funcion)
+    PARENTESIS_CIERRA  shift, and go to state 167
+    COMA               shift, and go to state 168
 
 
 State 141
 
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-   89 lista_expresiones: expresion •
-
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 89 (lista_expresiones)
-
-
-State 142
-
-   86 funcion: IDENT PARENTESIS_ABRE lista_expresiones • PARENTESIS_CIERRA
-   88 lista_expresiones: lista_expresiones • COMA expresion
-
-    PARENTESIS_CIERRA  shift, and go to state 168
-    COMA               shift, and go to state 169
-
-
-State 143
-
-   52 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA •
-
-    $default  reduce using rule 52 (expresion)
-
-
-State 144
-
-   96 contenido_lista_booleano: BOOLEANO COMA • contenido_lista_booleano
-
-    BOOLEANO  shift, and go to state 109
-
-    contenido_lista_booleano  go to state 170
-
-
-State 145
-
-   99 contenido_lista_entero: CONSTANTE_NUM COMA • contenido_lista_entero
-
-    CONSTANTE_NUM  shift, and go to state 110
-
-    contenido_lista_entero  go to state 171
-
-
-State 146
-
-  105 contenido_lista_car: CONSTANTE_CAR COMA • contenido_lista_car
-
-    CONSTANTE_CAR  shift, and go to state 111
-
-    contenido_lista_car  go to state 172
-
-
-State 147
-
-  102 contenido_lista_flotante: CONSTANTE_FLOAT COMA • contenido_lista_flotante
-
-    CONSTANTE_FLOAT  shift, and go to state 112
-
-    contenido_lista_flotante  go to state 173
-
-
-State 148
-
-   94 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA •
-
-    $default  reduce using rule 94 (lista_constante_booleano)
-
-
-State 149
-
-   97 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA •
-
-    $default  reduce using rule 97 (lista_constante_entero)
-
-
-State 150
-
-  100 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA •
-
-    $default  reduce using rule 100 (lista_constante_flotante)
-
-
-State 151
-
-  103 lista_constante_car: CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA •
-
-    $default  reduce using rule 103 (lista_constante_car)
-
-
-State 152
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   56          | expresion OP_OR expresion •
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 56 (expresion)
-
-
-State 153
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   57          | expresion OP_AND expresion •
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 57 (expresion)
-
-
-State 154
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   58          | expresion OP_XOR expresion •
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 58 (expresion)
-
-
-State 155
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   61          | expresion OP_IGUALDAD expresion •
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 61 (expresion)
-
-
-State 156
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   59          | expresion OP_RELACION expresion •
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 59 (expresion)
-
-
-State 157
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   62          | expresion OP_ADITIVO expresion •
-   64          | expresion • SIGSIG expresion
-
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 62 (expresion)
-
-
-State 158
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-   64          | expresion SIGSIG expresion •
-
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
-
-    $default  reduce using rule 64 (expresion)
-
-
-State 159
-
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   60          | expresion OP_MULTIPLICATIVO expresion •
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-
-    OP_UNARIO    shift, and go to state 125
-    OP_TERNARIO  shift, and go to state 126
+   60 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA •
 
     $default  reduce using rule 60 (expresion)
 
 
+State 142
+
+  104 contenido_lista_booleano: BOOLEANO COMA • contenido_lista_booleano
+
+    BOOLEANO  shift, and go to state 107
+
+    contenido_lista_booleano  go to state 169
+
+
+State 143
+
+  107 contenido_lista_entero: CONSTANTE_NUM COMA • contenido_lista_entero
+
+    CONSTANTE_NUM  shift, and go to state 108
+
+    contenido_lista_entero  go to state 170
+
+
+State 144
+
+  113 contenido_lista_car: CONSTANTE_CAR COMA • contenido_lista_car
+
+    CONSTANTE_CAR  shift, and go to state 109
+
+    contenido_lista_car  go to state 171
+
+
+State 145
+
+  110 contenido_lista_flotante: CONSTANTE_FLOAT COMA • contenido_lista_flotante
+
+    CONSTANTE_FLOAT  shift, and go to state 110
+
+    contenido_lista_flotante  go to state 172
+
+
+State 146
+
+  102 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA •
+
+    $default  reduce using rule 102 (lista_constante_booleano)
+
+
+State 147
+
+  105 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA •
+
+    $default  reduce using rule 105 (lista_constante_entero)
+
+
+State 148
+
+  108 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA •
+
+    $default  reduce using rule 108 (lista_constante_flotante)
+
+
+State 149
+
+  111 lista_constante_car: CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA •
+
+    $default  reduce using rule 111 (lista_constante_car)
+
+
+State 150
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   64          | expresion OP_OR expresion •
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 64 (expresion)
+
+
+State 151
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   65          | expresion OP_AND expresion •
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 65 (expresion)
+
+
+State 152
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   66          | expresion OP_XOR expresion •
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 66 (expresion)
+
+
+State 153
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   69          | expresion OP_IGUALDAD expresion •
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 69 (expresion)
+
+
+State 154
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   67          | expresion OP_RELACION expresion •
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 67 (expresion)
+
+
+State 155
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   70          | expresion OP_ADITIVO expresion •
+   72          | expresion • SIGSIG expresion
+
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 70 (expresion)
+
+
+State 156
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+   72          | expresion SIGSIG expresion •
+
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+
+    $default  reduce using rule 72 (expresion)
+
+
+State 157
+
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   68          | expresion OP_MULTIPLICATIVO expresion •
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_UNARIO    shift, and go to state 123
+    OP_TERNARIO  shift, and go to state 124
+
+    $default  reduce using rule 68 (expresion)
+
+
+State 158
+
+   63 expresion: expresion OP_TERNARIO CONSTANTE_NUM •
+
+    $default  reduce using rule 63 (expresion)
+
+
+State 159
+
+   59 sentencia_retorno: DEVOLVER expresion @18 PYC •
+
+    $default  reduce using rule 59 (sentencia_retorno)
+
+
 State 160
 
-   55 expresion: expresion OP_TERNARIO CONSTANTE_NUM •
+   48 sentencia_si: SI PARENTESIS_ABRE expresion • PARENTESIS_CIERRA $@15 posibles
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
 
-    $default  reduce using rule 55 (expresion)
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+    PARENTESIS_CIERRA  shift, and go to state 173
 
 
 State 161
 
-   51 sentencia_retorno: DEVOLVER expresion @13 PYC •
+   54 cond_mientras: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA @17 cuerpo_mientras
 
-    $default  reduce using rule 51 (sentencia_retorno)
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 174
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 162
 
-   44 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC •
+   52 sentencia_mientras: MIENTRAS $@16 cond_mientras •
 
-    $default  reduce using rule 44 (sentencia_asignacion)
+    $default  reduce using rule 52 (sentencia_mientras)
 
 
 State 163
 
-   24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE parametros • PARENTESIS_CIERRA
+   46 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC •
 
-    PARENTESIS_CIERRA  shift, and go to state 174
+    $default  reduce using rule 46 (sentencia_asignacion)
 
 
 State 164
 
-   47 sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia •
+   24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE parametros • PARENTESIS_CIERRA
 
-    $default  reduce using rule 47 (sentencia_mientras)
+    PARENTESIS_CIERRA  shift, and go to state 175
 
 
 State 165
 
-   45 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia •
-   46             | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia • SINO sentencia
+   93 lista_variables: identificador DIRECCION identificador •
 
-    SINO  shift, and go to state 175
-
-    SINO      [reduce using rule 45 (sentencia_si)]
-    $default  reduce using rule 45 (sentencia_si)
+    $default  reduce using rule 93 (lista_variables)
 
 
 State 166
 
-   85 lista_variables: identificador DIRECCION identificador •
+   81 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena •
 
-    $default  reduce using rule 85 (lista_variables)
+    $default  reduce using rule 81 (lista_expresiones_o_cadena)
 
 
 State 167
 
-   73 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena •
+   94 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA •
 
-    $default  reduce using rule 73 (lista_expresiones_o_cadena)
+    $default  reduce using rule 94 (funcion)
 
 
 State 168
 
-   86 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA •
+   96 lista_expresiones: lista_expresiones COMA • expresion
 
-    $default  reduce using rule 86 (funcion)
+    error            shift, and go to state 67
+    OP_ADITIVO       shift, and go to state 68
+    OP_UNARIO        shift, and go to state 69
+    BOOLEANO         shift, and go to state 70
+    CONSTANTE_NUM    shift, and go to state 71
+    CONSTANTE_CAR    shift, and go to state 72
+    CONSTANTE_FLOAT  shift, and go to state 73
+    IDENT            shift, and go to state 74
+    PARENTESIS_ABRE  shift, and go to state 75
+    CORCHETE_ABRE    shift, and go to state 76
+
+    expresion                 go to state 176
+    identificador             go to state 78
+    constante                 go to state 79
+    funcion                   go to state 80
+    lista_constantes          go to state 81
+    lista_constante_booleano  go to state 82
+    lista_constante_entero    go to state 83
+    lista_constante_flotante  go to state 84
+    lista_constante_car       go to state 85
 
 
 State 169
 
-   88 lista_expresiones: lista_expresiones COMA • expresion
+  104 contenido_lista_booleano: BOOLEANO COMA contenido_lista_booleano •
 
-    error            shift, and go to state 71
-    OP_ADITIVO       shift, and go to state 72
-    OP_UNARIO        shift, and go to state 73
-    BOOLEANO         shift, and go to state 74
-    CONSTANTE_NUM    shift, and go to state 75
-    CONSTANTE_CAR    shift, and go to state 76
-    CONSTANTE_FLOAT  shift, and go to state 77
-    IDENT            shift, and go to state 78
-    PARENTESIS_ABRE  shift, and go to state 79
-    CORCHETE_ABRE    shift, and go to state 80
-
-    expresion                 go to state 176
-    identificador             go to state 82
-    constante                 go to state 83
-    funcion                   go to state 84
-    lista_constantes          go to state 85
-    lista_constante_booleano  go to state 86
-    lista_constante_entero    go to state 87
-    lista_constante_flotante  go to state 88
-    lista_constante_car       go to state 89
+    $default  reduce using rule 104 (contenido_lista_booleano)
 
 
 State 170
 
-   96 contenido_lista_booleano: BOOLEANO COMA contenido_lista_booleano •
+  107 contenido_lista_entero: CONSTANTE_NUM COMA contenido_lista_entero •
 
-    $default  reduce using rule 96 (contenido_lista_booleano)
+    $default  reduce using rule 107 (contenido_lista_entero)
 
 
 State 171
 
-   99 contenido_lista_entero: CONSTANTE_NUM COMA contenido_lista_entero •
+  113 contenido_lista_car: CONSTANTE_CAR COMA contenido_lista_car •
 
-    $default  reduce using rule 99 (contenido_lista_entero)
+    $default  reduce using rule 113 (contenido_lista_car)
 
 
 State 172
 
-  105 contenido_lista_car: CONSTANTE_CAR COMA contenido_lista_car •
+  110 contenido_lista_flotante: CONSTANTE_FLOAT COMA contenido_lista_flotante •
 
-    $default  reduce using rule 105 (contenido_lista_car)
+    $default  reduce using rule 110 (contenido_lista_flotante)
 
 
 State 173
 
-  102 contenido_lista_flotante: CONSTANTE_FLOAT COMA contenido_lista_flotante •
+   48 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA • $@15 posibles
 
-    $default  reduce using rule 102 (contenido_lista_flotante)
+    $default  reduce using rule 47 ($@15)
+
+    $@15  go to state 177
 
 
 State 174
+
+   54 cond_mientras: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA @17 cuerpo_mientras
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
+    PARENTESIS_CIERRA  shift, and go to state 178
+
+
+State 175
 
    24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA •
 
     $default  reduce using rule 24 (cabecera_subprog)
 
 
-State 175
-
-   46 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO • sentencia
-
-    INI_BLOQUE  shift, and go to state 22
-    MIENTRAS    shift, and go to state 47
-    SI          shift, and go to state 48
-    ENTRADA     shift, and go to state 49
-    IMPRIMIR    shift, and go to state 50
-    DEVOLVER    shift, and go to state 51
-    DIRECCION   shift, and go to state 52
-    IDENT       shift, and go to state 18
-
-    bloque                go to state 53
-    sentencia             go to state 177
-    sentencia_asignacion  go to state 55
-    sentencia_si          go to state 56
-    sentencia_mientras    go to state 57
-    sentencia_entrada     go to state 58
-    sentencia_salida      go to state 59
-    sentencia_retorno     go to state 60
-    identificador         go to state 61
-
-
 State 176
 
-   54 expresion: expresion • OP_UNARIO
-   55          | expresion • OP_TERNARIO CONSTANTE_NUM
-   56          | expresion • OP_OR expresion
-   57          | expresion • OP_AND expresion
-   58          | expresion • OP_XOR expresion
-   59          | expresion • OP_RELACION expresion
-   60          | expresion • OP_MULTIPLICATIVO expresion
-   61          | expresion • OP_IGUALDAD expresion
-   62          | expresion • OP_ADITIVO expresion
-   64          | expresion • SIGSIG expresion
-   88 lista_expresiones: lista_expresiones COMA expresion •
+   62 expresion: expresion • OP_UNARIO
+   63          | expresion • OP_TERNARIO CONSTANTE_NUM
+   64          | expresion • OP_OR expresion
+   65          | expresion • OP_AND expresion
+   66          | expresion • OP_XOR expresion
+   67          | expresion • OP_RELACION expresion
+   68          | expresion • OP_MULTIPLICATIVO expresion
+   69          | expresion • OP_IGUALDAD expresion
+   70          | expresion • OP_ADITIVO expresion
+   72          | expresion • SIGSIG expresion
+   96 lista_expresiones: lista_expresiones COMA expresion •
 
-    OP_OR              shift, and go to state 117
-    OP_AND             shift, and go to state 118
-    OP_XOR             shift, and go to state 119
-    OP_IGUALDAD        shift, and go to state 120
-    OP_RELACION        shift, and go to state 121
-    OP_ADITIVO         shift, and go to state 122
-    SIGSIG             shift, and go to state 123
-    OP_MULTIPLICATIVO  shift, and go to state 124
-    OP_UNARIO          shift, and go to state 125
-    OP_TERNARIO        shift, and go to state 126
+    OP_OR              shift, and go to state 115
+    OP_AND             shift, and go to state 116
+    OP_XOR             shift, and go to state 117
+    OP_IGUALDAD        shift, and go to state 118
+    OP_RELACION        shift, and go to state 119
+    OP_ADITIVO         shift, and go to state 120
+    SIGSIG             shift, and go to state 121
+    OP_MULTIPLICATIVO  shift, and go to state 122
+    OP_UNARIO          shift, and go to state 123
+    OP_TERNARIO        shift, and go to state 124
 
-    $default  reduce using rule 88 (lista_expresiones)
+    $default  reduce using rule 96 (lista_expresiones)
 
 
 State 177
 
-   46 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia •
+   48 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@15 • posibles
 
-    $default  reduce using rule 46 (sentencia_si)
+    INI_BLOQUE  shift, and go to state 22
+    ENTRADA     shift, and go to state 47
+    IMPRIMIR    shift, and go to state 48
+    DEVOLVER    shift, and go to state 49
+    DIRECCION   shift, and go to state 50
+    IDENT       shift, and go to state 18
+
+    MIENTRAS  reduce using rule 39 ($@14)
+    $default  reduce using rule 37 ($@13)
+
+    bloque                go to state 51
+    sentencia             go to state 179
+    $@13                  go to state 53
+    $@14                  go to state 54
+    sentencia_asignacion  go to state 55
+    posibles              go to state 180
+    sentencia_entrada     go to state 56
+    sentencia_salida      go to state 57
+    sentencia_retorno     go to state 58
+    identificador         go to state 59
+
+
+State 178
+
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA • @17 cuerpo_mientras
+
+    $default  reduce using rule 53 (@17)
+
+    @17  go to state 181
+
+
+State 179
+
+   49 posibles: sentencia •
+   50         | sentencia • SINO sentencia
+
+    SINO  shift, and go to state 182
+
+    SINO      [reduce using rule 49 (posibles)]
+    $default  reduce using rule 49 (posibles)
+
+
+State 180
+
+   48 sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@15 posibles •
+
+    $default  reduce using rule 48 (sentencia_si)
+
+
+State 181
+
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 • cuerpo_mientras
+
+    INI_BLOQUE  shift, and go to state 22
+    ENTRADA     shift, and go to state 47
+    IMPRIMIR    shift, and go to state 48
+    DEVOLVER    shift, and go to state 49
+    DIRECCION   shift, and go to state 50
+    IDENT       shift, and go to state 18
+
+    MIENTRAS  reduce using rule 39 ($@14)
+    $default  reduce using rule 37 ($@13)
+
+    bloque                go to state 51
+    sentencia             go to state 183
+    $@13                  go to state 53
+    $@14                  go to state 54
+    sentencia_asignacion  go to state 55
+    cuerpo_mientras       go to state 184
+    sentencia_entrada     go to state 56
+    sentencia_salida      go to state 57
+    sentencia_retorno     go to state 58
+    identificador         go to state 59
+
+
+State 182
+
+   50 posibles: sentencia SINO • sentencia
+
+    INI_BLOQUE  shift, and go to state 22
+    ENTRADA     shift, and go to state 47
+    IMPRIMIR    shift, and go to state 48
+    DEVOLVER    shift, and go to state 49
+    DIRECCION   shift, and go to state 50
+    IDENT       shift, and go to state 18
+
+    MIENTRAS  reduce using rule 39 ($@14)
+    $default  reduce using rule 37 ($@13)
+
+    bloque                go to state 51
+    sentencia             go to state 185
+    $@13                  go to state 53
+    $@14                  go to state 54
+    sentencia_asignacion  go to state 55
+    sentencia_entrada     go to state 56
+    sentencia_salida      go to state 57
+    sentencia_retorno     go to state 58
+    identificador         go to state 59
+
+
+State 183
+
+   55 cuerpo_mientras: sentencia •
+
+    $default  reduce using rule 55 (cuerpo_mientras)
+
+
+State 184
+
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 cuerpo_mientras •
+
+    $default  reduce using rule 54 (cond_mientras)
+
+
+State 185
+
+   50 posibles: sentencia SINO sentencia •
+
+    $default  reduce using rule 50 (posibles)

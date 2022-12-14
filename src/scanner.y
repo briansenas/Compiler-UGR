@@ -68,18 +68,21 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); fputs("}",MAIN); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
         {tsAddMark();
-        if(!principal)
+        if(!principal && !cond)
             cMarkIn();
         }
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        cMarkOut();
+        if(!principal && !cond){
+            cMarkOut();
+            cond = 0;
+        }
         }
 
 cuerpo_bloque: declar_de_variables_locales
@@ -128,8 +131,8 @@ sentencias: sentencias {decvariable=2;} sentencia
 
 sentencia: bloque
     | sentencia_asignacion
-    | sentencia_si
-    | sentencia_mientras
+    | {cond=1;}sentencia_si
+    | {cond=1;}sentencia_mientras
     | sentencia_entrada
     | sentencia_salida
     | sentencia_retorno
@@ -161,21 +164,46 @@ sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
 
 };
 
-sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
+sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
+        generaCodigoSi(&$1,$3);
         if ($3.tipoDato != TIPOBOOL){
             printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
-        }}
-            | SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia SINO sentencia{
-                if($3.tipoDato != TIPOBOOL){
-                printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
-                }
-            } ;
+        }
+        }posibles{
+        strcat($1.nombre,"\n");
+        cWriteCode($1.nombre);
+        };
 
-sentencia_mientras: MIENTRAS PARENTESIS_ABRE expresion PARENTESIS_CIERRA sentencia{
-        if($3.tipoDato != TIPOBOOL){
+posibles: sentencia
+        | sentencia SINO sentencia;
+
+sentencia_mientras: MIENTRAS {
+                  $1.nombre=generarEtiqueta();
+                  char * etiqueta = malloc(255);
+                  strcpy(etiqueta,$1.nombre);
+                  strcat(etiqueta,":\n{\n");
+                  cWriteCode(etiqueta);
+                  }cond_mientras {
+                  char * res = malloc(255);
+                  strcpy(res,"goto ");
+                  strcat(res, $1.nombre);
+                  strcat(res,";\n}\n");
+                  cWriteCode(res);
+                  strcpy(res,$3.nombre);
+                  strcat(res,"\n");
+                  cWriteCode(res);
+                  };
+
+cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+        {
+        generaCodigoSi(&$1,$2);
+        strcpy($$.nombre,$1.nombre);
+        if($2.tipoDato != TIPOBOOL){
                 printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
         }
-};
+        } cuerpo_mientras;
+
+cuerpo_mientras: sentencia;
 
 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
 

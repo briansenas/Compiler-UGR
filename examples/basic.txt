@@ -24,7 +24,17 @@ principal()
 
         devolver b + c;
     }
+    ve = -1;
+    mientras(ve<0){
+        ve = 1 ;
+        mientras(ve>3){
+            ve = 1 ;
+            mientras(bol && A)
+                ve = 1 ;
+        }
 
+    }
 
-    bol = A && !B || Verdadero;
+    ve = 0;
+    devolver ve;
 }
