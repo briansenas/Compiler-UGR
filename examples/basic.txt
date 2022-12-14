@@ -24,17 +24,11 @@ principal()
 
         devolver b + c;
     }
-    ve = -1;
-    mientras(ve<0){
-        ve = 1 ;
-        mientras(ve>3){
-            ve = 1 ;
-            mientras(bol && A)
-                ve = 1 ;
-        }
 
-    }
-
-    ve = 0;
-    devolver ve;
+    si(bol)
+        ve = 1;
+    sino si(!bol)
+        ve = -1;
+    sino
+        ve = 0;
 }

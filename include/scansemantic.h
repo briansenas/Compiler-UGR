@@ -46,6 +46,8 @@ typedef struct {
 	int attr;
 	char *nombre;
     char *codigo;
+    char* etiq1;
+    char* etiq2;
 	dtipo tipoDato;
 	int lista;		// indica si es una lista
 	int es_constante;		// indica si es constante
@@ -234,11 +236,15 @@ extern FILE* MAIN;
 extern int asignar;
 extern int isIf;
 extern int cond;
+typedef struct{
+	char *etiqueta;
+} etiquetas ;
+extern etiquetas ts_etiq[50];
+extern int TS_ETIQ;
 
 
 
 int tsSearchParam(atributos a);
-
 char* generarEtiqueta();
 char* generarVariableTemporal();
 void abrirArchivos();
@@ -253,7 +259,11 @@ void addCOMMA();
 void addPAR_A();
 void addPAR_C();
 void addASSIGN();
+void generaGOTO(char* etq);
+void addDesc(char* resultado);
+void delDesc();
 char* getADD(int a);
+void writeLastGotos();
 void addADD(atributos a);
 void cWriteIdent();
 void cWriteName();
@@ -268,3 +278,4 @@ void generaCodigoReturn(atributos a);
 void generaCodigo(char* pattern, char* a, char* b, char* c);
 void generaCodigoUnario(atributos op, atributos a, atributos* res);
 void generaCodigoSi(atributos* a, atributos exp);
+void generaCodigoSiNo(atributos* a, atributos exp);

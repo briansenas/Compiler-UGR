@@ -164,18 +164,33 @@ sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
 
 };
 
-sentencia_si: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
-        generaCodigoSi(&$1,$3);
+sentencia_primera: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA{
+        $$.etiq1 = generarEtiqueta();
+        $$.etiq2 = generarEtiqueta();
+        generaCodigoSi(&$$,$3);
         if ($3.tipoDato != TIPOBOOL){
             printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
         }
-        }posibles{
-        strcat($1.nombre,"\n");
-        cWriteCode($1.nombre);
+                 }
+sentencia_si: sentencia_primera sentencia
+            {
+        char* etq = malloc(255);
+        strcpy(etq,$1.etiq1);
+        strcat(etq,":\n;");
+        cWriteCode(etq);
+        }
+        | sentencia_primera sentencia SINO {
+            generaGOTO($1.etiq2);
+            char* etq = malloc(255);
+            strcpy(etq,$1.etiq1);
+            strcat(etq,":\n;");
+            cWriteCode(etq);
+        }sentencia{
+            char* etq = malloc(255);
+            strcpy(etq,$1.etiq2);
+            strcat(etq,":\n;");
+            cWriteCode(etq);
         };
-
-posibles: sentencia
-        | sentencia SINO sentencia;
 
 sentencia_mientras: MIENTRAS {
                   $1.nombre=generarEtiqueta();
@@ -206,6 +221,11 @@ cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 cuerpo_mientras: sentencia;
 
 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
+
+lista_variables: identificador
+               | DIRECCION lista_variables
+               | identificador DIRECCION identificador;
+
 
 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
 
@@ -329,10 +349,6 @@ constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.
 
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
     | LISTA TIPO_DATO {$$.tipoDato = $2.tipoDato; $$.lista=1;};
-
-lista_variables: identificador
-               | DIRECCION lista_variables
-               | identificador DIRECCION identificador;
 
 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {tsFunctionCall($1,&$$);}
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {tsFunctionCall($1,&$$);};

@@ -998,10 +998,34 @@ int cond = 0;
 int isIf = 0;
 FILE* MAIN;
 FILE* FUNC;
+int TS_ETIQ = 0;
+etiquetas ts_etiq[50];
+
+void addDesc(char* resultado){
+    etiquetas etiq;
+    etiq.etiqueta = malloc(255);
+    etiq.etiqueta = resultado;
+    ts_etiq[TS_ETIQ] = etiq;
+    TS_ETIQ++;
+}
+
+void delDesc(){
+    TS_ETIQ--;
+}
+
+void generaGOTO(char* etq){
+    char* resultado = malloc(255);
+    strcpy(resultado, "goto ");
+    strcat(resultado,etq);
+    strcat(resultado, ";\n");
+    cWriteCode(resultado);
+};
+
 
 char* generarEtiqueta(){
     char* resultado = malloc(255);
     snprintf(resultado,255,"etiqueta_%d",num_etiqueta);
+    addDesc(resultado);
 	num_etiqueta++;
 
 	return resultado;
@@ -1292,7 +1316,7 @@ void generaCodigoSi(atributos* a, atributos exp){
     strcat(_code,exp.nombre);
     strcat(_code,") goto ");
     a->nombre = malloc(255);
-    strcpy(a->nombre,generarEtiqueta());
+    strcpy(a->nombre,a->etiq1);
     strcat(_code,a->nombre);
     strcat(a->nombre,":");
     strcat(_code,";\n");
