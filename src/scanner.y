@@ -146,12 +146,7 @@ sentencia: bloque
     } ;
 
 sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
-        decvariable=1;
-        cWriteIdent($1);
-        addASSIGN();
-        cWriteName($3);
-        addPYC();
-        decvariable=2;
+    generaCodigoAsignacion($1,$3);
     if($1.tipoDato != $3.tipoDato){
         printf("Semantic Error(%d): El valor a asignar no es del mismo tipo.[Expected: %s - Got:%s]\n",
         line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
@@ -187,7 +182,7 @@ sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
 
 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
 
-sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$);} PYC;
+sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoReturn($2);} PYC;
 
 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
@@ -197,10 +192,32 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | expresion OP_OR expresion {tsOpOr($1, $2, $3, &$$); }
     | expresion OP_AND expresion {tsOpAnd($1, $2, $3, &$$); }
     | expresion OP_XOR expresion {tsOpXOr($1, $2, $3, &$$); }
-    | expresion OP_RELACION expresion {tsOpRel($1, $2, $3, &$$);}
-    | expresion OP_MULTIPLICATIVO expresion {tsOpMul($1, $2, $3, &$$); }
-    | expresion OP_IGUALDAD expresion {tsOpEqual($1, $2, $3, &$$); }
-    | expresion OP_ADITIVO expresion {tsOpAdditivo($1, $2, $3, &$$); $1.nombre=strcat($1.nombre,getADD($2.attr)); $$.nombre=strcat($1.nombre,$3.nombre);}
+    | expresion OP_RELACION expresion {
+    tsOpRel($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigoOpRelacion($1,$2,$3,&$$);
+    }
+    | expresion OP_MULTIPLICATIVO expresion {
+    tsOpMul($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigoOpMultiplicativo($1,$2,$3,&$$);
+    }
+    | expresion OP_IGUALDAD expresion {
+    tsOpEqual($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    $$.codigo = malloc(255);
+    snprintf($$.codigo,255,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
+    cWriteCode($$.codigo);
+    }
+    | expresion OP_ADITIVO expresion {
+    tsOpAdditivo($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigoOpAditivo($1,$2,$3,&$$);
+    }
     | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;

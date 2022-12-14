@@ -3,6 +3,7 @@ principal()
     ini_var
         entero ve;
         entero ve2, ve3;
+        bool bol;
     fin_var
 
     entero functionA(entero a, entero b){
@@ -10,7 +11,27 @@ principal()
             entero c;
             entero d, e;
         fin_var
+
+        c = d + e;
+        devolver c;
+    }
+
+    real funcionB(real b, real c){
+        ini_var
+            real d;
+        fin_var
+
+        devolver b + c;
     }
 
     ve = 1 + 1 ;
+    ve = 1 - 1;
+    ve = 1 / 1;
+    ve = 1 * 1;
+    ve = 1 % 1;
+    bol = 1 == 1;
+    bol = 1 < 1;
+    bol = 1 > 1;
+    bol = 1 <= 1;
+    bol = 1 >= 1;
 }

@@ -45,6 +45,7 @@ typedef struct {
 
 	int attr;
 	char *nombre;
+    char *codigo;
 	dtipo tipoDato;
 	int lista;		// indica si es una lista
 	int es_constante;		// indica si es constante
@@ -252,3 +253,10 @@ char* getADD(int a);
 void addADD(atributos a);
 void cWriteIdent();
 void cWriteName();
+void cWriteCode(char* code);
+void generaCodigoVariableTemporal(atributos a, atributos* res);
+void generaCodigoAsignacion(atributos a, atributos b);
+void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res);
+void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res);
+void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res);
+void generaCodigoReturn(atributos a);

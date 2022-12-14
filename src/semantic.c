@@ -999,7 +999,7 @@ FILE* FUNC;
 
 char* generarEtiqueta(){
     char* resultado = malloc(255);
-    snprintf(resultado,255,"etiqueta_%d ",num_var);
+    snprintf(resultado,255,"etiqueta_%d ",num_etiqueta);
 	num_etiqueta++;
 
 	return resultado;
@@ -1175,4 +1175,77 @@ void cWriteName(atributos a){
         fputs(a.nombre,FUNC);
     else
         fputs(a.nombre,MAIN);
+}
+
+void cWriteCode(char* code){
+    if(subProg || decParam)
+        fputs(code,FUNC);
+    else
+        fputs(code,MAIN);
+}
+
+void generaCodigoVariableTemporal(atributos a, atributos* res){
+    tipoAtipoC(a);
+    cWriteCode(res->nombre);
+    addPYC();
+    addNewLine();
+}
+void generaCodigoAsignacion(atributos a, atributos b){
+    decvariable=1;
+    cWriteIdent(a);
+    addASSIGN();
+    cWriteName(b);
+    addPYC();
+    addNewLine();
+    decvariable=2;
+}
+void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res){
+    res->codigo = malloc(255);
+    char* _code = malloc(255);
+    if(op.attr==0)
+        strcpy(_code,"%s = %s + %s;\n");
+    else
+        strcpy(_code,"%s = %s - %s;\n");
+    snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    cWriteCode(res->codigo);
+    free(_code);
+}
+
+void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
+    res->codigo = malloc(255);
+    char* _code = malloc(255);
+    if(op.attr==0)
+        strcpy(_code,"%s = %s * %s;\n");
+    else if(op.attr==1)
+        strcpy(_code,"%s = %s / %s;\n");
+    else if(op.attr==2)
+        strcpy(_code,"%s = %s %% %s;\n");
+    else if(op.attr==3)
+        strcpy(_code,"%s = %s ** %s;\n");
+    snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    cWriteCode(res->codigo);
+    free(_code);
+}
+
+void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res){
+    res->codigo = malloc(255);
+    char* _code = malloc(255);
+    if(op.attr==0)
+        strcpy(_code,"%s = %s < %s;\n");
+    else if(op.attr==1)
+        strcpy(_code,"%s = %s > %s;\n");
+    else if(op.attr==2)
+        strcpy(_code,"%s = %s <= %s;\n");
+    else if(op.attr==3)
+        strcpy(_code,"%s = %s >= %s;\n");
+    snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    cWriteCode(res->codigo);
+    free(_code);
+}
+
+void generaCodigoReturn(atributos a){
+    a.codigo = malloc(255);
+    snprintf(a.codigo,255,"return %s;\n",a.nombre);
+    cWriteCode(a.codigo);
+    free(a.codigo);
 }
