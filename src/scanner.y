@@ -192,24 +192,27 @@ sentencia_si: sentencia_primera sentencia
         };
 
 sentencia_mientras: MIENTRAS {
+                    printf("bk1");
                   $1.nombre=generarEtiqueta();
-                  char * etiqueta = malloc(255);
+                  char* etiqueta = malloc(255);
                   strcpy(etiqueta,$1.nombre);
                   strcat(etiqueta,":\n{\n");
                   cWriteCode(etiqueta);
-                  }cond_mientras {
-                  char * res = malloc(255);
+                  } cond_mientras {
+                    printf("bk2");
+                  char* res = malloc(255);
                   strcpy(res,"goto ");
                   strcat(res, $1.nombre);
                   strcat(res,";\n}\n");
                   cWriteCode(res);
-                  strcpy(res,$3.nombre);
+                  strcpy(res,$2.nombre);
                   strcat(res,"\n");
                   cWriteCode(res);
                   };
 
 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
         {
+        printf("bk3");
         generaCodigoSi(&$1,$2);
         strcpy($$.nombre,$1.nombre);
         if($2.tipoDato != TIPOBOOL){
@@ -220,7 +223,7 @@ cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 cuerpo_mientras: sentencia;
 
 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC {
-                 generarE_S("scanf(\"");
+                 generarE("scanf(\"");
                  };
 
 lista_variables: identificador {TS_subprog_params($1); }
@@ -232,7 +235,7 @@ lista_variables: identificador {TS_subprog_params($1); }
 
 
 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC{
-                generarE_S("printf(\"");
+                generarS("printf(\"");
                 };
 
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoReturn($2);} PYC;
@@ -273,6 +276,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigo("%s = %s ^ %s;\n", $$.nombre, $1.nombre, $3.nombre);
     }
     | expresion OP_RELACION expresion {
+
+    printf("bk4");
     tsOpRel($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal($1,&$$);

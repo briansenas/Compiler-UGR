@@ -1343,7 +1343,31 @@ char* tipoAprintf(dtipo tipo) {
 	return resultado;
 }
 
-void generarE_S(char* E_S){
+void generarE(char* E_S){
+    int i = 0;
+    char* res = malloc(255);
+    strcpy(res,E_S);
+    while(i<TOPE_SUBPROG){
+        strcat(res,tipoAprintf(ts_subprog[i].tipoDato));
+        if(i<TOPE_SUBPROG-1)
+            strcat(res,", ");
+        i++;
+    }
+    i=0;
+    strcat(res,"\",");
+    while(i<TOPE_SUBPROG){
+				strcat(res,"&");
+        strcat(res,ts_subprog[i].nombre);
+        if(i<TOPE_SUBPROG-1)
+            strcat(res,", ");
+        i++;
+    }
+    strcat(res,");\n");
+    cWriteCode(res);
+    TOPE_SUBPROG = 0;
+}
+
+void generarS(char* E_S){
     int i = 0;
     char* res = malloc(255);
     strcpy(res,E_S);

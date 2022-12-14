@@ -1,0 +1,55 @@
+principal()
+{
+    ini_var
+        entero n, curr, ultim, cuenta, primero;
+    fin_var
+    curr = 2; ultim = 0; cuenta = 0; primero = 1;
+
+    imprimir << "introduce un numero : ";
+    entrada >> n;
+
+    imprimir << n << " == ";
+    curr = 2;
+
+    mientras( curr <= n){
+      ini_var
+        entero d;
+      fin_var
+      d = n/curr;
+        
+      si ( d * curr == n)
+      {
+        si (curr != ultim){
+          ultim = curr;
+          cuenta = 1;
+        }sino
+          cuenta = cuenta+1;
+          
+
+        n = n / curr;
+      }
+      sino{
+        si (cuenta > 0)
+        {
+            si (primero == 0) imprimir << " *";
+            primero = 0;
+            imprimir << " " << curr;
+            si (cuenta > 1) imprimir << "^" << cuenta;
+        }
+      }
+        
+        curr = curr + 1;
+        cuenta = 0;
+    }
+
+    si (cuenta > 0){
+      si (primero == 0) imprimir << " *";
+      primero = 0;
+      imprimir << " " << curr;
+      si (cuenta > 1) imprimir << "^" << cuenta;
+    }
+
+    imprimir << "\n";
+
+    devolver 0; 
+}

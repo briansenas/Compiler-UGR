@@ -278,5 +278,6 @@ void generaCodigo(char* pattern, char* a, char* b, char* c);
 void generaCodigoUnario(atributos op, atributos a, atributos* res);
 void generaCodigoSi(atributos* a, atributos exp);
 void generaCodigoSiNo(atributos* a, atributos exp);
-void generarE_S(char* E_S);
+void generarE(char* E_S);
+void generarS(char* E_S);
 char* generarFuncion(char* nombre);

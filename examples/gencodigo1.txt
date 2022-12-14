@@ -1,0 +1,31 @@
+principal()
+{
+    ini_var
+        entero n, curr;
+    fin_var
+
+    imprimir << "introduce un numero : ";
+    entrada >> n;
+
+    imprimir << n << " == ";
+    curr = 2;
+
+    mientras( curr <= n){ 
+      ini_var
+        entero d;
+      fin_var
+      d = n/curr;
+        
+      si ( d * curr == n)
+      {
+        imprimir << " * %d " << curr;
+        n = n / curr;
+      }
+      sino
+        curr = curr + 1;
+    }
+
+    imprimir << "\n";
+
+    devolver 0; 
+}

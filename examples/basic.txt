@@ -8,11 +8,18 @@ principal()
     fin_var
 
     entero funcionA(entero add){
+
+        entero funcionB(entero o){
+            devolver ve + o;
+        }
+
         devolver ve + add; 
     }
 
+
     ve = 1; 
 
+    ve2 = funcionB(ve);
     ve2 = funcionA(ve);
 
     imprimir >> ve2; 

@@ -1,7 +1,7 @@
-State 129 conflicts: 1 shift/reduce
+Estado 129 conflictos: 1 desplazamiento/reducción
 
 
-Grammar
+Gramática
 
     0 $accept: programa $end
 
@@ -90,9 +90,9 @@ Grammar
 
    50 sentencia_si: sentencia_primera sentencia SINO $@15 sentencia
 
-   51 $@16: ε
+   51 @16: ε
 
-   52 sentencia_mientras: MIENTRAS $@16 cond_mientras
+   52 sentencia_mientras: MIENTRAS @16 cond_mientras
 
    53 @17: ε
 
@@ -185,7 +185,7 @@ Grammar
   114                    | CONSTANTE_CAR COMA contenido_lista_car
 
 
-Terminals, with rules where they appear
+Terminales con las reglas donde aparecen
 
     $end (0) 0
     error (256) 6 22 25 81
@@ -228,7 +228,7 @@ Terminals, with rules where they appear
     PYC (294) 21 44 45 46 56 61 63
 
 
-Nonterminals, with rules where they appear
+No terminales con las reglas donde aparecen
 
     $accept (40)
         on left: 0
@@ -328,7 +328,7 @@ Nonterminals, with rules where they appear
     sentencia_mientras (72)
         on left: 52
         on right: 40
-    $@16 (73)
+    @16 (73)
         on left: 51
         on right: 52
     cond_mientras (74)
@@ -414,802 +414,802 @@ Nonterminals, with rules where they appear
         on right: 112 114
 
 
-State 0
+Estado 0
 
     0 $accept: • programa $end
 
-    error  shift, and go to state 1
+    error  desplazar e ir al estado 1
 
-    PRINCIPAL  reduce using rule 1 (@1)
+    PRINCIPAL  reduce usando la regla 1 (@1)
 
-    programa  go to state 2
-    @1        go to state 3
+    programa  ir al estado 2
+    @1        ir al estado 3
 
 
-State 1
+Estado 1
 
     6 programa: error •
 
-    $default  reduce using rule 6 (programa)
+    $default  reduce usando la regla 6 (programa)
 
 
-State 2
+Estado 2
 
     0 $accept: programa • $end
 
-    $end  shift, and go to state 4
+    $end  desplazar e ir al estado 4
 
 
-State 3
+Estado 3
 
     5 programa: @1 • PRINCIPAL $@2 $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 bloque
 
-    PRINCIPAL  shift, and go to state 5
+    PRINCIPAL  desplazar e ir al estado 5
 
 
-State 4
+Estado 4
 
     0 $accept: programa $end •
 
-    $default  accept
+    $default  aceptar
 
 
-State 5
+Estado 5
 
     5 programa: @1 PRINCIPAL • $@2 $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 bloque
 
-    $default  reduce using rule 2 ($@2)
+    $default  reduce usando la regla 2 ($@2)
 
-    $@2  go to state 6
+    $@2  ir al estado 6
 
 
-State 6
+Estado 6
 
     5 programa: @1 PRINCIPAL $@2 • $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 bloque
 
-    $default  reduce using rule 3 ($@3)
+    $default  reduce usando la regla 3 ($@3)
 
-    $@3  go to state 7
+    $@3  ir al estado 7
 
 
-State 7
+Estado 7
 
     5 programa: @1 PRINCIPAL $@2 $@3 • PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 bloque
 
-    PARENTESIS_ABRE  shift, and go to state 8
+    PARENTESIS_ABRE  desplazar e ir al estado 8
 
 
-State 8
+Estado 8
 
     5 programa: @1 PRINCIPAL $@2 $@3 PARENTESIS_ABRE • parametros PARENTESIS_CIERRA $@4 bloque
 
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    $default  reduce using rule 28 (lista_parametros)
+    $default  reduce usando la regla 28 (lista_parametros)
 
-    parametros        go to state 11
-    lista_parametros  go to state 12
-    tipo              go to state 13
+    parametros        ir al estado 11
+    lista_parametros  ir al estado 12
+    tipo              ir al estado 13
 
 
-State 9
+Estado 9
 
    93 tipo: TIPO_DATO •
 
-    $default  reduce using rule 93 (tipo)
+    $default  reduce usando la regla 93 (tipo)
 
 
-State 10
+Estado 10
 
    94 tipo: LISTA • TIPO_DATO
 
-    TIPO_DATO  shift, and go to state 14
+    TIPO_DATO  desplazar e ir al estado 14
 
 
-State 11
+Estado 11
 
     5 programa: @1 PRINCIPAL $@2 $@3 PARENTESIS_ABRE parametros • PARENTESIS_CIERRA $@4 bloque
 
-    PARENTESIS_CIERRA  shift, and go to state 15
+    PARENTESIS_CIERRA  desplazar e ir al estado 15
 
 
-State 12
+Estado 12
 
    27 parametros: lista_parametros • $@10
    29 lista_parametros: lista_parametros • COMA tipo identificador
 
-    COMA  shift, and go to state 16
+    COMA  desplazar e ir al estado 16
 
-    $default  reduce using rule 26 ($@10)
+    $default  reduce usando la regla 26 ($@10)
 
-    $@10  go to state 17
+    $@10  ir al estado 17
 
 
-State 13
+Estado 13
 
    30 lista_parametros: tipo • identificador
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    identificador  go to state 19
+    identificador  ir al estado 19
 
 
-State 14
+Estado 14
 
    94 tipo: LISTA TIPO_DATO •
 
-    $default  reduce using rule 94 (tipo)
+    $default  reduce usando la regla 94 (tipo)
 
 
-State 15
+Estado 15
 
     5 programa: @1 PRINCIPAL $@2 $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA • $@4 bloque
 
-    $default  reduce using rule 4 ($@4)
+    $default  reduce usando la regla 4 ($@4)
 
-    $@4  go to state 20
+    $@4  ir al estado 20
 
 
-State 16
+Estado 16
 
    29 lista_parametros: lista_parametros COMA • tipo identificador
 
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    tipo  go to state 21
+    tipo  ir al estado 21
 
 
-State 17
+Estado 17
 
    27 parametros: lista_parametros $@10 •
 
-    $default  reduce using rule 27 (parametros)
+    $default  reduce usando la regla 27 (parametros)
 
 
-State 18
+Estado 18
 
    84 identificador: IDENT •
 
-    $default  reduce using rule 84 (identificador)
+    $default  reduce usando la regla 84 (identificador)
 
 
-State 19
+Estado 19
 
    30 lista_parametros: tipo identificador •
 
-    $default  reduce using rule 30 (lista_parametros)
+    $default  reduce usando la regla 30 (lista_parametros)
 
 
-State 20
+Estado 20
 
     5 programa: @1 PRINCIPAL $@2 $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 • bloque
 
-    INI_BLOQUE  shift, and go to state 22
+    INI_BLOQUE  desplazar e ir al estado 22
 
-    bloque  go to state 23
+    bloque  ir al estado 23
 
 
-State 21
+Estado 21
 
    29 lista_parametros: lista_parametros COMA tipo • identificador
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    identificador  go to state 24
+    identificador  ir al estado 24
 
 
-State 22
+Estado 22
 
     8 bloque: INI_BLOQUE • $@5 cuerpo_bloque FIN_BLOQUE
 
-    $default  reduce using rule 7 ($@5)
+    $default  reduce usando la regla 7 ($@5)
 
-    $@5  go to state 25
+    $@5  ir al estado 25
 
 
-State 23
+Estado 23
 
     5 programa: @1 PRINCIPAL $@2 $@3 PARENTESIS_ABRE parametros PARENTESIS_CIERRA $@4 bloque •
 
-    $default  reduce using rule 5 (programa)
+    $default  reduce usando la regla 5 (programa)
 
 
-State 24
+Estado 24
 
    29 lista_parametros: lista_parametros COMA tipo identificador •
 
-    $default  reduce using rule 29 (lista_parametros)
+    $default  reduce usando la regla 29 (lista_parametros)
 
 
-State 25
+Estado 25
 
     8 bloque: INI_BLOQUE $@5 • cuerpo_bloque FIN_BLOQUE
 
-    INI_VAR  shift, and go to state 26
+    INI_VAR  desplazar e ir al estado 26
 
-    $default  reduce using rule 17 (declar_de_variables_locales)
+    $default  reduce usando la regla 17 (declar_de_variables_locales)
 
-    cuerpo_bloque                go to state 27
-    declar_de_variables_locales  go to state 28
+    cuerpo_bloque                ir al estado 27
+    declar_de_variables_locales  ir al estado 28
 
 
-State 26
+Estado 26
 
    16 declar_de_variables_locales: INI_VAR • $@7 variables_locales FIN_VAR
 
-    $default  reduce using rule 15 ($@7)
+    $default  reduce usando la regla 15 ($@7)
 
-    $@7  go to state 29
+    $@7  ir al estado 29
 
 
-State 27
+Estado 27
 
     8 bloque: INI_BLOQUE $@5 cuerpo_bloque • FIN_BLOQUE
 
-    FIN_BLOQUE  shift, and go to state 30
+    FIN_BLOQUE  desplazar e ir al estado 30
 
 
-State 28
+Estado 28
 
     9 cuerpo_bloque: declar_de_variables_locales • declar_de_subprogs sentencias
    10              | declar_de_variables_locales • declar_de_subprogs
 
-    $default  reduce using rule 12 (declar_de_subprogs)
+    $default  reduce usando la regla 12 (declar_de_subprogs)
 
-    declar_de_subprogs  go to state 31
+    declar_de_subprogs  ir al estado 31
 
 
-State 29
+Estado 29
 
    16 declar_de_variables_locales: INI_VAR $@7 • variables_locales FIN_VAR
 
-    error      shift, and go to state 32
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    error      desplazar e ir al estado 32
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    variables_locales        go to state 33
-    cuerpo_declar_variables  go to state 34
-    tipo                     go to state 35
+    variables_locales        ir al estado 33
+    cuerpo_declar_variables  ir al estado 34
+    tipo                     ir al estado 35
 
 
-State 30
+Estado 30
 
     8 bloque: INI_BLOQUE $@5 cuerpo_bloque FIN_BLOQUE •
 
-    $default  reduce using rule 8 (bloque)
+    $default  reduce usando la regla 8 (bloque)
 
 
-State 31
+Estado 31
 
     9 cuerpo_bloque: declar_de_variables_locales declar_de_subprogs • sentencias
    10              | declar_de_variables_locales declar_de_subprogs •
    11 declar_de_subprogs: declar_de_subprogs • declar_subprog
 
-    error      shift, and go to state 36
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    error      desplazar e ir al estado 36
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    INI_BLOQUE  reduce using rule 33 ($@12)
-    FIN_BLOQUE  reduce using rule 10 (cuerpo_bloque)
-    MIENTRAS    reduce using rule 33 ($@12)
-    SI          reduce using rule 33 ($@12)
-    ENTRADA     reduce using rule 33 ($@12)
-    IMPRIMIR    reduce using rule 33 ($@12)
-    DEVOLVER    reduce using rule 33 ($@12)
-    DIRECCION   reduce using rule 33 ($@12)
-    IDENT       reduce using rule 33 ($@12)
+    INI_BLOQUE  reduce usando la regla 33 ($@12)
+    FIN_BLOQUE  reduce usando la regla 10 (cuerpo_bloque)
+    MIENTRAS    reduce usando la regla 33 ($@12)
+    SI          reduce usando la regla 33 ($@12)
+    ENTRADA     reduce usando la regla 33 ($@12)
+    IMPRIMIR    reduce usando la regla 33 ($@12)
+    DEVOLVER    reduce usando la regla 33 ($@12)
+    DIRECCION   reduce usando la regla 33 ($@12)
+    IDENT       reduce usando la regla 33 ($@12)
 
-    declar_subprog    go to state 37
-    cabecera_subprog  go to state 38
-    sentencias        go to state 39
-    $@12              go to state 40
-    tipo              go to state 41
+    declar_subprog    ir al estado 37
+    cabecera_subprog  ir al estado 38
+    sentencias        ir al estado 39
+    $@12              ir al estado 40
+    tipo              ir al estado 41
 
 
-State 32
+Estado 32
 
    22 cuerpo_declar_variables: error •
 
-    $default  reduce using rule 22 (cuerpo_declar_variables)
+    $default  reduce usando la regla 22 (cuerpo_declar_variables)
 
 
-State 33
+Estado 33
 
    16 declar_de_variables_locales: INI_VAR $@7 variables_locales • FIN_VAR
    18 variables_locales: variables_locales • cuerpo_declar_variables
 
-    error      shift, and go to state 32
-    FIN_VAR    shift, and go to state 42
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    error      desplazar e ir al estado 32
+    FIN_VAR    desplazar e ir al estado 42
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    cuerpo_declar_variables  go to state 43
-    tipo                     go to state 35
+    cuerpo_declar_variables  ir al estado 43
+    tipo                     ir al estado 35
 
 
-State 34
+Estado 34
 
    19 variables_locales: cuerpo_declar_variables •
 
-    $default  reduce using rule 19 (variables_locales)
+    $default  reduce usando la regla 19 (variables_locales)
 
 
-State 35
+Estado 35
 
    21 cuerpo_declar_variables: tipo • $@8 varios_identificador PYC
 
-    $default  reduce using rule 20 ($@8)
+    $default  reduce usando la regla 20 ($@8)
 
-    $@8  go to state 44
+    $@8  ir al estado 44
 
 
-State 36
+Estado 36
 
    25 cabecera_subprog: error •
 
-    $default  reduce using rule 25 (cabecera_subprog)
+    $default  reduce usando la regla 25 (cabecera_subprog)
 
 
-State 37
+Estado 37
 
    11 declar_de_subprogs: declar_de_subprogs declar_subprog •
 
-    $default  reduce using rule 11 (declar_de_subprogs)
+    $default  reduce usando la regla 11 (declar_de_subprogs)
 
 
-State 38
+Estado 38
 
    14 declar_subprog: cabecera_subprog • $@6 bloque
 
-    $default  reduce using rule 13 ($@6)
+    $default  reduce usando la regla 13 ($@6)
 
-    $@6  go to state 45
+    $@6  ir al estado 45
 
 
-State 39
+Estado 39
 
     9 cuerpo_bloque: declar_de_variables_locales declar_de_subprogs sentencias •
    32 sentencias: sentencias • $@11 sentencia
 
-    FIN_BLOQUE  reduce using rule 9 (cuerpo_bloque)
-    $default    reduce using rule 31 ($@11)
+    FIN_BLOQUE  reduce usando la regla 9 (cuerpo_bloque)
+    $default    reduce usando la regla 31 ($@11)
 
-    $@11  go to state 46
+    $@11  ir al estado 46
 
 
-State 40
+Estado 40
 
    34 sentencias: $@12 • sentencia
 
-    INI_BLOQUE  shift, and go to state 22
-    ENTRADA     shift, and go to state 47
-    IMPRIMIR    shift, and go to state 48
-    DEVOLVER    shift, and go to state 49
-    DIRECCION   shift, and go to state 50
-    IDENT       shift, and go to state 18
+    INI_BLOQUE  desplazar e ir al estado 22
+    ENTRADA     desplazar e ir al estado 47
+    IMPRIMIR    desplazar e ir al estado 48
+    DEVOLVER    desplazar e ir al estado 49
+    DIRECCION   desplazar e ir al estado 50
+    IDENT       desplazar e ir al estado 18
 
-    MIENTRAS  reduce using rule 39 ($@14)
-    $default  reduce using rule 37 ($@13)
+    MIENTRAS  reduce usando la regla 39 ($@14)
+    $default  reduce usando la regla 37 ($@13)
 
-    bloque                go to state 51
-    sentencia             go to state 52
-    $@13                  go to state 53
-    $@14                  go to state 54
-    sentencia_asignacion  go to state 55
-    sentencia_entrada     go to state 56
-    sentencia_salida      go to state 57
-    sentencia_retorno     go to state 58
-    identificador         go to state 59
+    bloque                ir al estado 51
+    sentencia             ir al estado 52
+    $@13                  ir al estado 53
+    $@14                  ir al estado 54
+    sentencia_asignacion  ir al estado 55
+    sentencia_entrada     ir al estado 56
+    sentencia_salida      ir al estado 57
+    sentencia_retorno     ir al estado 58
+    identificador         ir al estado 59
 
 
-State 41
+Estado 41
 
    24 cabecera_subprog: tipo • IDENT $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA
 
-    IDENT  shift, and go to state 60
+    IDENT  desplazar e ir al estado 60
 
 
-State 42
+Estado 42
 
    16 declar_de_variables_locales: INI_VAR $@7 variables_locales FIN_VAR •
 
-    $default  reduce using rule 16 (declar_de_variables_locales)
+    $default  reduce usando la regla 16 (declar_de_variables_locales)
 
 
-State 43
+Estado 43
 
    18 variables_locales: variables_locales cuerpo_declar_variables •
 
-    $default  reduce using rule 18 (variables_locales)
+    $default  reduce usando la regla 18 (variables_locales)
 
 
-State 44
+Estado 44
 
    21 cuerpo_declar_variables: tipo $@8 • varios_identificador PYC
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    varios_identificador  go to state 61
-    identificador         go to state 62
+    varios_identificador  ir al estado 61
+    identificador         ir al estado 62
 
 
-State 45
+Estado 45
 
    14 declar_subprog: cabecera_subprog $@6 • bloque
 
-    INI_BLOQUE  shift, and go to state 22
+    INI_BLOQUE  desplazar e ir al estado 22
 
-    bloque  go to state 63
+    bloque  ir al estado 63
 
 
-State 46
+Estado 46
 
    32 sentencias: sentencias $@11 • sentencia
 
-    INI_BLOQUE  shift, and go to state 22
-    ENTRADA     shift, and go to state 47
-    IMPRIMIR    shift, and go to state 48
-    DEVOLVER    shift, and go to state 49
-    DIRECCION   shift, and go to state 50
-    IDENT       shift, and go to state 18
+    INI_BLOQUE  desplazar e ir al estado 22
+    ENTRADA     desplazar e ir al estado 47
+    IMPRIMIR    desplazar e ir al estado 48
+    DEVOLVER    desplazar e ir al estado 49
+    DIRECCION   desplazar e ir al estado 50
+    IDENT       desplazar e ir al estado 18
 
-    MIENTRAS  reduce using rule 39 ($@14)
-    $default  reduce using rule 37 ($@13)
+    MIENTRAS  reduce usando la regla 39 ($@14)
+    $default  reduce usando la regla 37 ($@13)
 
-    bloque                go to state 51
-    sentencia             go to state 64
-    $@13                  go to state 53
-    $@14                  go to state 54
-    sentencia_asignacion  go to state 55
-    sentencia_entrada     go to state 56
-    sentencia_salida      go to state 57
-    sentencia_retorno     go to state 58
-    identificador         go to state 59
+    bloque                ir al estado 51
+    sentencia             ir al estado 64
+    $@13                  ir al estado 53
+    $@14                  ir al estado 54
+    sentencia_asignacion  ir al estado 55
+    sentencia_entrada     ir al estado 56
+    sentencia_salida      ir al estado 57
+    sentencia_retorno     ir al estado 58
+    identificador         ir al estado 59
 
 
-State 47
+Estado 47
 
    56 sentencia_entrada: ENTRADA • DIRECCION lista_variables PYC
 
-    DIRECCION  shift, and go to state 65
+    DIRECCION  desplazar e ir al estado 65
 
 
-State 48
+Estado 48
 
    61 sentencia_salida: IMPRIMIR • DIRECCION lista_expresiones_o_cadena PYC
 
-    DIRECCION  shift, and go to state 66
+    DIRECCION  desplazar e ir al estado 66
 
 
-State 49
+Estado 49
 
    63 sentencia_retorno: DEVOLVER • expresion @19 PYC
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 77
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 77
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 50
+Estado 50
 
    45 sentencia: DIRECCION • identificador PYC
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    identificador  go to state 86
+    identificador  ir al estado 86
 
 
-State 51
+Estado 51
 
    35 sentencia: bloque •
 
-    $default  reduce using rule 35 (sentencia)
+    $default  reduce usando la regla 35 (sentencia)
 
 
-State 52
+Estado 52
 
    34 sentencias: $@12 sentencia •
 
-    $default  reduce using rule 34 (sentencias)
+    $default  reduce usando la regla 34 (sentencias)
 
 
-State 53
+Estado 53
 
    38 sentencia: $@13 • sentencia_si
 
-    SI  shift, and go to state 87
+    SI  desplazar e ir al estado 87
 
-    sentencia_primera  go to state 88
-    sentencia_si       go to state 89
+    sentencia_primera  ir al estado 88
+    sentencia_si       ir al estado 89
 
 
-State 54
+Estado 54
 
    40 sentencia: $@14 • sentencia_mientras
 
-    MIENTRAS  shift, and go to state 90
+    MIENTRAS  desplazar e ir al estado 90
 
-    sentencia_mientras  go to state 91
+    sentencia_mientras  ir al estado 91
 
 
-State 55
+Estado 55
 
    36 sentencia: sentencia_asignacion •
 
-    $default  reduce using rule 36 (sentencia)
+    $default  reduce usando la regla 36 (sentencia)
 
 
-State 56
+Estado 56
 
    41 sentencia: sentencia_entrada •
 
-    $default  reduce using rule 41 (sentencia)
+    $default  reduce usando la regla 41 (sentencia)
 
 
-State 57
+Estado 57
 
    42 sentencia: sentencia_salida •
 
-    $default  reduce using rule 42 (sentencia)
+    $default  reduce usando la regla 42 (sentencia)
 
 
-State 58
+Estado 58
 
    43 sentencia: sentencia_retorno •
 
-    $default  reduce using rule 43 (sentencia)
+    $default  reduce usando la regla 43 (sentencia)
 
 
-State 59
+Estado 59
 
    44 sentencia: identificador • DIRECCION PYC
    46 sentencia_asignacion: identificador • OP_ASIGNACION expresion PYC
 
-    OP_ASIGNACION  shift, and go to state 92
-    DIRECCION      shift, and go to state 93
+    OP_ASIGNACION  desplazar e ir al estado 92
+    DIRECCION      desplazar e ir al estado 93
 
 
-State 60
+Estado 60
 
    24 cabecera_subprog: tipo IDENT • $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA
 
-    $default  reduce using rule 23 ($@9)
+    $default  reduce usando la regla 23 ($@9)
 
-    $@9  go to state 94
+    $@9  ir al estado 94
 
 
-State 61
+Estado 61
 
    21 cuerpo_declar_variables: tipo $@8 varios_identificador • PYC
    83 varios_identificador: varios_identificador • COMA identificador
 
-    COMA  shift, and go to state 95
-    PYC   shift, and go to state 96
+    COMA  desplazar e ir al estado 95
+    PYC   desplazar e ir al estado 96
 
 
-State 62
+Estado 62
 
    82 varios_identificador: identificador •
 
-    $default  reduce using rule 82 (varios_identificador)
+    $default  reduce usando la regla 82 (varios_identificador)
 
 
-State 63
+Estado 63
 
    14 declar_subprog: cabecera_subprog $@6 bloque •
 
-    $default  reduce using rule 14 (declar_subprog)
+    $default  reduce usando la regla 14 (declar_subprog)
 
 
-State 64
+Estado 64
 
    32 sentencias: sentencias $@11 sentencia •
 
-    $default  reduce using rule 32 (sentencias)
+    $default  reduce usando la regla 32 (sentencias)
 
 
-State 65
+Estado 65
 
    56 sentencia_entrada: ENTRADA DIRECCION • lista_variables PYC
 
-    DIRECCION  shift, and go to state 97
-    IDENT      shift, and go to state 18
+    DIRECCION  desplazar e ir al estado 97
+    IDENT      desplazar e ir al estado 18
 
-    lista_variables  go to state 98
-    identificador    go to state 99
+    lista_variables  ir al estado 98
+    identificador    ir al estado 99
 
 
-State 66
+Estado 66
 
    61 sentencia_salida: IMPRIMIR DIRECCION • lista_expresiones_o_cadena PYC
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    CADENA           shift, and go to state 100
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    CADENA           desplazar e ir al estado 100
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                   go to state 101
-    identificador               go to state 78
-    lista_expresiones_o_cadena  go to state 102
-    expresion_o_cadena          go to state 103
-    constante                   go to state 79
-    funcion                     go to state 80
-    lista_constantes            go to state 81
-    lista_constante_booleano    go to state 82
-    lista_constante_entero      go to state 83
-    lista_constante_flotante    go to state 84
-    lista_constante_car         go to state 85
+    expresion                   ir al estado 101
+    identificador               ir al estado 78
+    lista_expresiones_o_cadena  ir al estado 102
+    expresion_o_cadena          ir al estado 103
+    constante                   ir al estado 79
+    funcion                     ir al estado 80
+    lista_constantes            ir al estado 81
+    lista_constante_booleano    ir al estado 82
+    lista_constante_entero      ir al estado 83
+    lista_constante_flotante    ir al estado 84
+    lista_constante_car         ir al estado 85
 
 
-State 67
+Estado 67
 
    81 expresion: error •
 
-    $default  reduce using rule 81 (expresion)
+    $default  reduce usando la regla 81 (expresion)
 
 
-State 68
+Estado 68
 
    75 expresion: OP_ADITIVO • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 104
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 104
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 69
+Estado 69
 
    65 expresion: OP_UNARIO • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 105
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 105
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 70
+Estado 70
 
    89 constante: BOOLEANO •
 
-    $default  reduce using rule 89 (constante)
+    $default  reduce usando la regla 89 (constante)
 
 
-State 71
+Estado 71
 
    90 constante: CONSTANTE_NUM •
 
-    $default  reduce using rule 90 (constante)
+    $default  reduce usando la regla 90 (constante)
 
 
-State 72
+Estado 72
 
    92 constante: CONSTANTE_CAR •
 
-    $default  reduce using rule 92 (constante)
+    $default  reduce usando la regla 92 (constante)
 
 
-State 73
+Estado 73
 
    91 constante: CONSTANTE_FLOAT •
 
-    $default  reduce using rule 91 (constante)
+    $default  reduce usando la regla 91 (constante)
 
 
-State 74
+Estado 74
 
    84 identificador: IDENT •
    95 funcion: IDENT • PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA
    96        | IDENT • PARENTESIS_ABRE PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE  shift, and go to state 106
+    PARENTESIS_ABRE  desplazar e ir al estado 106
 
-    $default  reduce using rule 84 (identificador)
+    $default  reduce usando la regla 84 (identificador)
 
 
-State 75
+Estado 75
 
    64 expresion: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 107
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 107
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 76
+Estado 76
 
   103 lista_constante_booleano: CORCHETE_ABRE • contenido_lista_booleano CORCHETE_CIERRA
   106 lista_constante_entero: CORCHETE_ABRE • contenido_lista_entero CORCHETE_CIERRA
   109 lista_constante_flotante: CORCHETE_ABRE • contenido_lista_flotante CORCHETE_CIERRA
   112 lista_constante_car: CORCHETE_ABRE • contenido_lista_car CORCHETE_CIERRA
 
-    BOOLEANO         shift, and go to state 108
-    CONSTANTE_NUM    shift, and go to state 109
-    CONSTANTE_CAR    shift, and go to state 110
-    CONSTANTE_FLOAT  shift, and go to state 111
+    BOOLEANO         desplazar e ir al estado 108
+    CONSTANTE_NUM    desplazar e ir al estado 109
+    CONSTANTE_CAR    desplazar e ir al estado 110
+    CONSTANTE_FLOAT  desplazar e ir al estado 111
 
-    contenido_lista_booleano  go to state 112
-    contenido_lista_entero    go to state 113
-    contenido_lista_flotante  go to state 114
-    contenido_lista_car       go to state 115
+    contenido_lista_booleano  ir al estado 112
+    contenido_lista_entero    ir al estado 113
+    contenido_lista_flotante  ir al estado 114
+    contenido_lista_car       ir al estado 115
 
 
-State 77
+Estado 77
 
    63 sentencia_retorno: DEVOLVER expresion • @19 PYC
    66 expresion: expresion • OP_UNARIO
@@ -1223,233 +1223,233 @@ State 77
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 62 (@19)
+    $default  reduce usando la regla 62 (@19)
 
-    @19  go to state 126
+    @19  ir al estado 126
 
 
-State 78
+Estado 78
 
    77 expresion: identificador •
 
-    $default  reduce using rule 77 (expresion)
+    $default  reduce usando la regla 77 (expresion)
 
 
-State 79
+Estado 79
 
    78 expresion: constante •
 
-    $default  reduce using rule 78 (expresion)
+    $default  reduce usando la regla 78 (expresion)
 
 
-State 80
+Estado 80
 
    79 expresion: funcion •
 
-    $default  reduce using rule 79 (expresion)
+    $default  reduce usando la regla 79 (expresion)
 
 
-State 81
+Estado 81
 
    80 expresion: lista_constantes •
 
-    $default  reduce using rule 80 (expresion)
+    $default  reduce usando la regla 80 (expresion)
 
 
-State 82
+Estado 82
 
    99 lista_constantes: lista_constante_booleano •
 
-    $default  reduce using rule 99 (lista_constantes)
+    $default  reduce usando la regla 99 (lista_constantes)
 
 
-State 83
+Estado 83
 
   100 lista_constantes: lista_constante_entero •
 
-    $default  reduce using rule 100 (lista_constantes)
+    $default  reduce usando la regla 100 (lista_constantes)
 
 
-State 84
+Estado 84
 
   101 lista_constantes: lista_constante_flotante •
 
-    $default  reduce using rule 101 (lista_constantes)
+    $default  reduce usando la regla 101 (lista_constantes)
 
 
-State 85
+Estado 85
 
   102 lista_constantes: lista_constante_car •
 
-    $default  reduce using rule 102 (lista_constantes)
+    $default  reduce usando la regla 102 (lista_constantes)
 
 
-State 86
+Estado 86
 
    45 sentencia: DIRECCION identificador • PYC
 
-    PYC  shift, and go to state 127
+    PYC  desplazar e ir al estado 127
 
 
-State 87
+Estado 87
 
    47 sentencia_primera: SI • PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE  shift, and go to state 128
+    PARENTESIS_ABRE  desplazar e ir al estado 128
 
 
-State 88
+Estado 88
 
    48 sentencia_si: sentencia_primera • sentencia
    50             | sentencia_primera • sentencia SINO $@15 sentencia
 
-    INI_BLOQUE  shift, and go to state 22
-    ENTRADA     shift, and go to state 47
-    IMPRIMIR    shift, and go to state 48
-    DEVOLVER    shift, and go to state 49
-    DIRECCION   shift, and go to state 50
-    IDENT       shift, and go to state 18
+    INI_BLOQUE  desplazar e ir al estado 22
+    ENTRADA     desplazar e ir al estado 47
+    IMPRIMIR    desplazar e ir al estado 48
+    DEVOLVER    desplazar e ir al estado 49
+    DIRECCION   desplazar e ir al estado 50
+    IDENT       desplazar e ir al estado 18
 
-    MIENTRAS  reduce using rule 39 ($@14)
-    $default  reduce using rule 37 ($@13)
+    MIENTRAS  reduce usando la regla 39 ($@14)
+    $default  reduce usando la regla 37 ($@13)
 
-    bloque                go to state 51
-    sentencia             go to state 129
-    $@13                  go to state 53
-    $@14                  go to state 54
-    sentencia_asignacion  go to state 55
-    sentencia_entrada     go to state 56
-    sentencia_salida      go to state 57
-    sentencia_retorno     go to state 58
-    identificador         go to state 59
+    bloque                ir al estado 51
+    sentencia             ir al estado 129
+    $@13                  ir al estado 53
+    $@14                  ir al estado 54
+    sentencia_asignacion  ir al estado 55
+    sentencia_entrada     ir al estado 56
+    sentencia_salida      ir al estado 57
+    sentencia_retorno     ir al estado 58
+    identificador         ir al estado 59
 
 
-State 89
+Estado 89
 
    38 sentencia: $@13 sentencia_si •
 
-    $default  reduce using rule 38 (sentencia)
+    $default  reduce usando la regla 38 (sentencia)
 
 
-State 90
+Estado 90
 
-   52 sentencia_mientras: MIENTRAS • $@16 cond_mientras
+   52 sentencia_mientras: MIENTRAS • @16 cond_mientras
 
-    $default  reduce using rule 51 ($@16)
+    $default  reduce usando la regla 51 (@16)
 
-    $@16  go to state 130
+    @16  ir al estado 130
 
 
-State 91
+Estado 91
 
    40 sentencia: $@14 sentencia_mientras •
 
-    $default  reduce using rule 40 (sentencia)
+    $default  reduce usando la regla 40 (sentencia)
 
 
-State 92
+Estado 92
 
    46 sentencia_asignacion: identificador OP_ASIGNACION • expresion PYC
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 131
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 131
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 93
+Estado 93
 
    44 sentencia: identificador DIRECCION • PYC
 
-    PYC  shift, and go to state 132
+    PYC  desplazar e ir al estado 132
 
 
-State 94
+Estado 94
 
    24 cabecera_subprog: tipo IDENT $@9 • PARENTESIS_ABRE parametros PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE  shift, and go to state 133
+    PARENTESIS_ABRE  desplazar e ir al estado 133
 
 
-State 95
+Estado 95
 
    83 varios_identificador: varios_identificador COMA • identificador
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    identificador  go to state 134
+    identificador  ir al estado 134
 
 
-State 96
+Estado 96
 
    21 cuerpo_declar_variables: tipo $@8 varios_identificador PYC •
 
-    $default  reduce using rule 21 (cuerpo_declar_variables)
+    $default  reduce usando la regla 21 (cuerpo_declar_variables)
 
 
-State 97
+Estado 97
 
    58 lista_variables: DIRECCION • lista_variables
 
-    DIRECCION  shift, and go to state 97
-    IDENT      shift, and go to state 18
+    DIRECCION  desplazar e ir al estado 97
+    IDENT      desplazar e ir al estado 18
 
-    lista_variables  go to state 135
-    identificador    go to state 99
+    lista_variables  ir al estado 135
+    identificador    ir al estado 99
 
 
-State 98
+Estado 98
 
    56 sentencia_entrada: ENTRADA DIRECCION lista_variables • PYC
 
-    PYC  shift, and go to state 136
+    PYC  desplazar e ir al estado 136
 
 
-State 99
+Estado 99
 
    57 lista_variables: identificador •
    60                | identificador • DIRECCION identificador $@18
 
-    DIRECCION  shift, and go to state 137
+    DIRECCION  desplazar e ir al estado 137
 
-    $default  reduce using rule 57 (lista_variables)
+    $default  reduce usando la regla 57 (lista_variables)
 
 
-State 100
+Estado 100
 
    88 expresion_o_cadena: CADENA •
 
-    $default  reduce using rule 88 (expresion_o_cadena)
+    $default  reduce usando la regla 88 (expresion_o_cadena)
 
 
-State 101
+Estado 101
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -1463,37 +1463,37 @@ State 101
    76          | expresion • SIGSIG expresion
    87 expresion_o_cadena: expresion •
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 87 (expresion_o_cadena)
+    $default  reduce usando la regla 87 (expresion_o_cadena)
 
 
-State 102
+Estado 102
 
    61 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena • PYC
    85 lista_expresiones_o_cadena: lista_expresiones_o_cadena • DIRECCION expresion_o_cadena
 
-    DIRECCION  shift, and go to state 138
-    PYC        shift, and go to state 139
+    DIRECCION  desplazar e ir al estado 138
+    PYC        desplazar e ir al estado 139
 
 
-State 103
+Estado 103
 
    86 lista_expresiones_o_cadena: expresion_o_cadena •
 
-    $default  reduce using rule 86 (lista_expresiones_o_cadena)
+    $default  reduce usando la regla 86 (lista_expresiones_o_cadena)
 
 
-State 104
+Estado 104
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -1507,13 +1507,13 @@ State 104
    75          | OP_ADITIVO expresion •
    76          | expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
+    OP_UNARIO    desplazar e ir al estado 124
+    OP_TERNARIO  desplazar e ir al estado 125
 
-    $default  reduce using rule 75 (expresion)
+    $default  reduce usando la regla 75 (expresion)
 
 
-State 105
+Estado 105
 
    65 expresion: OP_UNARIO expresion •
    66          | expresion • OP_UNARIO
@@ -1527,42 +1527,42 @@ State 105
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
+    OP_UNARIO    desplazar e ir al estado 124
+    OP_TERNARIO  desplazar e ir al estado 125
 
-    $default  reduce using rule 65 (expresion)
+    $default  reduce usando la regla 65 (expresion)
 
 
-State 106
+Estado 106
 
    95 funcion: IDENT PARENTESIS_ABRE • lista_expresiones PARENTESIS_CIERRA
    96        | IDENT PARENTESIS_ABRE • PARENTESIS_CIERRA
 
-    error              shift, and go to state 67
-    OP_ADITIVO         shift, and go to state 68
-    OP_UNARIO          shift, and go to state 69
-    BOOLEANO           shift, and go to state 70
-    CONSTANTE_NUM      shift, and go to state 71
-    CONSTANTE_CAR      shift, and go to state 72
-    CONSTANTE_FLOAT    shift, and go to state 73
-    IDENT              shift, and go to state 74
-    PARENTESIS_ABRE    shift, and go to state 75
-    PARENTESIS_CIERRA  shift, and go to state 140
-    CORCHETE_ABRE      shift, and go to state 76
+    error              desplazar e ir al estado 67
+    OP_ADITIVO         desplazar e ir al estado 68
+    OP_UNARIO          desplazar e ir al estado 69
+    BOOLEANO           desplazar e ir al estado 70
+    CONSTANTE_NUM      desplazar e ir al estado 71
+    CONSTANTE_CAR      desplazar e ir al estado 72
+    CONSTANTE_FLOAT    desplazar e ir al estado 73
+    IDENT              desplazar e ir al estado 74
+    PARENTESIS_ABRE    desplazar e ir al estado 75
+    PARENTESIS_CIERRA  desplazar e ir al estado 140
+    CORCHETE_ABRE      desplazar e ir al estado 76
 
-    expresion                 go to state 141
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_expresiones         go to state 142
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 141
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_expresiones         ir al estado 142
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 107
+Estado 107
 
    64 expresion: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA
    66          | expresion • OP_UNARIO
@@ -1576,370 +1576,370 @@ State 107
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    PARENTESIS_CIERRA  shift, and go to state 143
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
+    PARENTESIS_CIERRA  desplazar e ir al estado 143
 
 
-State 108
+Estado 108
 
   104 contenido_lista_booleano: BOOLEANO •
   105                         | BOOLEANO • COMA contenido_lista_booleano
 
-    COMA  shift, and go to state 144
+    COMA  desplazar e ir al estado 144
 
-    $default  reduce using rule 104 (contenido_lista_booleano)
+    $default  reduce usando la regla 104 (contenido_lista_booleano)
 
 
-State 109
+Estado 109
 
   107 contenido_lista_entero: CONSTANTE_NUM •
   108                       | CONSTANTE_NUM • COMA contenido_lista_entero
 
-    COMA  shift, and go to state 145
+    COMA  desplazar e ir al estado 145
 
-    $default  reduce using rule 107 (contenido_lista_entero)
+    $default  reduce usando la regla 107 (contenido_lista_entero)
 
 
-State 110
+Estado 110
 
   113 contenido_lista_car: CONSTANTE_CAR •
   114                    | CONSTANTE_CAR • COMA contenido_lista_car
 
-    COMA  shift, and go to state 146
+    COMA  desplazar e ir al estado 146
 
-    $default  reduce using rule 113 (contenido_lista_car)
+    $default  reduce usando la regla 113 (contenido_lista_car)
 
 
-State 111
+Estado 111
 
   110 contenido_lista_flotante: CONSTANTE_FLOAT •
   111                         | CONSTANTE_FLOAT • COMA contenido_lista_flotante
 
-    COMA  shift, and go to state 147
+    COMA  desplazar e ir al estado 147
 
-    $default  reduce using rule 110 (contenido_lista_flotante)
+    $default  reduce usando la regla 110 (contenido_lista_flotante)
 
 
-State 112
+Estado 112
 
   103 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano • CORCHETE_CIERRA
 
-    CORCHETE_CIERRA  shift, and go to state 148
+    CORCHETE_CIERRA  desplazar e ir al estado 148
 
 
-State 113
+Estado 113
 
   106 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero • CORCHETE_CIERRA
 
-    CORCHETE_CIERRA  shift, and go to state 149
+    CORCHETE_CIERRA  desplazar e ir al estado 149
 
 
-State 114
+Estado 114
 
   109 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante • CORCHETE_CIERRA
 
-    CORCHETE_CIERRA  shift, and go to state 150
+    CORCHETE_CIERRA  desplazar e ir al estado 150
 
 
-State 115
+Estado 115
 
   112 lista_constante_car: CORCHETE_ABRE contenido_lista_car • CORCHETE_CIERRA
 
-    CORCHETE_CIERRA  shift, and go to state 151
+    CORCHETE_CIERRA  desplazar e ir al estado 151
 
 
-State 116
+Estado 116
 
    68 expresion: expresion OP_OR • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 152
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 152
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 117
+Estado 117
 
    69 expresion: expresion OP_AND • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 153
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 153
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 118
+Estado 118
 
    70 expresion: expresion OP_XOR • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 154
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 154
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 119
+Estado 119
 
    73 expresion: expresion OP_IGUALDAD • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 155
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 155
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 120
+Estado 120
 
    71 expresion: expresion OP_RELACION • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 156
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 156
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 121
+Estado 121
 
    74 expresion: expresion OP_ADITIVO • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 157
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 157
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 122
+Estado 122
 
    76 expresion: expresion SIGSIG • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 158
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 158
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 123
+Estado 123
 
    72 expresion: expresion OP_MULTIPLICATIVO • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 159
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 159
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 124
+Estado 124
 
    66 expresion: expresion OP_UNARIO •
 
-    $default  reduce using rule 66 (expresion)
+    $default  reduce usando la regla 66 (expresion)
 
 
-State 125
+Estado 125
 
    67 expresion: expresion OP_TERNARIO • CONSTANTE_NUM
 
-    CONSTANTE_NUM  shift, and go to state 160
+    CONSTANTE_NUM  desplazar e ir al estado 160
 
 
-State 126
+Estado 126
 
    63 sentencia_retorno: DEVOLVER expresion @19 • PYC
 
-    PYC  shift, and go to state 161
+    PYC  desplazar e ir al estado 161
 
 
-State 127
+Estado 127
 
    45 sentencia: DIRECCION identificador PYC •
 
-    $default  reduce using rule 45 (sentencia)
+    $default  reduce usando la regla 45 (sentencia)
 
 
-State 128
+Estado 128
 
    47 sentencia_primera: SI PARENTESIS_ABRE • expresion PARENTESIS_CIERRA
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 162
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 162
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 129
+Estado 129
 
    48 sentencia_si: sentencia_primera sentencia •
    50             | sentencia_primera sentencia • SINO $@15 sentencia
 
-    SINO  shift, and go to state 163
+    SINO  desplazar e ir al estado 163
 
-    SINO      [reduce using rule 48 (sentencia_si)]
-    $default  reduce using rule 48 (sentencia_si)
-
-
-State 130
-
-   52 sentencia_mientras: MIENTRAS $@16 • cond_mientras
-
-    PARENTESIS_ABRE  shift, and go to state 164
-
-    cond_mientras  go to state 165
+    SINO      [reduce usando la regla 48 (sentencia_si)]
+    $default  reduce usando la regla 48 (sentencia_si)
 
 
-State 131
+Estado 130
+
+   52 sentencia_mientras: MIENTRAS @16 • cond_mientras
+
+    PARENTESIS_ABRE  desplazar e ir al estado 164
+
+    cond_mientras  ir al estado 165
+
+
+Estado 131
 
    46 sentencia_asignacion: identificador OP_ASIGNACION expresion • PYC
    66 expresion: expresion • OP_UNARIO
@@ -1953,113 +1953,113 @@ State 131
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    PYC                shift, and go to state 166
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
+    PYC                desplazar e ir al estado 166
 
 
-State 132
+Estado 132
 
    44 sentencia: identificador DIRECCION PYC •
 
-    $default  reduce using rule 44 (sentencia)
+    $default  reduce usando la regla 44 (sentencia)
 
 
-State 133
+Estado 133
 
    24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE • parametros PARENTESIS_CIERRA
 
-    TIPO_DATO  shift, and go to state 9
-    LISTA      shift, and go to state 10
+    TIPO_DATO  desplazar e ir al estado 9
+    LISTA      desplazar e ir al estado 10
 
-    $default  reduce using rule 28 (lista_parametros)
+    $default  reduce usando la regla 28 (lista_parametros)
 
-    parametros        go to state 167
-    lista_parametros  go to state 12
-    tipo              go to state 13
+    parametros        ir al estado 167
+    lista_parametros  ir al estado 12
+    tipo              ir al estado 13
 
 
-State 134
+Estado 134
 
    83 varios_identificador: varios_identificador COMA identificador •
 
-    $default  reduce using rule 83 (varios_identificador)
+    $default  reduce usando la regla 83 (varios_identificador)
 
 
-State 135
+Estado 135
 
    58 lista_variables: DIRECCION lista_variables •
 
-    $default  reduce using rule 58 (lista_variables)
+    $default  reduce usando la regla 58 (lista_variables)
 
 
-State 136
+Estado 136
 
    56 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC •
 
-    $default  reduce using rule 56 (sentencia_entrada)
+    $default  reduce usando la regla 56 (sentencia_entrada)
 
 
-State 137
+Estado 137
 
    60 lista_variables: identificador DIRECCION • identificador $@18
 
-    IDENT  shift, and go to state 18
+    IDENT  desplazar e ir al estado 18
 
-    identificador  go to state 168
+    identificador  ir al estado 168
 
 
-State 138
+Estado 138
 
    85 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION • expresion_o_cadena
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    CADENA           shift, and go to state 100
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    CADENA           desplazar e ir al estado 100
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 101
-    identificador             go to state 78
-    expresion_o_cadena        go to state 169
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 101
+    identificador             ir al estado 78
+    expresion_o_cadena        ir al estado 169
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 139
+Estado 139
 
    61 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC •
 
-    $default  reduce using rule 61 (sentencia_salida)
+    $default  reduce usando la regla 61 (sentencia_salida)
 
 
-State 140
+Estado 140
 
    96 funcion: IDENT PARENTESIS_ABRE PARENTESIS_CIERRA •
 
-    $default  reduce using rule 96 (funcion)
+    $default  reduce usando la regla 96 (funcion)
 
 
-State 141
+Estado 141
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2073,101 +2073,101 @@ State 141
    76          | expresion • SIGSIG expresion
    98 lista_expresiones: expresion •
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 98 (lista_expresiones)
+    $default  reduce usando la regla 98 (lista_expresiones)
 
 
-State 142
+Estado 142
 
    95 funcion: IDENT PARENTESIS_ABRE lista_expresiones • PARENTESIS_CIERRA
    97 lista_expresiones: lista_expresiones • COMA expresion
 
-    PARENTESIS_CIERRA  shift, and go to state 170
-    COMA               shift, and go to state 171
+    PARENTESIS_CIERRA  desplazar e ir al estado 170
+    COMA               desplazar e ir al estado 171
 
 
-State 143
+Estado 143
 
    64 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA •
 
-    $default  reduce using rule 64 (expresion)
+    $default  reduce usando la regla 64 (expresion)
 
 
-State 144
+Estado 144
 
   105 contenido_lista_booleano: BOOLEANO COMA • contenido_lista_booleano
 
-    BOOLEANO  shift, and go to state 108
+    BOOLEANO  desplazar e ir al estado 108
 
-    contenido_lista_booleano  go to state 172
+    contenido_lista_booleano  ir al estado 172
 
 
-State 145
+Estado 145
 
   108 contenido_lista_entero: CONSTANTE_NUM COMA • contenido_lista_entero
 
-    CONSTANTE_NUM  shift, and go to state 109
+    CONSTANTE_NUM  desplazar e ir al estado 109
 
-    contenido_lista_entero  go to state 173
+    contenido_lista_entero  ir al estado 173
 
 
-State 146
+Estado 146
 
   114 contenido_lista_car: CONSTANTE_CAR COMA • contenido_lista_car
 
-    CONSTANTE_CAR  shift, and go to state 110
+    CONSTANTE_CAR  desplazar e ir al estado 110
 
-    contenido_lista_car  go to state 174
+    contenido_lista_car  ir al estado 174
 
 
-State 147
+Estado 147
 
   111 contenido_lista_flotante: CONSTANTE_FLOAT COMA • contenido_lista_flotante
 
-    CONSTANTE_FLOAT  shift, and go to state 111
+    CONSTANTE_FLOAT  desplazar e ir al estado 111
 
-    contenido_lista_flotante  go to state 175
+    contenido_lista_flotante  ir al estado 175
 
 
-State 148
+Estado 148
 
   103 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA •
 
-    $default  reduce using rule 103 (lista_constante_booleano)
+    $default  reduce usando la regla 103 (lista_constante_booleano)
 
 
-State 149
+Estado 149
 
   106 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA •
 
-    $default  reduce using rule 106 (lista_constante_entero)
+    $default  reduce usando la regla 106 (lista_constante_entero)
 
 
-State 150
+Estado 150
 
   109 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA •
 
-    $default  reduce using rule 109 (lista_constante_flotante)
+    $default  reduce usando la regla 109 (lista_constante_flotante)
 
 
-State 151
+Estado 151
 
   112 lista_constante_car: CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA •
 
-    $default  reduce using rule 112 (lista_constante_car)
+    $default  reduce usando la regla 112 (lista_constante_car)
 
 
-State 152
+Estado 152
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2181,20 +2181,20 @@ State 152
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 68 (expresion)
+    $default  reduce usando la regla 68 (expresion)
 
 
-State 153
+Estado 153
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2208,19 +2208,19 @@ State 153
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 69 (expresion)
+    $default  reduce usando la regla 69 (expresion)
 
 
-State 154
+Estado 154
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2234,18 +2234,18 @@ State 154
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 70 (expresion)
+    $default  reduce usando la regla 70 (expresion)
 
 
-State 155
+Estado 155
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2259,17 +2259,17 @@ State 155
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 73 (expresion)
+    $default  reduce usando la regla 73 (expresion)
 
 
-State 156
+Estado 156
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2283,16 +2283,16 @@ State 156
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 71 (expresion)
+    $default  reduce usando la regla 71 (expresion)
 
 
-State 157
+Estado 157
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2306,15 +2306,15 @@ State 157
    74          | expresion OP_ADITIVO expresion •
    76          | expresion • SIGSIG expresion
 
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 74 (expresion)
+    $default  reduce usando la regla 74 (expresion)
 
 
-State 158
+Estado 158
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2328,14 +2328,14 @@ State 158
    76          | expresion • SIGSIG expresion
    76          | expresion SIGSIG expresion •
 
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 76 (expresion)
+    $default  reduce usando la regla 76 (expresion)
 
 
-State 159
+Estado 159
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2349,27 +2349,27 @@ State 159
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
+    OP_UNARIO    desplazar e ir al estado 124
+    OP_TERNARIO  desplazar e ir al estado 125
 
-    $default  reduce using rule 72 (expresion)
+    $default  reduce usando la regla 72 (expresion)
 
 
-State 160
+Estado 160
 
    67 expresion: expresion OP_TERNARIO CONSTANTE_NUM •
 
-    $default  reduce using rule 67 (expresion)
+    $default  reduce usando la regla 67 (expresion)
 
 
-State 161
+Estado 161
 
    63 sentencia_retorno: DEVOLVER expresion @19 PYC •
 
-    $default  reduce using rule 63 (sentencia_retorno)
+    $default  reduce usando la regla 63 (sentencia_retorno)
 
 
-State 162
+Estado 162
 
    47 sentencia_primera: SI PARENTESIS_ABRE expresion • PARENTESIS_CIERRA
    66 expresion: expresion • OP_UNARIO
@@ -2383,185 +2383,185 @@ State 162
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    PARENTESIS_CIERRA  shift, and go to state 176
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
+    PARENTESIS_CIERRA  desplazar e ir al estado 176
 
 
-State 163
+Estado 163
 
    50 sentencia_si: sentencia_primera sentencia SINO • $@15 sentencia
 
-    $default  reduce using rule 49 ($@15)
+    $default  reduce usando la regla 49 ($@15)
 
-    $@15  go to state 177
+    $@15  ir al estado 177
 
 
-State 164
+Estado 164
 
    54 cond_mientras: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA @17 cuerpo_mientras
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 178
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
-
-
-State 165
-
-   52 sentencia_mientras: MIENTRAS $@16 cond_mientras •
-
-    $default  reduce using rule 52 (sentencia_mientras)
+    expresion                 ir al estado 178
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 166
+Estado 165
+
+   52 sentencia_mientras: MIENTRAS @16 cond_mientras •
+
+    $default  reduce usando la regla 52 (sentencia_mientras)
+
+
+Estado 166
 
    46 sentencia_asignacion: identificador OP_ASIGNACION expresion PYC •
 
-    $default  reduce using rule 46 (sentencia_asignacion)
+    $default  reduce usando la regla 46 (sentencia_asignacion)
 
 
-State 167
+Estado 167
 
    24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE parametros • PARENTESIS_CIERRA
 
-    PARENTESIS_CIERRA  shift, and go to state 179
+    PARENTESIS_CIERRA  desplazar e ir al estado 179
 
 
-State 168
+Estado 168
 
    60 lista_variables: identificador DIRECCION identificador • $@18
 
-    $default  reduce using rule 59 ($@18)
+    $default  reduce usando la regla 59 ($@18)
 
-    $@18  go to state 180
+    $@18  ir al estado 180
 
 
-State 169
+Estado 169
 
    85 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena •
 
-    $default  reduce using rule 85 (lista_expresiones_o_cadena)
+    $default  reduce usando la regla 85 (lista_expresiones_o_cadena)
 
 
-State 170
+Estado 170
 
    95 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA •
 
-    $default  reduce using rule 95 (funcion)
+    $default  reduce usando la regla 95 (funcion)
 
 
-State 171
+Estado 171
 
    97 lista_expresiones: lista_expresiones COMA • expresion
 
-    error            shift, and go to state 67
-    OP_ADITIVO       shift, and go to state 68
-    OP_UNARIO        shift, and go to state 69
-    BOOLEANO         shift, and go to state 70
-    CONSTANTE_NUM    shift, and go to state 71
-    CONSTANTE_CAR    shift, and go to state 72
-    CONSTANTE_FLOAT  shift, and go to state 73
-    IDENT            shift, and go to state 74
-    PARENTESIS_ABRE  shift, and go to state 75
-    CORCHETE_ABRE    shift, and go to state 76
+    error            desplazar e ir al estado 67
+    OP_ADITIVO       desplazar e ir al estado 68
+    OP_UNARIO        desplazar e ir al estado 69
+    BOOLEANO         desplazar e ir al estado 70
+    CONSTANTE_NUM    desplazar e ir al estado 71
+    CONSTANTE_CAR    desplazar e ir al estado 72
+    CONSTANTE_FLOAT  desplazar e ir al estado 73
+    IDENT            desplazar e ir al estado 74
+    PARENTESIS_ABRE  desplazar e ir al estado 75
+    CORCHETE_ABRE    desplazar e ir al estado 76
 
-    expresion                 go to state 181
-    identificador             go to state 78
-    constante                 go to state 79
-    funcion                   go to state 80
-    lista_constantes          go to state 81
-    lista_constante_booleano  go to state 82
-    lista_constante_entero    go to state 83
-    lista_constante_flotante  go to state 84
-    lista_constante_car       go to state 85
+    expresion                 ir al estado 181
+    identificador             ir al estado 78
+    constante                 ir al estado 79
+    funcion                   ir al estado 80
+    lista_constantes          ir al estado 81
+    lista_constante_booleano  ir al estado 82
+    lista_constante_entero    ir al estado 83
+    lista_constante_flotante  ir al estado 84
+    lista_constante_car       ir al estado 85
 
 
-State 172
+Estado 172
 
   105 contenido_lista_booleano: BOOLEANO COMA contenido_lista_booleano •
 
-    $default  reduce using rule 105 (contenido_lista_booleano)
+    $default  reduce usando la regla 105 (contenido_lista_booleano)
 
 
-State 173
+Estado 173
 
   108 contenido_lista_entero: CONSTANTE_NUM COMA contenido_lista_entero •
 
-    $default  reduce using rule 108 (contenido_lista_entero)
+    $default  reduce usando la regla 108 (contenido_lista_entero)
 
 
-State 174
+Estado 174
 
   114 contenido_lista_car: CONSTANTE_CAR COMA contenido_lista_car •
 
-    $default  reduce using rule 114 (contenido_lista_car)
+    $default  reduce usando la regla 114 (contenido_lista_car)
 
 
-State 175
+Estado 175
 
   111 contenido_lista_flotante: CONSTANTE_FLOAT COMA contenido_lista_flotante •
 
-    $default  reduce using rule 111 (contenido_lista_flotante)
+    $default  reduce usando la regla 111 (contenido_lista_flotante)
 
 
-State 176
+Estado 176
 
    47 sentencia_primera: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA •
 
-    $default  reduce using rule 47 (sentencia_primera)
+    $default  reduce usando la regla 47 (sentencia_primera)
 
 
-State 177
+Estado 177
 
    50 sentencia_si: sentencia_primera sentencia SINO $@15 • sentencia
 
-    INI_BLOQUE  shift, and go to state 22
-    ENTRADA     shift, and go to state 47
-    IMPRIMIR    shift, and go to state 48
-    DEVOLVER    shift, and go to state 49
-    DIRECCION   shift, and go to state 50
-    IDENT       shift, and go to state 18
+    INI_BLOQUE  desplazar e ir al estado 22
+    ENTRADA     desplazar e ir al estado 47
+    IMPRIMIR    desplazar e ir al estado 48
+    DEVOLVER    desplazar e ir al estado 49
+    DIRECCION   desplazar e ir al estado 50
+    IDENT       desplazar e ir al estado 18
 
-    MIENTRAS  reduce using rule 39 ($@14)
-    $default  reduce using rule 37 ($@13)
+    MIENTRAS  reduce usando la regla 39 ($@14)
+    $default  reduce usando la regla 37 ($@13)
 
-    bloque                go to state 51
-    sentencia             go to state 182
-    $@13                  go to state 53
-    $@14                  go to state 54
-    sentencia_asignacion  go to state 55
-    sentencia_entrada     go to state 56
-    sentencia_salida      go to state 57
-    sentencia_retorno     go to state 58
-    identificador         go to state 59
+    bloque                ir al estado 51
+    sentencia             ir al estado 182
+    $@13                  ir al estado 53
+    $@14                  ir al estado 54
+    sentencia_asignacion  ir al estado 55
+    sentencia_entrada     ir al estado 56
+    sentencia_salida      ir al estado 57
+    sentencia_retorno     ir al estado 58
+    identificador         ir al estado 59
 
 
-State 178
+Estado 178
 
    54 cond_mientras: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA @17 cuerpo_mientras
    66 expresion: expresion • OP_UNARIO
@@ -2575,34 +2575,34 @@ State 178
    74          | expresion • OP_ADITIVO expresion
    76          | expresion • SIGSIG expresion
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    PARENTESIS_CIERRA  shift, and go to state 183
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
+    PARENTESIS_CIERRA  desplazar e ir al estado 183
 
 
-State 179
+Estado 179
 
    24 cabecera_subprog: tipo IDENT $@9 PARENTESIS_ABRE parametros PARENTESIS_CIERRA •
 
-    $default  reduce using rule 24 (cabecera_subprog)
+    $default  reduce usando la regla 24 (cabecera_subprog)
 
 
-State 180
+Estado 180
 
    60 lista_variables: identificador DIRECCION identificador $@18 •
 
-    $default  reduce using rule 60 (lista_variables)
+    $default  reduce usando la regla 60 (lista_variables)
 
 
-State 181
+Estado 181
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2616,71 +2616,71 @@ State 181
    76          | expresion • SIGSIG expresion
    97 lista_expresiones: lista_expresiones COMA expresion •
 
-    OP_OR              shift, and go to state 116
-    OP_AND             shift, and go to state 117
-    OP_XOR             shift, and go to state 118
-    OP_IGUALDAD        shift, and go to state 119
-    OP_RELACION        shift, and go to state 120
-    OP_ADITIVO         shift, and go to state 121
-    SIGSIG             shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
+    OP_OR              desplazar e ir al estado 116
+    OP_AND             desplazar e ir al estado 117
+    OP_XOR             desplazar e ir al estado 118
+    OP_IGUALDAD        desplazar e ir al estado 119
+    OP_RELACION        desplazar e ir al estado 120
+    OP_ADITIVO         desplazar e ir al estado 121
+    SIGSIG             desplazar e ir al estado 122
+    OP_MULTIPLICATIVO  desplazar e ir al estado 123
+    OP_UNARIO          desplazar e ir al estado 124
+    OP_TERNARIO        desplazar e ir al estado 125
 
-    $default  reduce using rule 97 (lista_expresiones)
+    $default  reduce usando la regla 97 (lista_expresiones)
 
 
-State 182
+Estado 182
 
    50 sentencia_si: sentencia_primera sentencia SINO $@15 sentencia •
 
-    $default  reduce using rule 50 (sentencia_si)
+    $default  reduce usando la regla 50 (sentencia_si)
 
 
-State 183
+Estado 183
 
    54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA • @17 cuerpo_mientras
 
-    $default  reduce using rule 53 (@17)
+    $default  reduce usando la regla 53 (@17)
 
-    @17  go to state 184
+    @17  ir al estado 184
 
 
-State 184
+Estado 184
 
    54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 • cuerpo_mientras
 
-    INI_BLOQUE  shift, and go to state 22
-    ENTRADA     shift, and go to state 47
-    IMPRIMIR    shift, and go to state 48
-    DEVOLVER    shift, and go to state 49
-    DIRECCION   shift, and go to state 50
-    IDENT       shift, and go to state 18
+    INI_BLOQUE  desplazar e ir al estado 22
+    ENTRADA     desplazar e ir al estado 47
+    IMPRIMIR    desplazar e ir al estado 48
+    DEVOLVER    desplazar e ir al estado 49
+    DIRECCION   desplazar e ir al estado 50
+    IDENT       desplazar e ir al estado 18
 
-    MIENTRAS  reduce using rule 39 ($@14)
-    $default  reduce using rule 37 ($@13)
+    MIENTRAS  reduce usando la regla 39 ($@14)
+    $default  reduce usando la regla 37 ($@13)
 
-    bloque                go to state 51
-    sentencia             go to state 185
-    $@13                  go to state 53
-    $@14                  go to state 54
-    sentencia_asignacion  go to state 55
-    cuerpo_mientras       go to state 186
-    sentencia_entrada     go to state 56
-    sentencia_salida      go to state 57
-    sentencia_retorno     go to state 58
-    identificador         go to state 59
+    bloque                ir al estado 51
+    sentencia             ir al estado 185
+    $@13                  ir al estado 53
+    $@14                  ir al estado 54
+    sentencia_asignacion  ir al estado 55
+    cuerpo_mientras       ir al estado 186
+    sentencia_entrada     ir al estado 56
+    sentencia_salida      ir al estado 57
+    sentencia_retorno     ir al estado 58
+    identificador         ir al estado 59
 
 
-State 185
+Estado 185
 
    55 cuerpo_mientras: sentencia •
 
-    $default  reduce using rule 55 (cuerpo_mientras)
+    $default  reduce usando la regla 55 (cuerpo_mientras)
 
 
-State 186
+Estado 186
 
    54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 cuerpo_mientras •
 
-    $default  reduce using rule 54 (cond_mientras)
+    $default  reduce usando la regla 54 (cond_mientras)
