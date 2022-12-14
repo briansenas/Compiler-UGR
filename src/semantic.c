@@ -994,6 +994,7 @@ int variable_main = 0;
 int Many = 0;
 int asignar = 0;
 int principal = 0;
+int isIf = 0;
 FILE* MAIN;
 FILE* FUNC;
 
@@ -1031,9 +1032,9 @@ void cerrarArchivos(){
 
 void cMarkOut(){
     if(subProg || decParam)
-        fputs("\n}",FUNC);
+        fputs("\n}\n",FUNC);
     else
-        fputs("\n}",MAIN);
+        fputs("\n}\n",MAIN);
     variable_main = 0;
 }
 
@@ -1211,6 +1212,17 @@ void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* re
     free(_code);
 }
 
+void generaSigno(atributos op, atributos b, atributos* res){
+    res->nombre = malloc(255);
+    char* _code = malloc(255);
+    if(op.attr==0)
+        strcpy(_code,"+%s");
+    else
+        strcpy(_code,"-%s");
+    snprintf(res->nombre,255,_code,b.nombre);
+    free(_code);
+}
+
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
     char* _code = malloc(255);
@@ -1248,4 +1260,27 @@ void generaCodigoReturn(atributos a){
     snprintf(a.codigo,255,"return %s;\n",a.nombre);
     cWriteCode(a.codigo);
     free(a.codigo);
+}
+
+void generaCodigo(char* pattern, char* a, char* b, char* c){
+    char* resultado = malloc(255);
+    snprintf(resultado,255,pattern,a,b,c);
+    cWriteCode(resultado);
+    free(resultado);
+}
+
+void generaCodigoUnario(atributos op, atributos a, atributos* res){
+    res->codigo = malloc(255);
+    char* _code = malloc(255);
+
+    if(op.attr==0)
+        strcpy(_code,"%s = !%s;\n");
+    else if(op.attr==1)
+        strcpy(_code,"%s = getLongitud(%s);");
+    else if(op.attr==2)
+        strcpy(_code,"%s = getActual(%s);");
+
+    snprintf(res->codigo,255,_code,res->nombre, a.nombre);
+    cWriteCode(res->codigo);
+    free(_code);
 }

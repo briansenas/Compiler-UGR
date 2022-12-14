@@ -4,6 +4,7 @@ principal()
         entero ve;
         entero ve2, ve3;
         bool bol;
+        bool A, B;
     fin_var
 
     entero functionA(entero a, entero b){
@@ -24,14 +25,6 @@ principal()
         devolver b + c;
     }
 
-    ve = 1 + 1 ;
-    ve = 1 - 1;
-    ve = 1 / 1;
-    ve = 1 * 1;
-    ve = 1 % 1;
-    bol = 1 == 1;
-    bol = 1 < 1;
-    bol = 1 > 1;
-    bol = 1 <= 1;
-    bol = 1 >= 1;
+
+    bol = A && !B || Verdadero;
 }

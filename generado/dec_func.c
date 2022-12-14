@@ -10,6 +10,7 @@ c=tmp_0 ;
 return c;
 
 }
+
 float funcionB(float b,float c)
 {
 float d;
@@ -18,3 +19,4 @@ tmp_1  = b + c;
 return tmp_1 ;
 
 }
+

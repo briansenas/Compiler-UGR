@@ -79,16 +79,10 @@ bloque: INI_BLOQUE
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        if(!principal)
-            cMarkOut();
+        cMarkOut();
         }
 
-cuerpo_bloque: declar_de_variables_locales {
-             if(principal){
-             fputs("int main(){\n",MAIN);
-             principal=0;
-            }
-             }
+cuerpo_bloque: declar_de_variables_locales
              declar_de_subprogs sentencias
        | declar_de_variables_locales declar_de_subprogs;
 
@@ -97,7 +91,12 @@ declar_de_subprogs: declar_de_subprogs declar_subprog
 
 declar_subprog:  cabecera_subprog {subProg=1; addNewLine(); } bloque {addNewLine();  subProg=0; };
 
-declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;}
+declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;
+             if(principal){
+             fputs("int main(){\n",MAIN);
+             principal=0;
+            }
+                           }
                            |;
 
 variables_locales: variables_locales cuerpo_declar_variables
@@ -186,12 +185,39 @@ sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoRetur
 
 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
-    | OP_UNARIO expresion {tsOpUnary($1, $2, &$$); }
-    | expresion OP_UNARIO {tsOpUnary($2, $1, &$$); }
-    | expresion OP_TERNARIO CONSTANTE_NUM {tsCheckLeftList($1,$3,&$$);}
-    | expresion OP_OR expresion {tsOpOr($1, $2, $3, &$$); }
-    | expresion OP_AND expresion {tsOpAnd($1, $2, $3, &$$); }
-    | expresion OP_XOR expresion {tsOpXOr($1, $2, $3, &$$); }
+    | OP_UNARIO expresion {
+    tsOpUnary($1, $2, &$$);
+    $$.nombre=generarVariableTemporal();
+    generaCodigoVariableTemporal($2,&$$);
+    generaCodigoUnario($1,$2,&$$);
+    }
+    | expresion OP_UNARIO {
+    tsOpUnary($2, $1, &$$);
+    $$.nombre=generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigoUnario($2,$1,&$$);
+    }
+    | expresion OP_TERNARIO CONSTANTE_NUM {
+    tsCheckLeftList($1,$3,&$$);
+    }
+    | expresion OP_OR expresion {
+    tsOpOr($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigo("%s = %s || %s;\n", $$.nombre, $1.nombre, $3.nombre);
+    }
+    | expresion OP_AND expresion {
+    tsOpAnd($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigo("%s = %s && %s;\n", $$.nombre, $1.nombre, $3.nombre);
+    }
+    | expresion OP_XOR expresion {
+    tsOpXOr($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    generaCodigoVariableTemporal($1,&$$);
+    generaCodigo("%s = %s ^ %s;\n", $$.nombre, $1.nombre, $3.nombre);
+    }
     | expresion OP_RELACION expresion {
     tsOpRel($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
@@ -218,9 +244,13 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoVariableTemporal($1,&$$);
     generaCodigoOpAditivo($1,$2,$3,&$$);
     }
-    | OP_ADITIVO expresion {tsOpSign($1, $2, &$$); } %prec OP_UNARIO
+    | OP_ADITIVO expresion {
+    tsOpSign($1, $2, &$$);
+    generaSigno($1,$2, &$$);
+    } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
+    $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; $$.es_constante = $1.es_constante;
     }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;

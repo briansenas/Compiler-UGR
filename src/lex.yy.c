@@ -1127,12 +1127,12 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 76 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = "true"; return(BOOLEANO);}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 77 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = strdup(yytext); return(BOOLEANO);}
+{ if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = "false"; return(BOOLEANO);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */

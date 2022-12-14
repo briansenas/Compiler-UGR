@@ -232,6 +232,9 @@ extern int Many;
 extern int principal;
 extern FILE* MAIN;
 extern int asignar;
+extern int isIf;
+
+
 
 int tsSearchParam(atributos a);
 
@@ -257,6 +260,9 @@ void cWriteCode(char* code);
 void generaCodigoVariableTemporal(atributos a, atributos* res);
 void generaCodigoAsignacion(atributos a, atributos b);
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res);
+void generaSigno(atributos op, atributos b, atributos* res);
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res);
 void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res);
 void generaCodigoReturn(atributos a);
+void generaCodigo(char* pattern, char* a, char* b, char* c);
+void generaCodigoUnario(atributos op, atributos a, atributos* res);
