@@ -7,28 +7,6 @@ principal()
         bool A, B;
     fin_var
 
-    entero functionA(entero a, entero b){
-        ini_var
-            entero c;
-            entero d, e;
-        fin_var
+    entrada >> ve;
 
-        c = d + e;
-        devolver c;
-    }
-
-    real funcionB(real b, real c){
-        ini_var
-            real d;
-        fin_var
-
-        devolver b + c;
-    }
-
-    si(bol)
-        ve = 1;
-    sino si(!bol)
-        ve = -1;
-    sino
-        ve = 0;
 }

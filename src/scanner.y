@@ -79,10 +79,6 @@ bloque: INI_BLOQUE
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        if(!principal && !cond){
-            cMarkOut();
-            cond = 0;
-        }
         }
 
 cuerpo_bloque: declar_de_variables_locales
@@ -220,14 +216,21 @@ cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
 cuerpo_mientras: sentencia;
 
-sentencia_entrada: ENTRADA DIRECCION lista_variables PYC;
+sentencia_entrada: ENTRADA DIRECCION lista_variables PYC {
+                 generarE_S("scanf(\"");
+                 };
 
-lista_variables: identificador
+lista_variables: identificador {TS_subprog_params($1); }
                | DIRECCION lista_variables
-               | identificador DIRECCION identificador;
+               | identificador DIRECCION identificador
+                {TS_subprog_params($1); }
+                {TS_subprog_params($3); }
+               ;
 
 
-sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC;
+sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC{
+                generarE_S("printf(\"");
+                };
 
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoReturn($2);} PYC;
 
@@ -339,8 +342,14 @@ identificador: IDENT {
 lista_expresiones_o_cadena: lista_expresiones_o_cadena DIRECCION expresion_o_cadena
                           | expresion_o_cadena;
 
-expresion_o_cadena: expresion
-                  | CADENA ;
+expresion_o_cadena: expresion{
+                  $$.tipoDato = $1.tipoDato;
+                  TS_subprog_params($1);
+                  }
+                  | CADENA {
+                  $$.tipoDato = $1.tipoDato;
+                  TS_subprog_params($1);
+                  } ;
 
 constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
 | CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }

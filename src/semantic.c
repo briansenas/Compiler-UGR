@@ -1019,7 +1019,7 @@ void generaGOTO(char* etq){
     strcat(resultado,etq);
     strcat(resultado, ";\n");
     cWriteCode(resultado);
-};
+}
 
 
 char* generarEtiqueta(){
@@ -1322,4 +1322,45 @@ void generaCodigoSi(atributos* a, atributos exp){
     strcat(_code,";\n");
     cWriteCode(_code);
     free(_code);
+}
+
+char* tipoAprintf(dtipo tipo) {
+    char* resultado = malloc(3);
+
+	if ( tipo == ENTERO ) {
+		strcpy(resultado , "%d");
+	} else if ( tipo == REAL ) {
+		strcpy(resultado , "%f");
+	} else if ( tipo == TIPOBOOL ) {
+		strcpy(resultado , "%d");
+	} else if ( tipo == CARACTER ) {
+		strcpy(resultado , "%c");
+	} else if ( tipo == TIPOCADENA ) {
+		strcpy(resultado , "%s");
+    }
+
+	return resultado;
+}
+
+void generarE_S(char* E_S){
+    int i = 0;
+    char* res = malloc(255);
+    strcpy(res,E_S);
+    while(i<TOPE_SUBPROG){
+        strcat(res,tipoAprintf(ts_subprog[i].tipoDato));
+        if(i<TOPE_SUBPROG-1)
+            strcat(res,", ");
+        i++;
+    }
+    i=0;
+    strcat(res,"\",");
+    while(i<TOPE_SUBPROG){
+        strcat(res,ts_subprog[i].nombre);
+        if(i<TOPE_SUBPROG-1)
+            strcat(res,", ");
+        i++;
+    }
+    strcat(res,");\n");
+    cWriteCode(res);
+    TOPE_SUBPROG = 0;
 }

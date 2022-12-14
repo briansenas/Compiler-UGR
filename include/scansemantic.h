@@ -243,7 +243,6 @@ extern etiquetas ts_etiq[50];
 extern int TS_ETIQ;
 
 
-
 int tsSearchParam(atributos a);
 char* generarEtiqueta();
 char* generarVariableTemporal();
@@ -279,3 +278,4 @@ void generaCodigo(char* pattern, char* a, char* b, char* c);
 void generaCodigoUnario(atributos op, atributos a, atributos* res);
 void generaCodigoSi(atributos* a, atributos exp);
 void generaCodigoSiNo(atributos* a, atributos exp);
+void generarE_S(char* E_S);

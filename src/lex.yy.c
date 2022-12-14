@@ -1138,7 +1138,7 @@ case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
 #line 78 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;   yylval.tipoDato=CADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
+{ if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
