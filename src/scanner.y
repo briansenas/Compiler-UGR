@@ -79,6 +79,9 @@ bloque: INI_BLOQUE
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
+        if(!principal && !cond){
+            cMarkOut();
+        }
         }
 
 cuerpo_bloque: declar_de_variables_locales
@@ -309,7 +312,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | funcion {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
-        $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista;
+        $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista; cond=1;
     }
     | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;}
     | error ;
@@ -351,19 +354,51 @@ expresion_o_cadena: expresion{
                   TS_subprog_params($1);
                   } ;
 
-constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; }
-| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; };
+constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
+| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
+| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; };
 
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
     | LISTA TIPO_DATO {$$.tipoDato = $2.tipoDato; $$.lista=1;};
 
-funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {tsFunctionCall($1,&$$);}
-       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {tsFunctionCall($1,&$$);};
+funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
+            $$.nombre = generarVariableTemporal();
+            int index = tsSearchName($1);
+            atributos a; 
+            a.lista = ts[index].lista; 
+            a.nombre = ts[index].nombre; 
+            a.tipoDato = ts[index].tipoDato; 
+            generaCodigoVariableTemporal(a,&$$);
+            char* resultado = malloc(255);
+            strcpy(resultado,$$.nombre);
+            strcat(resultado," = ");
+            strcat(resultado,generarFuncion($1.nombre));
+            cWriteCode(resultado); 
+            strcpy(resultado,$$.nombre); 
+            tsFunctionCall($1,&$$);
+            strcpy($$.nombre, resultado);
+        };
+       | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
+            $$.nombre = generarVariableTemporal();
+            int index = tsSearchName($1);
+            atributos a; 
+            a.lista = ts[index].lista; 
+            a.nombre = ts[index].nombre; 
+            a.tipoDato = ts[index].tipoDato; 
+            generaCodigoVariableTemporal(a,&$$);
+            char* resultado = malloc(255);
+            strcpy(resultado,$$.nombre);
+            strcat(resultado," = ");
+            strcat(resultado,generarFuncion($1.nombre));
+            cWriteCode(resultado); 
+            strcpy(resultado,$$.nombre); 
+            tsFunctionCall($1,&$$);
+            strcpy($$.nombre, resultado);
+       };
 
-lista_expresiones: lista_expresiones COMA expresion {nParam++; TS_subprog_params($3);}
-                 | expresion {nParam=1; TS_subprog_params($1);}
+lista_expresiones: lista_expresiones COMA expresion {nParam++;TS_subprog_params($3);}
+                 | expresion {nParam=1;TS_subprog_params($1);};
 
 lista_constantes: lista_constante_booleano {$$.lista=1; $$.tipoDato=TIPOBOOL;}
     | lista_constante_entero{$$.lista=1;$$.tipoDato=ENTERO;}

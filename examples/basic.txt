@@ -7,6 +7,15 @@ principal()
         bool A, B;
     fin_var
 
-    entrada >> ve;
+    entero funcionA(entero add){
+        devolver ve + add; 
+    }
 
+    ve = 1; 
+
+    ve2 = funcionA(ve);
+
+    imprimir >> ve2; 
+
+    devolver 0; 
 }

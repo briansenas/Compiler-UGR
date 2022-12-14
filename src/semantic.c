@@ -1364,3 +1364,21 @@ void generarE_S(char* E_S){
     cWriteCode(res);
     TOPE_SUBPROG = 0;
 }
+
+
+char* generarFuncion(char* nombre){
+    int i = 0;
+    char* res = malloc(255);
+    i=0;
+	strcpy(res,nombre);
+    strcat(res,"(");
+    while(i<TOPE_SUBPROG){
+        strcat(res,ts_subprog[i].nombre);
+        if(i<TOPE_SUBPROG-1)
+            strcat(res,", ");
+        i++;
+    }
+    strcat(res,");\n");
+  
+	return res;
+}
