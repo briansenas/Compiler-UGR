@@ -79,8 +79,9 @@ bloque: INI_BLOQUE
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        if(!principal && !cond){
+        if(subProg && !cond){
             cMarkOut();
+            cond = 0;
         }
         }
 
@@ -136,11 +137,15 @@ sentencia: bloque
     | sentencia_salida
     | sentencia_retorno
     | identificador DIRECCION PYC {
+    $2.tipoDato = $1.tipoDato;
+    moverCursor($2);
     if(!tsCheckList($1)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
     }
     | DIRECCION identificador PYC {
+    $2.tipoDato = $1.tipoDato;
+    moverCursor($1);
     if(!tsCheckList($2)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
@@ -223,6 +228,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
     $$.nombre=generarVariableTemporal();
+    $2.lista=0;
     generaCodigoVariableTemporal($2,&$$);
     generaCodigoUnario($1,$2,&$$);
     }
@@ -234,6 +240,15 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | expresion OP_TERNARIO CONSTANTE_NUM {
     tsCheckLeftList($1,$3,&$$);
+    $$.nombre = generarVariableTemporal();
+    int a = tsSearchId($1);
+    $1.lista=0;
+    generaCodigoVariableTemporal($1,&$$);
+    char* res = malloc(255);
+    snprintf(res,255,"%s = getElemento%s(%s,%s);\n", $$.nombre,
+    tipoAstring(ts[a].tipoDato),
+    $1.nombre,$3.nombre);
+    cWriteCode(res);
     }
     | expresion OP_OR expresion {
     tsOpOr($1, $2, $3, &$$);
@@ -286,6 +301,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
     | identificador { decvariable = 0;
     $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; $$.es_constante = $1.es_constante;
+    $$.nombre = $1.nombre;
     }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
@@ -295,7 +311,11 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
         $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista; cond=1;
     }
-    | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;}
+    | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;
+        $$.nombre = generarVariableTemporal();
+        $1.nombre = $$.nombre;
+        generaCreacionLista($1);
+    }
     | error ;
 
 varios_identificador: identificador
@@ -314,13 +334,13 @@ identificador: IDENT {
                             addPYC();
                             addNewLine();
                             if(principal){
-                                subProg=1;
+                                decParam = 1;
                                 cWriteCode("extern ");
                                 tipoAtipoC($1);
                                 cWriteIdent($1);
                                 addPYC();
                                 addNewLine();
-                                subProg=0;
+                                decParam = 0;
                             }
                         }
 					}else{
@@ -373,23 +393,23 @@ lista_constantes: lista_constante_booleano {$$.lista=1; $$.tipoDato=TIPOBOOL;}
 
 lista_constante_booleano: CORCHETE_ABRE contenido_lista_booleano CORCHETE_CIERRA;
 
-contenido_lista_booleano: BOOLEANO
-    | BOOLEANO COMA contenido_lista_booleano;
+contenido_lista_booleano: BOOLEANO{nParam=1; TS_subprog_params($1); }
+    | BOOLEANO COMA contenido_lista_booleano{nParam++;TS_subprog_params($1);};
 
 lista_constante_entero: CORCHETE_ABRE contenido_lista_entero CORCHETE_CIERRA;
 
-contenido_lista_entero: CONSTANTE_NUM
-    | CONSTANTE_NUM COMA contenido_lista_entero;
+contenido_lista_entero: CONSTANTE_NUM {nParam=1; TS_subprog_params($1); }
+    | CONSTANTE_NUM COMA contenido_lista_entero{nParam++;TS_subprog_params($1);};
 
 lista_constante_flotante: CORCHETE_ABRE contenido_lista_flotante CORCHETE_CIERRA;
 
-contenido_lista_flotante: CONSTANTE_FLOAT
-    | CONSTANTE_FLOAT COMA contenido_lista_flotante;
+contenido_lista_flotante: CONSTANTE_FLOAT {nParam=1; TS_subprog_params($1); }
+    | CONSTANTE_FLOAT COMA contenido_lista_flotante{nParam++;TS_subprog_params($1);};
 
 lista_constante_car : CORCHETE_ABRE contenido_lista_car CORCHETE_CIERRA;
 
-contenido_lista_car : CONSTANTE_CAR
-    | CONSTANTE_CAR COMA contenido_lista_car;
+contenido_lista_car : CONSTANTE_CAR{nParam=1; TS_subprog_params($1); }
+    | CONSTANTE_CAR COMA contenido_lista_car{nParam++;TS_subprog_params($1);};
 
 %%
 

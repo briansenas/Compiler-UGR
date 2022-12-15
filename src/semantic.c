@@ -17,22 +17,22 @@ int currentFunction = -1;
 
 char* tipoAstring(dtipo tipo){
 
-	char *tipo_str;
+	char *tipo_str = malloc(255);
 	if(!tipo_str)
 		return NULL;
 
     tipo_str=strdup("Desconocido");
 
 	if ( tipo == REAL ) {
-        tipo_str=strdup("Real");
+        tipo_str=strdup("float");
 	} else if (tipo == ENTERO) {
-        tipo_str=strdup("Entero");
+        tipo_str=strdup("int");
 	} else if ( tipo == TIPOBOOL ) {
-       tipo_str = strdup("Booleano");
+       tipo_str = strdup("bool");
 	} else if ( tipo == CARACTER ) {
-       tipo_str = strdup("Caracter");
+       tipo_str = strdup("char");
 	}else if (tipo == TIPOCADENA){
-	    tipo_str = strdup("Cadena");
+	    tipo_str = strdup("string");
 	}else if (tipo== NA){
  	    tipo_str = strdup("NA");
 	}
@@ -145,7 +145,7 @@ int tsSearchId(atributos e){
     int i = TOPE - 1;
 	int found = 0;
 
-	while (i > 0 && !found /*&& ts[i].entrada != MARCA*/) {
+	while (i >= 0 && !found /*&& ts[i].entrada != MARCA*/) {
 		if (ts[i].entrada == VARIABLE && strcmp(e.nombre, ts[i].nombre) == 0) {
 			found = 1;
 		} else{
@@ -1047,9 +1047,11 @@ void abrirArchivos(){
 	fputs("#include <string.h>\n", MAIN);
 	fputs("#include <stdbool.h>\n", MAIN);
 	fputs("#include \"dec_func.c\"\n",MAIN);
+	fputs("#include \"dec_data.c\"\n",MAIN);
     fputs("\n",MAIN);
 	fputs("#include <stdio.h>\n",FUNC);
 	fputs("#include <stdbool.h>\n", FUNC);
+	fputs("#include \"dec_data.c\"\n",FUNC);
 }
 
 void cerrarArchivos(){
@@ -1077,10 +1079,9 @@ void tipoAtipoC(atributos var){
     char* resultado = malloc(255);
 
     if(var.lista)
-        strcpy(resultado,"listade<");
+        strcpy(resultado,"struct listade");
     else
         strcpy(resultado,"");
-
     dtipo tipo = var.tipoDato;
     if ( tipo == ENTERO ) {
 		strcat(resultado, "int ");
@@ -1092,8 +1093,6 @@ void tipoAtipoC(atributos var){
 		strcat(resultado, "char ");
 	}
 
-    if(var.lista)
-        strcat(resultado,">");
 
     if(subProg>0|| decParam)
         fputs(resultado,FUNC);
@@ -1303,11 +1302,11 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
     if(op.attr==0)
        _code = strdup("%s = !%s;\n");
     else if(op.attr==1)
-       _code = strdup("%s = getLongitud(%s);");
+       _code = strdup("%s = getLongitudLista%s(%s);\n");
     else if(op.attr==2)
-       _code = strdup("%s = getActual(%s);");
+       _code = strdup("%s = getActualLista%s(%s);\n");
 
-    snprintf(res->codigo,255,_code,res->nombre, a.nombre);
+    snprintf(res->codigo,255,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
     cWriteCode(res->codigo);
     free(_code);
 }
@@ -1408,7 +1407,7 @@ char* generarFuncion(char* nombre){
 void cWriteLabel(char* etiq1){
     char* etq = malloc(255);
     strcpy(etq,etiq1);
-    strcat(etq,":\n;");
+    strcat(etq,":\n");
     cWriteCode(etq);
     free(etq);
 }
@@ -1426,4 +1425,41 @@ void cWriteFunc(atributos in, atributos* res){
     cWriteCode(resultado);
     free(resultado);
     free(pattern);
+}
+
+void moverCursor(atributos a ){
+    char* pattern;
+    if(a.attr==0){
+    pattern = strdup("retrocederLista%s(&%s);\n");
+    }else if(a.attr==1){
+    pattern = strdup("avanzarLista%s(&%s);\n");
+    }else{
+    pattern = strdup("irAPosicion%s(&%s,0);\n");
+    }
+    char* code = malloc(255);
+    snprintf(code,255,pattern,tipoAstring(a.tipoDato),a.nombre);
+    cWriteCode(code);
+    free(pattern);
+    free(code);
+}
+
+void generaCreacionLista(atributos a){
+    int i = 0;
+    char* res = malloc(255);
+    i=TOPE_SUBPROG-1;
+    char* var_name = malloc(255);
+    snprintf(var_name, 255, "listade%s", tipoAstring(a.tipoDato));
+    snprintf(res,255,"struct %s %s= %s_default;\n",var_name,a.nombre,var_name);
+    cWriteCode(res);
+    var_name = strdup(a.nombre);
+    char* pattern = strdup("insertar%s(&%s,%s);\n");
+    while(i>=0){
+        snprintf(res,255,pattern,tipoAstring(a.tipoDato),var_name,ts_subprog[i].nombre);
+        cWriteCode(res);
+        i--;
+    }
+    TOPE_SUBPROG = 0;
+    free(var_name);
+    free(pattern);
+    free(res);
 }

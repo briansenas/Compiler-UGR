@@ -2,27 +2,21 @@ principal()
 {
     ini_var
         entero ve;
-        entero ve2, ve3;
-        bool bol;
-        bool A, B;
+        listade entero lx;
     fin_var
 
-    entero funcionA(entero add){
-
-        entero funcionB(entero o){
-            devolver ve + o;
-        }
-
-        devolver ve + add;
+    entero funcionA(entero b){
+        devolver b + ve;
     }
 
+    lx = [1,2,3,4];
 
-    ve = 1;
+    imprimir >> "Longitud: " >> #lx >> " \n";
+    imprimir >> "Elemento Actual: " >> ?lx >> " \n";
+    lx>>;
+    imprimir >> "Elemento Actual: " >> ?lx >> " \n";
+    lx<<;
+    imprimir >> "Elemento Actual: " >> ?lx >> " \n";
+    imprimir >> "Elemento Posicion 4: " >> lx@4 >> " \n";
 
-    mientras(ve>0)
-        ve = ve -1;
-
-    imprimir >> ve2;
-
-    devolver 0;
 }

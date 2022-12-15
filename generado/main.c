@@ -3,46 +3,34 @@
 #include <string.h>
 #include <stdbool.h>
 #include "dec_func.c"
+#include "dec_data.c"
 
 
-int n;
-int curr;
+int ve;
+struct listadeint lx;
 int main(){
-printf("%s","introduce un numero : ");
-scanf("%d",&n);
-printf("%d%s",n, " == ");
-curr=2;
-etiqueta_0:
-;int tmp_0;
-tmp_0 = curr <= n;
-if(!tmp_0) goto etiqueta_1;
-int d;
-int tmp_1;
-tmp_1 = n / curr;
-d=tmp_1;
+struct listadeint tmp_1= listadeint_default;
+insertarint(&tmp_1,1);
+insertarint(&tmp_1,2);
+insertarint(&tmp_1,3);
+insertarint(&tmp_1,4);
+lx=tmp_1;
 int tmp_2;
-tmp_2 = d * curr;
+tmp_2 = getLongitudListaint(lx);
+printf("%s%d%s","Longitud: ", tmp_2, " \n");
 int tmp_3;
-tmp_3 = tmp_2 == n;
-if(!tmp_3) goto etiqueta_4;
-printf("%d",curr);
+tmp_3 = getActualListaint(lx);
+printf("%s%d%s","Elemento Actual: ", tmp_3, " \n");
+avanzarListaint(&lx);
 int tmp_4;
-tmp_4 = curr < n;
-if(!tmp_4) goto etiqueta_7;
-printf("%s"," * ");
-etiqueta_7:
-;int tmp_5;
-tmp_5 = n / curr;
-n=tmp_5;
-goto etiqueta_3 ;
-etiqueta_4:
-;int tmp_6;
-tmp_6 = curr + 1;
-curr=tmp_6;
-etiqueta_3:
-;goto etiqueta_0 ;
-etiqueta_1:
-;printf("%s","\n");
-return 0;
+tmp_4 = getActualListaint(lx);
+printf("%s%d%s","Elemento Actual: ", tmp_4, " \n");
+retrocederListaint(&lx);
+int tmp_5;
+tmp_5 = getActualListaint(lx);
+printf("%s%d%s","Elemento Actual: ", tmp_5, " \n");
+int tmp_6;
+tmp_6 = getElementoint(lx,4);
+printf("%s%d%s","Elemento Posicion 4: ", tmp_6, " \n");
 
 }
