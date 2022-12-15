@@ -16,7 +16,7 @@ principal()
         entero d;
       fin_var
       d = n/curr;
-        
+
       si ( d * curr == n)
       {
         si (curr != ultim){
@@ -24,7 +24,7 @@ principal()
           cuenta = 1;
         }sino
           cuenta = cuenta+1;
-          
+
 
         n = n / curr;
       }
@@ -37,7 +37,7 @@ principal()
             si (cuenta > 1) imprimir << "^" << cuenta;
         }
       }
-        
+
         curr = curr + 1;
         cuenta = 0;
     }
@@ -51,5 +51,5 @@ principal()
 
     imprimir << "\n";
 
-    devolver 0; 
+    devolver 0;
 }

@@ -1371,8 +1371,6 @@ void generarS(char* E_S){
     strcpy(res,E_S);
     while(i<TOPE_SUBPROG){
         strcat(res,tipoAprintf(ts_subprog[i].tipoDato));
-        if(i<TOPE_SUBPROG-1)
-            strcat(res,", ");
         i++;
     }
     i=0;

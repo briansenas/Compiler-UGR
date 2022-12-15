@@ -251,7 +251,6 @@ void cerrarArchivos();
 void cMarkIn();
 void cMarkOut();
 void tipoAtipoC();
-void cSubProgParams();
 void addNewLine();
 void addPYC();
 void addCOMMA();

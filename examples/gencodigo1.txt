@@ -10,15 +10,17 @@ principal()
     imprimir << n << " == ";
     curr = 2;
 
-    mientras( curr <= n){ 
+    mientras( curr <= n){
       ini_var
         entero d;
       fin_var
       d = n/curr;
-        
+
       si ( d * curr == n)
       {
-        imprimir << " * %d " << curr;
+        imprimir << curr;
+        si(curr < n)
+            imprimir << " * ";
         n = n / curr;
       }
       sino
@@ -27,5 +29,5 @@ principal()
 
     imprimir << "\n";
 
-    devolver 0; 
+    devolver 0;
 }
