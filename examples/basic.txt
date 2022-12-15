@@ -13,12 +13,14 @@ principal()
             lx>>;
             ve = ve + 1;
         }
+        imprimir >> "\n";
     }
 
     lx = [1,2,3,4];
     lx2 = [5,6];
 
     imprimir >> "Longitud: " >> #lx >> " \n";
+    ve = imprimirlista(lx);
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";
     lx>>;
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";

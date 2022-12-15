@@ -75,7 +75,10 @@ struct listadeint borrarListaint(struct listadeint l,int a){
 
 struct listadeint concatenerListas(struct listadeint l, struct listadeint l2){
     if(l.last_pos + l2.last_pos < l.longitud){
-        memcpy(l.var + l.last_pos, l2.var,l2.last_pos*sizeof(int));
+        int j = 0;
+        for(int i=l.last_pos;i<l2.last_pos;i++){
+            *(l.var+i) = *(l2.var+j);
+        }
         l.last_pos += l2.last_pos;
     }else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
