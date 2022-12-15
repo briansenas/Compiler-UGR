@@ -2,6 +2,7 @@ principal()
 {
     ini_var
         entero ve;
+        entero ve2;
         listade entero lx;
         listade entero lx2;
     fin_var
@@ -36,5 +37,7 @@ principal()
     lx = lx**lx2;
     imprimir >> "Elemento Longitud Lx nueva: " >> #lx >> " \n";
     ve = imprimirlista(lx);
-    imprimir >> "\n";
+
+    lx = lx--1;
+    ve = imprimirlista(lx);
 }

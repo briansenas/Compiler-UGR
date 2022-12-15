@@ -76,6 +76,7 @@ extern atributos ts_subprog[MAX_SUBPROG];
 extern char* tipoAstring(dtipo tipo);
 extern void tsCheckLeftList(atributos l, atributos o, atributos* ref);
 extern int tsCheckList(atributos l);
+extern int sigsig;
 
 // Línea del fichero que se está analizando
 extern int line;

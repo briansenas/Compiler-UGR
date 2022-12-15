@@ -46,8 +46,8 @@ ESPACIO					[" "]
 ")"                              { if(DEBUGGING) ECHO; return(PARENTESIS_CIERRA);}
 "("                              { if(DEBUGGING) ECHO; return(PARENTESIS_ABRE);}
 ";"                              { if(DEBUGGING) ECHO; return(PYC);}
-"++"                             { if(DEBUGGING) ECHO; return(SIGSIG);}
-"--"                             { if(DEBUGGING) ECHO; return(SIGSIG);}
+"++"                             { if(DEBUGGING) ECHO; yylval.attr=0; return(SIGSIG);}
+"--"                             { if(DEBUGGING) ECHO; yylval.attr=1; return(SIGSIG);}
 "@"                              { if(DEBUGGING) ECHO; return(OP_TERNARIO);}
 "!"                              { if(DEBUGGING) ECHO; yylval.attr=0; return(OP_UNARIO);}
 "#"                              { if(DEBUGGING) ECHO; yylval.attr=1; return(OP_UNARIO);}

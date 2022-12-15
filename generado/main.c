@@ -7,6 +7,7 @@
 
 
 int ve;
+int ve2;
 struct listadeint lx;
 struct listadeint lx2;
 int main(){
@@ -57,6 +58,11 @@ printf("%s%d%s","Elemento Longitud Lx nueva: ", tmp_15, " \n");
 int tmp_16;
 tmp_16 = imprimirlista(lx);
 ve=tmp_16;
-printf("%s","\n");
+struct listadeint tmp_17;
+tmp_17 = removeElementint(lx,1);
+lx=tmp_17;
+int tmp_18;
+tmp_18 = imprimirlista(lx);
+ve=tmp_18;
 
 }

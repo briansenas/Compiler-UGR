@@ -496,9 +496,12 @@ void tsCheckLeftList(atributos l, atributos a, atributos* res){
 
 	int index = tsSearchId(l);
 	//printf("\n%d\n",ts[index].lista);
-	if(!ts[index].lista || a.tipoDato!=ENTERO){
-		printf("Semantic Error(%d): El operador @ solo funciona con listas y enteros",line);
-	}
+    if(!sigsig){
+        if(!ts[index].lista || a.tipoDato!=ENTERO){
+            printf("Semantic Error(%d): El operador @ solo funciona con listas y enteros",line);
+        }
+        sigsig = 0;
+    }
 
 	res->tipoDato = ts[index].tipoDato;
 	res->lista = 0;
@@ -998,6 +1001,7 @@ int cond = 0;
 int isIf = 0;
 FILE* MAIN;
 FILE* FUNC;
+int sigsig = 0;
 int TS_ETIQ = 0;
 etiquetas ts_etiq[50];
 

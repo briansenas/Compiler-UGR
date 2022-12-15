@@ -31,11 +31,11 @@ void yyerror(const char * mensaje);
 %left OP_IGUALDAD
 %left OP_RELACION
 %left OP_ADITIVO
-%left SIGSIG
 %left OP_MULTIPLICATIVO
 
 %right OP_UNARIO
 %left OP_TERNARIO
+%left SIGSIG
 
 %token OP_ASIGNACION
 %token BOOLEANO
@@ -239,6 +239,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoUnario($2,$1,&$$);
     }
     | expresion OP_TERNARIO CONSTANTE_NUM {
+    if(!sigsig){
     tsCheckLeftList($1,$3,&$$);
     $$.nombre = generarVariableTemporal();
     int a = tsSearchId($1);
@@ -248,7 +249,13 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     snprintf(res,255,"%s = getElemento%s(%s,%s);\n", $$.nombre,
     tipoAstring(ts[a].tipoDato),
     $1.nombre,$3.nombre);
+    $$.codigo = malloc(255);
+    $$.codigo = $3.nombre;
     cWriteCode(res);
+    }else{
+        $$.nombre = $1.nombre;
+        $$.codigo = $3.nombre;
+    }
     }
     | expresion OP_OR expresion {
     tsOpOr($1, $2, $3, &$$);
@@ -298,7 +305,10 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     tsOpSign($1, $2, &$$);
     generaSigno($1,$2, &$$);
     } %prec OP_UNARIO
-    | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
+    | sigsig{
+    sigsig = 1;
+
+    }
     | identificador {
     decvariable = 0;
     $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; $$.es_constante = $1.es_constante;
@@ -306,7 +316,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | constante {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
-        $$.tamDimen2 = $1.tamDimen2; $$.nombre = $1.nombre;
+        $$.tamDimen2 = $1.tamDimen2; $$.nombre = $1.nombre; $$.codigo = $1.codigo;
     }
     | funcion {
         $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
@@ -318,6 +328,24 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
         generaCreacionLista($1);
     }
     | error ;
+
+sigsig:expresion SIGSIG expresion {
+    tsOpSignSign($1, $2, $3, &$$);
+    $$.nombre = generarVariableTemporal();
+    int index = tsSearchId($1);
+    generaCodigoVariableTemporal($1,&$$);
+    char* res = malloc(255);
+    if($2.attr==1){
+        snprintf(res,255,"%s = removeElement%s(%s,%s);\n", $$.nombre,
+        tipoAstring(ts[index].tipoDato),ts[index].nombre,$3.nombre);
+        cWriteCode(res);
+    }else{
+        snprintf(res,255,"%s = addElementAt%s(%s,%s,%s);\n",
+        $$.nombre, tipoAstring(ts[index].tipoDato),$1.nombre,$3.nombre,$3.codigo
+        );
+        cWriteCode(res);
+    }
+      };
 
 varios_identificador: identificador
     | varios_identificador COMA identificador;

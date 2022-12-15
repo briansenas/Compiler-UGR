@@ -65,10 +65,10 @@ extern int yydebug;
     OP_IGUALDAD = 266,             /* OP_IGUALDAD  */
     OP_RELACION = 267,             /* OP_RELACION  */
     OP_ADITIVO = 268,              /* OP_ADITIVO  */
-    SIGSIG = 269,                  /* SIGSIG  */
-    OP_MULTIPLICATIVO = 270,       /* OP_MULTIPLICATIVO  */
-    OP_UNARIO = 271,               /* OP_UNARIO  */
-    OP_TERNARIO = 272,             /* OP_TERNARIO  */
+    OP_MULTIPLICATIVO = 269,       /* OP_MULTIPLICATIVO  */
+    OP_UNARIO = 270,               /* OP_UNARIO  */
+    OP_TERNARIO = 271,             /* OP_TERNARIO  */
+    SIGSIG = 272,                  /* SIGSIG  */
     OP_ASIGNACION = 273,           /* OP_ASIGNACION  */
     BOOLEANO = 274,                /* BOOLEANO  */
     CONSTANTE_NUM = 275,           /* CONSTANTE_NUM  */

@@ -3,6 +3,7 @@
 #include "dec_data.c"
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 extern int ve;
+extern int ve2;
 extern struct listadeint lx;
 extern struct listadeint lx2;
 int imprimirlista(struct listadeint b)
@@ -26,6 +27,7 @@ ve=tmp_3;
 }
 goto etiqueta_0 ;
 etiqueta_1:
+printf("%s","\n");
 
 }
 

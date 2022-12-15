@@ -991,12 +991,12 @@ YY_RULE_SETUP
 case 24:
 YY_RULE_SETUP
 #line 49 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; return(SIGSIG);}
+{ if(DEBUGGING) ECHO; yylval.attr=0; return(SIGSIG);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 50 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; return(SIGSIG);}
+{ if(DEBUGGING) ECHO; yylval.attr=1; return(SIGSIG);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP

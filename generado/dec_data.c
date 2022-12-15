@@ -16,7 +16,7 @@ void insertarint(struct listadeint* l, int a){
         l->var = malloc(sizeof(int)*255);
     }
     if(l->last_pos < l->longitud){
-        *(l->var+l->last_pos+1) = a;
+        *(l->var+l->last_pos) = a;
         l->last_pos++;
     }else{
         printf("OVERFLOW ERROR, lists only support 255 numbers");
@@ -75,11 +75,19 @@ struct listadeint borrarListaint(struct listadeint l,int a){
 
 struct listadeint concatenerListas(struct listadeint l, struct listadeint l2){
     if(l.last_pos + l2.last_pos < l.longitud){
-        int j = 0;
-        for(int i=l.last_pos;i<l2.last_pos;i++){
-            *(l.var+i) = *(l2.var+j);
-        }
+        memcpy(l.var+l.last_pos,l2.var,sizeof(int)*l2.last_pos);
         l.last_pos += l2.last_pos;
+    }else{
+        printf("\n[ERROR]: Out-of-bounds exception\n");
+        exit(-1);
+    }
+    return l;
+}
+
+struct listadeint removeElementint(struct listadeint l, int a){
+    if(a>0 && a < l.last_pos){
+        memcpy(l.var+a,l.var+l.last_pos-a-1,sizeof(int)*(l.last_pos-a-1));
+        l.last_pos -= 1;
     }else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
         exit(-1);
