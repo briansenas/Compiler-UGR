@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "dec_data.c"
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 extern int ve;
 extern struct listadeint lx;
 int funcionA(int b)

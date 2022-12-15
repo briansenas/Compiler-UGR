@@ -32,5 +32,12 @@ printf("%s%d%s","Elemento Actual: ", tmp_5, " \n");
 int tmp_6;
 tmp_6 = getElementoint(lx,4);
 printf("%s%d%s","Elemento Posicion 4: ", tmp_6, " \n");
+printf("%s","Borrando lista por la mitad \n");
+struct listadeint tmp_7;
+tmp_7 = borrarListaint(lx,2);
+lx=tmp_7;
+int tmp_8;
+tmp_8 = getLongitudListaint(lx);
+printf("%s%d%s","Elemento Longitud nueva: ", tmp_8, " \n");
 
 }

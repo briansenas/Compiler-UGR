@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #ifndef DEC_DATA_H
 #define DEC_DATA_H
 
@@ -58,5 +59,17 @@ int getElementoint(struct listadeint l, int a){
 
 int getLongitudListaint(struct listadeint l){
     return l.last_pos;
+}
+struct listadeint borrarListaint(struct listadeint l,int a){
+    if(a < l.last_pos){
+        l.var = (l.var+a);
+        l.last_pos -= a;
+        l.actual = MIN(l.actual-a,0);
+    }else{
+        printf("\n[ERROR]: Out-of-bounds exception\n");
+        exit(-1);
+    }
+
+    return l;
 }
 #endif

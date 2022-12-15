@@ -19,4 +19,9 @@ principal()
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";
     imprimir >> "Elemento Posicion 4: " >> lx@4 >> " \n";
 
+
+    imprimir >> "Borrando lista por la mitad \n";
+    lx = lx%2;
+
+    imprimir >> "Elemento Longitud nueva: " >> #lx >> " \n";
 }

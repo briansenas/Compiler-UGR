@@ -1052,6 +1052,7 @@ void abrirArchivos(){
 	fputs("#include <stdio.h>\n",FUNC);
 	fputs("#include <stdbool.h>\n", FUNC);
 	fputs("#include \"dec_data.c\"\n",FUNC);
+    fputs("#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))\n",FUNC);
 }
 
 void cerrarArchivos(){
@@ -1256,11 +1257,19 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
        _code = strdup("%s = %s * %s;\n");
     else if(op.attr==1)
        _code = strdup("%s = %s / %s;\n");
-    else if(op.attr==2)
-       _code = strdup("%s = %s %% %s;\n");
-    else if(op.attr==3)
+    else if(op.attr==2){
+        if(!a.lista)
+            _code = strdup("%s = %s %% %s;\n");
+        else
+            _code = strdup("%s = borrarLista%s(%s,%s);\n");
+    }else if(op.attr==3)
        _code = strdup("%s = %s ** %s;\n");
-    snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+
+    if(!a.lista)
+        snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    else
+        snprintf(res->codigo,255,_code,res->nombre,tipoAstring(a.tipoDato),
+                a.nombre, b.nombre);
     cWriteCode(res->codigo);
     free(_code);
 }
