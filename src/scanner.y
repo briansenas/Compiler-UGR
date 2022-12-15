@@ -73,13 +73,13 @@ programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam 
 
 bloque: INI_BLOQUE
         {tsAddMark();
-        if(!principal && !cond)
+        if(!principal )
             cMarkIn();
         }
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        if(subProg && !cond){
+        if(subProg ){
             cMarkOut();
             cond = 0;
         }
@@ -328,7 +328,6 @@ identificador: IDENT {
                         $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
 						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
-                        $$.nombre = $1.nombre;
                         tsAddId($1);
                         if(!decParam) {
                             tipoAtipoC($1);

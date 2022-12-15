@@ -6,8 +6,13 @@ principal()
         listade entero lx2;
     fin_var
 
-    entero funcionA(entero b){
-        devolver b + ve;
+    entero imprimirlista(listade entero b){
+        ve = 0;
+        mientras(ve<#b){
+            imprimir >> ?lx >> "\t";
+            lx>>;
+            ve = ve + 1;
+        }
     }
 
     lx = [1,2,3,4];
@@ -27,6 +32,7 @@ principal()
     imprimir >> "Elemento Longitud nueva: " >> #lx >> " \n";
     imprimir >> "Concatenando listas...\n";
     lx = lx**lx2;
-
     imprimir >> "Elemento Longitud Lx nueva: " >> #lx >> " \n";
+    ve = imprimirlista(lx);
+    imprimir >> "\n";
 }
