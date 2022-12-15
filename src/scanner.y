@@ -299,7 +299,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaSigno($1,$2, &$$);
     } %prec OP_UNARIO
     | expresion SIGSIG expresion {tsOpSignSign($1, $2, $3, &$$); }
-    | identificador { decvariable = 0;
+    | identificador {
+    decvariable = 0;
     $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; $$.es_constante = $1.es_constante;
     $$.nombre = $1.nombre;
     }
@@ -327,6 +328,7 @@ identificador: IDENT {
                         $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
 						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
+                        $$.nombre = $1.nombre;
                         tsAddId($1);
                         if(!decParam) {
                             tipoAtipoC($1);

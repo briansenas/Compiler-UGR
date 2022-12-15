@@ -4,6 +4,7 @@
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 extern int ve;
 extern struct listadeint lx;
+extern struct listadeint lx2;
 int funcionA(int b)
 {
 int tmp_0;

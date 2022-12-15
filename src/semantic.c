@@ -1263,11 +1263,11 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
         else
             _code = strdup("%s = borrarLista%s(%s,%s);\n");
     }else if(op.attr==3)
-       _code = strdup("%s = %s ** %s;\n");
+       _code = strdup("%s = concatenerListas(%s,%s);\n");
 
-    if(!a.lista)
+    if(!a.lista || op.attr==3)
         snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
-    else
+    else if(op.attr==2)
         snprintf(res->codigo,255,_code,res->nombre,tipoAstring(a.tipoDato),
                 a.nombre, b.nombre);
     cWriteCode(res->codigo);

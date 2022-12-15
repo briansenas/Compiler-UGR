@@ -3,6 +3,7 @@ principal()
     ini_var
         entero ve;
         listade entero lx;
+        listade entero lx2;
     fin_var
 
     entero funcionA(entero b){
@@ -10,6 +11,7 @@ principal()
     }
 
     lx = [1,2,3,4];
+    lx2 = [5,6];
 
     imprimir >> "Longitud: " >> #lx >> " \n";
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";
@@ -22,6 +24,9 @@ principal()
 
     imprimir >> "Borrando lista por la mitad \n";
     lx = lx%2;
-
     imprimir >> "Elemento Longitud nueva: " >> #lx >> " \n";
+    imprimir >> "Concatenando listas...\n";
+    lx = lx**lx2;
+
+    imprimir >> "Elemento Longitud Lx nueva: " >> #lx >> " \n";
 }
