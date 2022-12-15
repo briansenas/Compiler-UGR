@@ -13,16 +13,16 @@ principal()
             devolver ve + o;
         }
 
-        devolver ve + add; 
+        devolver ve + add;
     }
 
 
-    ve = 1; 
+    ve = 1;
 
-    ve2 = funcionB(ve);
-    ve2 = funcionA(ve);
+    mientras(ve>0)
+        ve = ve -1;
 
-    imprimir >> ve2; 
+    imprimir >> ve2;
 
-    devolver 0; 
+    devolver 0;
 }

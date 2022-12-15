@@ -182,7 +182,7 @@ enum yysymbol_kind_t
   YYSYMBOL_sentencia_si = 70,              /* sentencia_si  */
   YYSYMBOL_71_15 = 71,                     /* $@15  */
   YYSYMBOL_sentencia_mientras = 72,        /* sentencia_mientras  */
-  YYSYMBOL_73_16 = 73,                     /* @16  */
+  YYSYMBOL_73_16 = 73,                     /* $@16  */
   YYSYMBOL_cond_mientras = 74,             /* cond_mientras  */
   YYSYMBOL_75_17 = 75,                     /* @17  */
   YYSYMBOL_cuerpo_mientras = 76,           /* cuerpo_mientras  */
@@ -604,13 +604,13 @@ static const yytype_int16 yyrline[] =
      105,   108,   108,   109,   111,   111,   112,   114,   114,   116,
      117,   122,   128,   128,   129,   129,   131,   132,   133,   133,
      134,   134,   135,   136,   137,   138,   143,   149,   166,   174,
-     181,   181,   194,   194,   214,   213,   223,   225,   229,   230,
-     232,   231,   237,   241,   241,   243,   245,   251,   257,   260,
-     266,   272,   278,   286,   292,   300,   306,   310,   311,   314,
-     318,   322,   323,   325,   326,   328,   359,   360,   362,   366,
-     371,   372,   373,   374,   376,   377,   379,   396,   414,   415,
-     417,   418,   419,   420,   422,   424,   425,   427,   429,   430,
-     432,   434,   435,   437,   439,   440
+     181,   181,   194,   194,   212,   211,   222,   224,   228,   229,
+     231,   230,   236,   240,   240,   242,   244,   250,   256,   259,
+     265,   271,   277,   283,   289,   297,   303,   307,   308,   311,
+     315,   319,   320,   322,   323,   325,   356,   357,   359,   363,
+     368,   369,   370,   371,   373,   374,   376,   393,   411,   412,
+     414,   415,   416,   417,   419,   421,   422,   424,   426,   427,
+     429,   431,   432,   434,   436,   437
 };
 #endif
 
@@ -640,7 +640,7 @@ static const char *const yytname[] =
   "cuerpo_declar_variables", "$@8", "cabecera_subprog", "$@9",
   "parametros", "$@10", "lista_parametros", "sentencias", "$@11", "$@12",
   "sentencia", "$@13", "$@14", "sentencia_asignacion", "sentencia_primera",
-  "sentencia_si", "$@15", "sentencia_mientras", "@16", "cond_mientras",
+  "sentencia_si", "$@15", "sentencia_mientras", "$@16", "cond_mientras",
   "@17", "cuerpo_mientras", "sentencia_entrada", "lista_variables", "$@18",
   "sentencia_salida", "sentencia_retorno", "@19", "expresion",
   "varios_identificador", "identificador", "lista_expresiones_o_cadena",
@@ -1648,13 +1648,13 @@ yyreduce:
 
   case 14: /* $@6: %empty  */
 #line 94 "./src/scanner.y"
-                                  {subProg=1; addNewLine(); }
+                                  {subProg++; addNewLine(); }
 #line 1653 "src/y.tab.c"
     break;
 
   case 15: /* declar_subprog: cabecera_subprog $@6 bloque  */
 #line 94 "./src/scanner.y"
-                                                                     {addNewLine();  subProg=0; }
+                                                                     {addNewLine();  subProg--; }
 #line 1659 "src/y.tab.c"
     break;
 
@@ -1836,184 +1836,181 @@ yyreduce:
 #line 1837 "src/y.tab.c"
     break;
 
-  case 52: /* @16: %empty  */
+  case 52: /* $@16: %empty  */
 #line 194 "./src/scanner.y"
                              {
-                    printf("bk1");
                   yyvsp[0].nombre=generarEtiqueta();
                   char* etiqueta = malloc(255);
                   strcpy(etiqueta,yyvsp[0].nombre);
-                  strcat(etiqueta,":\n{\n");
+                  strcat(etiqueta,":\n");
                   cWriteCode(etiqueta);
                   }
-#line 1850 "src/y.tab.c"
+#line 1849 "src/y.tab.c"
     break;
 
-  case 53: /* sentencia_mientras: MIENTRAS @16 cond_mientras  */
-#line 201 "./src/scanner.y"
+  case 53: /* sentencia_mientras: MIENTRAS $@16 cond_mientras  */
+#line 200 "./src/scanner.y"
                                   {
-                    printf("bk2");
                   char* res = malloc(255);
                   strcpy(res,"goto ");
                   strcat(res, yyvsp[-2].nombre);
-                  strcat(res,";\n}\n");
+                  strcat(res,";\n");
                   cWriteCode(res);
-                  strcpy(res,yyvsp[-1].nombre);
+                  strcpy(res,yyvsp[0].nombre);
                   strcat(res,"\n");
                   cWriteCode(res);
                   }
-#line 1866 "src/y.tab.c"
+#line 1864 "src/y.tab.c"
     break;
 
   case 54: /* @17: %empty  */
-#line 214 "./src/scanner.y"
+#line 212 "./src/scanner.y"
         {
-        printf("bk3");
+        yyval.nombre = malloc(255);
         generaCodigoSi(&yyvsp[-2],yyvsp[-1]);
+        yyval.etiq1 = yyvsp[-2].etiq1;
         strcpy(yyval.nombre,yyvsp[-2].nombre);
         if(yyvsp[-1].tipoDato != TIPOBOOL){
                 printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
         }
         }
-#line 1879 "src/y.tab.c"
+#line 1878 "src/y.tab.c"
     break;
 
   case 57: /* sentencia_entrada: ENTRADA DIRECCION lista_variables PYC  */
-#line 225 "./src/scanner.y"
+#line 224 "./src/scanner.y"
                                                          {
                  generarE("scanf(\"");
                  }
-#line 1887 "src/y.tab.c"
+#line 1886 "src/y.tab.c"
     break;
 
   case 58: /* lista_variables: identificador  */
-#line 229 "./src/scanner.y"
+#line 228 "./src/scanner.y"
                                {TS_subprog_params(yyvsp[0]); }
-#line 1893 "src/y.tab.c"
+#line 1892 "src/y.tab.c"
     break;
 
   case 60: /* $@18: %empty  */
-#line 232 "./src/scanner.y"
+#line 231 "./src/scanner.y"
                 {TS_subprog_params(yyvsp[-2]); }
-#line 1899 "src/y.tab.c"
+#line 1898 "src/y.tab.c"
     break;
 
   case 61: /* lista_variables: identificador DIRECCION identificador $@18  */
-#line 233 "./src/scanner.y"
+#line 232 "./src/scanner.y"
                 {TS_subprog_params(yyvsp[-1]); }
-#line 1905 "src/y.tab.c"
+#line 1904 "src/y.tab.c"
     break;
 
   case 62: /* sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC  */
-#line 237 "./src/scanner.y"
+#line 236 "./src/scanner.y"
                                                                    {
                 generarS("printf(\"");
                 }
-#line 1913 "src/y.tab.c"
+#line 1912 "src/y.tab.c"
     break;
 
   case 63: /* @19: %empty  */
-#line 241 "./src/scanner.y"
+#line 240 "./src/scanner.y"
                                       {tsCheckReturn(yyvsp[0], &yyval); generaCodigoReturn(yyvsp[0]);}
-#line 1919 "src/y.tab.c"
+#line 1918 "src/y.tab.c"
     break;
 
   case 65: /* expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA  */
-#line 243 "./src/scanner.y"
+#line 242 "./src/scanner.y"
                                                        {
     yyval.tipoDato = yyvsp[-1].tipoDato; yyval.nDim = yyvsp[-1].nDim; yyval.tamDimen1 = yyvsp[-1].tamDimen1; yyval.tamDimen2 = yyvsp[-1].tamDimen2; }
-#line 1926 "src/y.tab.c"
+#line 1925 "src/y.tab.c"
     break;
 
   case 66: /* expresion: OP_UNARIO expresion  */
-#line 245 "./src/scanner.y"
+#line 244 "./src/scanner.y"
                           {
     tsOpUnary(yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre=generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[0],&yyval);
     generaCodigoUnario(yyvsp[-1],yyvsp[0],&yyval);
     }
-#line 1937 "src/y.tab.c"
+#line 1936 "src/y.tab.c"
     break;
 
   case 67: /* expresion: expresion OP_UNARIO  */
-#line 251 "./src/scanner.y"
+#line 250 "./src/scanner.y"
                           {
     tsOpUnary(yyvsp[0], yyvsp[-1], &yyval);
     yyval.nombre=generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-1],&yyval);
     generaCodigoUnario(yyvsp[0],yyvsp[-1],&yyval);
     }
-#line 1948 "src/y.tab.c"
+#line 1947 "src/y.tab.c"
     break;
 
   case 68: /* expresion: expresion OP_TERNARIO CONSTANTE_NUM  */
-#line 257 "./src/scanner.y"
+#line 256 "./src/scanner.y"
                                           {
     tsCheckLeftList(yyvsp[-2],yyvsp[0],&yyval);
     }
-#line 1956 "src/y.tab.c"
+#line 1955 "src/y.tab.c"
     break;
 
   case 69: /* expresion: expresion OP_OR expresion  */
-#line 260 "./src/scanner.y"
+#line 259 "./src/scanner.y"
                                 {
     tsOpOr(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigo("%s = %s || %s;\n", yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
     }
-#line 1967 "src/y.tab.c"
+#line 1966 "src/y.tab.c"
     break;
 
   case 70: /* expresion: expresion OP_AND expresion  */
-#line 266 "./src/scanner.y"
+#line 265 "./src/scanner.y"
                                  {
     tsOpAnd(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigo("%s = %s && %s;\n", yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
     }
-#line 1978 "src/y.tab.c"
+#line 1977 "src/y.tab.c"
     break;
 
   case 71: /* expresion: expresion OP_XOR expresion  */
-#line 272 "./src/scanner.y"
+#line 271 "./src/scanner.y"
                                  {
     tsOpXOr(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigo("%s = %s ^ %s;\n", yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
     }
-#line 1989 "src/y.tab.c"
+#line 1988 "src/y.tab.c"
     break;
 
   case 72: /* expresion: expresion OP_RELACION expresion  */
-#line 278 "./src/scanner.y"
+#line 277 "./src/scanner.y"
                                       {
-
-    printf("bk4");
     tsOpRel(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigoOpRelacion(yyvsp[-2],yyvsp[-1],yyvsp[0],&yyval);
     }
-#line 2002 "src/y.tab.c"
+#line 1999 "src/y.tab.c"
     break;
 
   case 73: /* expresion: expresion OP_MULTIPLICATIVO expresion  */
-#line 286 "./src/scanner.y"
+#line 283 "./src/scanner.y"
                                             {
     tsOpMul(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigoOpMultiplicativo(yyvsp[-2],yyvsp[-1],yyvsp[0],&yyval);
     }
-#line 2013 "src/y.tab.c"
+#line 2010 "src/y.tab.c"
     break;
 
   case 74: /* expresion: expresion OP_IGUALDAD expresion  */
-#line 292 "./src/scanner.y"
+#line 289 "./src/scanner.y"
                                       {
     tsOpEqual(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
@@ -2022,69 +2019,69 @@ yyreduce:
     snprintf(yyval.codigo,255,"%s = %s == %s;\n",yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
     cWriteCode(yyval.codigo);
     }
-#line 2026 "src/y.tab.c"
+#line 2023 "src/y.tab.c"
     break;
 
   case 75: /* expresion: expresion OP_ADITIVO expresion  */
-#line 300 "./src/scanner.y"
+#line 297 "./src/scanner.y"
                                      {
     tsOpAdditivo(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
     generaCodigoOpAditivo(yyvsp[-2],yyvsp[-1],yyvsp[0],&yyval);
     }
-#line 2037 "src/y.tab.c"
+#line 2034 "src/y.tab.c"
     break;
 
   case 76: /* expresion: OP_ADITIVO expresion  */
-#line 306 "./src/scanner.y"
+#line 303 "./src/scanner.y"
                            {
     tsOpSign(yyvsp[-1], yyvsp[0], &yyval);
     generaSigno(yyvsp[-1],yyvsp[0], &yyval);
     }
-#line 2046 "src/y.tab.c"
+#line 2043 "src/y.tab.c"
     break;
 
   case 77: /* expresion: expresion SIGSIG expresion  */
-#line 310 "./src/scanner.y"
+#line 307 "./src/scanner.y"
                                  {tsOpSignSign(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval); }
-#line 2052 "src/y.tab.c"
+#line 2049 "src/y.tab.c"
     break;
 
   case 78: /* expresion: identificador  */
-#line 311 "./src/scanner.y"
+#line 308 "./src/scanner.y"
                     { decvariable = 0;
     yyval.tipoDato = yyvsp[0].tipoDato; yyval.lista = yyvsp[0].lista; yyval.es_constante = yyvsp[0].es_constante;
     }
-#line 2060 "src/y.tab.c"
+#line 2057 "src/y.tab.c"
     break;
 
   case 79: /* expresion: constante  */
-#line 314 "./src/scanner.y"
+#line 311 "./src/scanner.y"
                 {
         yyval.tipoDato = yyvsp[0].tipoDato; yyval.nDim = yyvsp[0].nDim; yyval.tamDimen1 = yyvsp[0].tamDimen1;
         yyval.tamDimen2 = yyvsp[0].tamDimen2; yyval.nombre = yyvsp[0].nombre;
     }
-#line 2069 "src/y.tab.c"
+#line 2066 "src/y.tab.c"
     break;
 
   case 80: /* expresion: funcion  */
-#line 318 "./src/scanner.y"
+#line 315 "./src/scanner.y"
               {
         yyval.tipoDato = yyvsp[0].tipoDato; yyval.nDim = yyvsp[0].nDim; yyval.tamDimen1 = yyvsp[0].tamDimen1;
         yyval.tamDimen2 = yyvsp[0].tamDimen2; yyval.lista = yyvsp[0].lista; cond=1;
     }
-#line 2078 "src/y.tab.c"
+#line 2075 "src/y.tab.c"
     break;
 
   case 81: /* expresion: lista_constantes  */
-#line 322 "./src/scanner.y"
+#line 319 "./src/scanner.y"
                        {yyval.tipoDato = yyvsp[0].tipoDato;yyval.lista = yyvsp[0].lista;}
-#line 2084 "src/y.tab.c"
+#line 2081 "src/y.tab.c"
     break;
 
   case 85: /* identificador: IDENT  */
-#line 328 "./src/scanner.y"
+#line 325 "./src/scanner.y"
                      {
                     if(decvariable == 1){
 						yyvsp[0].nDim=0; yyvsp[0].tamDimen1 = 0; yyvsp[0].tamDimen2 = 0;
@@ -2112,65 +2109,65 @@ yyreduce:
                             tsGetId(yyvsp[0], &yyval);
 					}
 				}
-#line 2116 "src/y.tab.c"
+#line 2113 "src/y.tab.c"
     break;
 
   case 88: /* expresion_o_cadena: expresion  */
-#line 362 "./src/scanner.y"
+#line 359 "./src/scanner.y"
                              {
                   yyval.tipoDato = yyvsp[0].tipoDato;
                   TS_subprog_params(yyvsp[0]);
                   }
-#line 2125 "src/y.tab.c"
+#line 2122 "src/y.tab.c"
     break;
 
   case 89: /* expresion_o_cadena: CADENA  */
-#line 366 "./src/scanner.y"
+#line 363 "./src/scanner.y"
                            {
                   yyval.tipoDato = yyvsp[0].tipoDato;
                   TS_subprog_params(yyvsp[0]);
                   }
-#line 2134 "src/y.tab.c"
+#line 2131 "src/y.tab.c"
     break;
 
   case 90: /* constante: BOOLEANO  */
-#line 371 "./src/scanner.y"
+#line 368 "./src/scanner.y"
                     { yyval.tipoDato = TIPOBOOL; yyval.nDim = 0; yyval.tamDimen1 = 0; yyval.tamDimen2 = 0; yyval.nombre = yyvsp[0].nombre; }
-#line 2140 "src/y.tab.c"
+#line 2137 "src/y.tab.c"
     break;
 
   case 91: /* constante: CONSTANTE_NUM  */
-#line 372 "./src/scanner.y"
+#line 369 "./src/scanner.y"
                 { yyval.tipoDato = ENTERO; yyval.nDim = 0; yyval.tamDimen1 = 0; yyval.tamDimen2 = 0; yyval.nombre = yyvsp[0].nombre; }
-#line 2146 "src/y.tab.c"
+#line 2143 "src/y.tab.c"
     break;
 
   case 92: /* constante: CONSTANTE_FLOAT  */
-#line 373 "./src/scanner.y"
+#line 370 "./src/scanner.y"
                   { yyval.tipoDato = REAL; yyval.nDim = 0; yyval.tamDimen1 = 0; yyval.tamDimen2 = 0; yyval.nombre = yyvsp[0].nombre; }
-#line 2152 "src/y.tab.c"
+#line 2149 "src/y.tab.c"
     break;
 
   case 93: /* constante: CONSTANTE_CAR  */
-#line 374 "./src/scanner.y"
+#line 371 "./src/scanner.y"
                 { yyval.tipoDato = CARACTER; yyval.nDim = 0; yyval.tamDimen1 = 0; yyval.tamDimen2 = 0; yyval.nombre = yyvsp[0].nombre; }
-#line 2158 "src/y.tab.c"
+#line 2155 "src/y.tab.c"
     break;
 
   case 94: /* tipo: TIPO_DATO  */
-#line 376 "./src/scanner.y"
+#line 373 "./src/scanner.y"
                 {yyval.tipoDato = yyvsp[0].tipoDato;yyval.lista=0;}
-#line 2164 "src/y.tab.c"
+#line 2161 "src/y.tab.c"
     break;
 
   case 95: /* tipo: LISTA TIPO_DATO  */
-#line 377 "./src/scanner.y"
+#line 374 "./src/scanner.y"
                       {yyval.tipoDato = yyvsp[0].tipoDato; yyval.lista=1;}
-#line 2170 "src/y.tab.c"
+#line 2167 "src/y.tab.c"
     break;
 
   case 96: /* funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA  */
-#line 379 "./src/scanner.y"
+#line 376 "./src/scanner.y"
                                                                    {
             yyval.nombre = generarVariableTemporal();
             int index = tsSearchName(yyvsp[-3]);
@@ -2188,11 +2185,11 @@ yyreduce:
             tsFunctionCall(yyvsp[-3],&yyval);
             strcpy(yyval.nombre, resultado);
         }
-#line 2192 "src/y.tab.c"
+#line 2189 "src/y.tab.c"
     break;
 
   case 97: /* funcion: IDENT PARENTESIS_ABRE PARENTESIS_CIERRA  */
-#line 396 "./src/scanner.y"
+#line 393 "./src/scanner.y"
                                                  {
             yyval.nombre = generarVariableTemporal();
             int index = tsSearchName(yyvsp[-2]);
@@ -2210,47 +2207,47 @@ yyreduce:
             tsFunctionCall(yyvsp[-2],&yyval);
             strcpy(yyval.nombre, resultado);
        }
-#line 2214 "src/y.tab.c"
+#line 2211 "src/y.tab.c"
     break;
 
   case 98: /* lista_expresiones: lista_expresiones COMA expresion  */
-#line 414 "./src/scanner.y"
+#line 411 "./src/scanner.y"
                                                     {nParam++;TS_subprog_params(yyvsp[0]);}
-#line 2220 "src/y.tab.c"
+#line 2217 "src/y.tab.c"
     break;
 
   case 99: /* lista_expresiones: expresion  */
-#line 415 "./src/scanner.y"
+#line 412 "./src/scanner.y"
                              {nParam=1;TS_subprog_params(yyvsp[0]);}
-#line 2226 "src/y.tab.c"
+#line 2223 "src/y.tab.c"
     break;
 
   case 100: /* lista_constantes: lista_constante_booleano  */
-#line 417 "./src/scanner.y"
+#line 414 "./src/scanner.y"
                                            {yyval.lista=1; yyval.tipoDato=TIPOBOOL;}
-#line 2232 "src/y.tab.c"
+#line 2229 "src/y.tab.c"
     break;
 
   case 101: /* lista_constantes: lista_constante_entero  */
-#line 418 "./src/scanner.y"
+#line 415 "./src/scanner.y"
                             {yyval.lista=1;yyval.tipoDato=ENTERO;}
-#line 2238 "src/y.tab.c"
+#line 2235 "src/y.tab.c"
     break;
 
   case 102: /* lista_constantes: lista_constante_flotante  */
-#line 419 "./src/scanner.y"
+#line 416 "./src/scanner.y"
                               {yyval.lista=1;yyval.tipoDato=REAL;}
-#line 2244 "src/y.tab.c"
+#line 2241 "src/y.tab.c"
     break;
 
   case 103: /* lista_constantes: lista_constante_car  */
-#line 420 "./src/scanner.y"
+#line 417 "./src/scanner.y"
                          {yyval.lista=1;yyval.tipoDato=CARACTER;}
-#line 2250 "src/y.tab.c"
+#line 2247 "src/y.tab.c"
     break;
 
 
-#line 2254 "src/y.tab.c"
+#line 2251 "src/y.tab.c"
 
       default: break;
     }
@@ -2474,7 +2471,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 442 "./src/scanner.y"
+#line 439 "./src/scanner.y"
 
 
 #include "lex.yy.c"

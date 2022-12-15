@@ -91,7 +91,7 @@ cuerpo_bloque: declar_de_variables_locales
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog:  cabecera_subprog {subProg=1; addNewLine(); } bloque {addNewLine();  subProg=0; };
+declar_subprog:  cabecera_subprog {subProg++; addNewLine(); } bloque {addNewLine();  subProg--; };
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;
              if(principal){
@@ -192,28 +192,27 @@ sentencia_si: sentencia_primera sentencia
         };
 
 sentencia_mientras: MIENTRAS {
-                    printf("bk1");
                   $1.nombre=generarEtiqueta();
                   char* etiqueta = malloc(255);
                   strcpy(etiqueta,$1.nombre);
-                  strcat(etiqueta,":\n{\n");
+                  strcat(etiqueta,":\n");
                   cWriteCode(etiqueta);
                   } cond_mientras {
-                    printf("bk2");
                   char* res = malloc(255);
                   strcpy(res,"goto ");
                   strcat(res, $1.nombre);
-                  strcat(res,";\n}\n");
+                  strcat(res,";\n");
                   cWriteCode(res);
-                  strcpy(res,$2.nombre);
+                  strcpy(res,$3.nombre);
                   strcat(res,"\n");
                   cWriteCode(res);
                   };
 
 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
         {
-        printf("bk3");
+        $$.nombre = malloc(255);
         generaCodigoSi(&$1,$2);
+        $$.etiq1 = $1.etiq1;
         strcpy($$.nombre,$1.nombre);
         if($2.tipoDato != TIPOBOOL){
                 printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
@@ -276,8 +275,6 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigo("%s = %s ^ %s;\n", $$.nombre, $1.nombre, $3.nombre);
     }
     | expresion OP_RELACION expresion {
-
-    printf("bk4");
     tsOpRel($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal($1,&$$);
@@ -392,7 +389,7 @@ funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
             strcpy(resultado,$$.nombre);
             tsFunctionCall($1,&$$);
             strcpy($$.nombre, resultado);
-        };
+        }
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             int index = tsSearchName($1);

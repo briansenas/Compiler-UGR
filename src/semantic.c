@@ -252,7 +252,7 @@ void tsAddMark(){
 
     // Se añaden a la tabla de símbolos los parámetros de la función como las
     // variableiables locales de ese bloque
-	if(subProg == 1){
+	if(subProg>0){
 
 		int j = TOPE - 2, mark = 0, funct = 0;
 
@@ -1057,7 +1057,7 @@ void cerrarArchivos(){
 }
 
 void cMarkOut(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs("\n}\n",FUNC);
     else
         fputs("\n}\n",MAIN);
@@ -1065,7 +1065,7 @@ void cMarkOut(){
 }
 
 void cMarkIn(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs("{\n",FUNC);
     else
         fputs("{\n",MAIN);
@@ -1094,7 +1094,7 @@ void tipoAtipoC(atributos var){
     if(var.lista)
         strcat(resultado,">");
 
-    if(subProg || decParam)
+    if(subProg>0|| decParam)
         fputs(resultado,FUNC);
     else
         fputs(resultado,MAIN);
@@ -1103,41 +1103,41 @@ void tipoAtipoC(atributos var){
 }
 
 void addNewLine(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs("\n",FUNC);
     else
         fputs("\n",MAIN);
 }
 
 void addPYC(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(";",FUNC);
     else
         fputs(";",MAIN);
 }
 
 void addCOMMA(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(",",FUNC);
     else
         fputs(",",MAIN);
 }
 void addPAR_A(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs("(",FUNC);
     else
         fputs("(",MAIN);
 }
 
 void addPAR_C(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(")",FUNC);
     else
         fputs(")",MAIN);
 }
 
 void addASSIGN(){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs("=",FUNC);
     else
         fputs("=",MAIN);
@@ -1153,7 +1153,7 @@ char* getADD(int a){
 }
 
 void addADD(atributos a){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(getADD(a.attr),FUNC);
     else
         fputs(getADD(a.attr),MAIN);
@@ -1189,7 +1189,7 @@ void cWriteIdent(atributos a){
     else
         strcpy(tmp,ts[index].nombre);
 
-    if(subProg || decParam)
+    if(subProg>0|| decParam)
         fputs(tmp,FUNC);
     else
         fputs(tmp,MAIN);
@@ -1198,14 +1198,14 @@ void cWriteIdent(atributos a){
 }
 
 void cWriteName(atributos a){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(a.nombre,FUNC);
     else
         fputs(a.nombre,MAIN);
 }
 
 void cWriteCode(char* code){
-    if(subProg || decParam)
+    if(subProg>0 || decParam)
         fputs(code,FUNC);
     else
         fputs(code,MAIN);
@@ -1317,6 +1317,7 @@ void generaCodigoSi(atributos* a, atributos exp){
     strcat(_code,exp.nombre);
     strcat(_code,") goto ");
     a->nombre = malloc(255);
+    a->etiq1 = generarEtiqueta();
     strcpy(a->nombre,a->etiq1);
     strcat(_code,a->nombre);
     strcat(a->nombre,":");
