@@ -94,9 +94,9 @@ Grammar
 
    52 sentencia_mientras: MIENTRAS $@16 cond_mientras
 
-   53 @17: ε
+   53 $@17: ε
 
-   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 cuerpo_mientras
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@17 cuerpo_mientras
 
    55 cuerpo_mientras: sentencia
 
@@ -334,7 +334,7 @@ Nonterminals, with rules where they appear
     cond_mientras (74)
         on left: 54
         on right: 52
-    @17 (75)
+    $@17 (75)
         on left: 53
         on right: 54
     cuerpo_mientras (76)
@@ -2407,7 +2407,7 @@ State 163
 
 State 164
 
-   54 cond_mientras: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA @17 cuerpo_mientras
+   54 cond_mientras: PARENTESIS_ABRE • expresion PARENTESIS_CIERRA $@17 cuerpo_mientras
 
     error            shift, and go to state 67
     OP_ADITIVO       shift, and go to state 68
@@ -2563,7 +2563,7 @@ State 177
 
 State 178
 
-   54 cond_mientras: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA @17 cuerpo_mientras
+   54 cond_mientras: PARENTESIS_ABRE expresion • PARENTESIS_CIERRA $@17 cuerpo_mientras
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
    68          | expresion • OP_OR expresion
@@ -2639,16 +2639,16 @@ State 182
 
 State 183
 
-   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA • @17 cuerpo_mientras
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA • $@17 cuerpo_mientras
 
-    $default  reduce using rule 53 (@17)
+    $default  reduce using rule 53 ($@17)
 
-    @17  go to state 184
+    $@17  go to state 184
 
 
 State 184
 
-   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 • cuerpo_mientras
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@17 • cuerpo_mientras
 
     INI_BLOQUE  shift, and go to state 22
     ENTRADA     shift, and go to state 47
@@ -2681,6 +2681,6 @@ State 185
 
 State 186
 
-   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA @17 cuerpo_mientras •
+   54 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA $@17 cuerpo_mientras •
 
     $default  reduce using rule 54 (cond_mientras)

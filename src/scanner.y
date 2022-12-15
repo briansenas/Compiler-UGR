@@ -173,47 +173,26 @@ sentencia_primera: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA{
                  }
 sentencia_si: sentencia_primera sentencia
             {
-        char* etq = malloc(255);
-        strcpy(etq,$1.etiq1);
-        strcat(etq,":\n;");
-        cWriteCode(etq);
+            cWriteLabel($1.etiq1);
         }
         | sentencia_primera sentencia SINO {
             generaGOTO($1.etiq2);
-            char* etq = malloc(255);
-            strcpy(etq,$1.etiq1);
-            strcat(etq,":\n;");
-            cWriteCode(etq);
+            cWriteLabel($1.etiq1);
         }sentencia{
-            char* etq = malloc(255);
-            strcpy(etq,$1.etiq2);
-            strcat(etq,":\n;");
-            cWriteCode(etq);
+            cWriteLabel($1.etiq2);
         };
 
 sentencia_mientras: MIENTRAS {
-                  $1.nombre=generarEtiqueta();
-                  char* etiqueta = malloc(255);
-                  strcpy(etiqueta,$1.nombre);
-                  strcat(etiqueta,":\n");
-                  cWriteCode(etiqueta);
+                  $1.etiq1=generarEtiqueta();
+                  cWriteLabel($1.etiq1);
                   } cond_mientras {
-                  char* res = malloc(255);
-                  strcpy(res,"goto ");
-                  strcat(res, $1.nombre);
-                  strcat(res,";\n");
-                  cWriteCode(res);
-                  strcpy(res,$3.nombre);
-                  strcat(res,"\n");
-                  cWriteCode(res);
+                  generaGOTO($1.etiq1);
+                  cWriteLabel($3.etiq1);
                   };
 
 cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
         {
-        $$.nombre = malloc(255);
         generaCodigoSi(&$1,$2);
-        $$.etiq1 = $1.etiq1;
-        strcpy($$.nombre,$1.nombre);
         if($2.tipoDato != TIPOBOOL){
                 printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
         }
@@ -335,13 +314,13 @@ identificador: IDENT {
                             addPYC();
                             addNewLine();
                             if(principal){
-                            subProg=1;
-                            cWriteCode("extern ");
-                            tipoAtipoC($1);
-                            cWriteIdent($1);
-                            addPYC();
-                            addNewLine();
-                            subProg=0;
+                                subProg=1;
+                                cWriteCode("extern ");
+                                tipoAtipoC($1);
+                                cWriteIdent($1);
+                                addPYC();
+                                addNewLine();
+                                subProg=0;
                             }
                         }
 					}else{
@@ -375,37 +354,13 @@ tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
 
 funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
-            int index = tsSearchName($1);
-            atributos a;
-            a.lista = ts[index].lista;
-            a.nombre = ts[index].nombre;
-            a.tipoDato = ts[index].tipoDato;
-            generaCodigoVariableTemporal(a,&$$);
-            char* resultado = malloc(255);
-            strcpy(resultado,$$.nombre);
-            strcat(resultado," = ");
-            strcat(resultado,generarFuncion($1.nombre));
-            cWriteCode(resultado);
-            strcpy(resultado,$$.nombre);
+            cWriteFunc($1,&$$);
             tsFunctionCall($1,&$$);
-            strcpy($$.nombre, resultado);
         }
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
-            int index = tsSearchName($1);
-            atributos a;
-            a.lista = ts[index].lista;
-            a.nombre = ts[index].nombre;
-            a.tipoDato = ts[index].tipoDato;
-            generaCodigoVariableTemporal(a,&$$);
-            char* resultado = malloc(255);
-            strcpy(resultado,$$.nombre);
-            strcat(resultado," = ");
-            strcat(resultado,generarFuncion($1.nombre));
-            cWriteCode(resultado);
-            strcpy(resultado,$$.nombre);
+            cWriteFunc($1,&$$);
             tsFunctionCall($1,&$$);
-            strcpy($$.nombre, resultado);
        };
 
 lista_expresiones: lista_expresiones COMA expresion {nParam++;TS_subprog_params($3);}

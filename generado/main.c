@@ -5,24 +5,39 @@
 #include "dec_func.c"
 
 
-int ve;
-int ve2;
-int ve3;
-bool bol;
-bool A;
-bool B;
+int n;
+int curr;
 int main(){
-ve=1;
+printf("%s","introduce un numero : ");
+scanf("%d",&n);
+printf("%d, %s",n, " == ");
+curr=2;
 etiqueta_0:
+;int tmp_0;
+tmp_0 = curr <= n;
+if(!tmp_0) goto etiqueta_1;
+int d;
+int tmp_1;
+tmp_1 = n / curr;
+d=tmp_1;
 int tmp_2;
-tmp_2 = ve > 0;
-if(!tmp_2) goto etiqueta_1;
+tmp_2 = d * curr;
 int tmp_3;
-tmp_3 = ve - 1;
-ve=tmp_3;
-goto etiqueta_0;
+tmp_3 = tmp_2 == n;
+if(!tmp_3) goto etiqueta_4;
+printf("%s, %d"," * %d ", curr);
+int tmp_4;
+tmp_4 = n / curr;
+n=tmp_4;
+goto etiqueta_3 ;
+etiqueta_4:
+;int tmp_5;
+tmp_5 = curr + 1;
+curr=tmp_5;
+etiqueta_3:
+;goto etiqueta_0 ;
 etiqueta_1:
-printf("%d",ve2);
+;printf("%s","\n");
 return 0;
 
 }

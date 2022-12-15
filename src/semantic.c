@@ -17,24 +17,24 @@ int currentFunction = -1;
 
 char* tipoAstring(dtipo tipo){
 
-	char *tipo_str = malloc(255);
+	char *tipo_str;
 	if(!tipo_str)
 		return NULL;
 
-    strcpy(tipo_str,"Desconocido");
+    tipo_str=strdup("Desconocido");
 
 	if ( tipo == REAL ) {
-        strcpy(tipo_str,"Real");
+        tipo_str=strdup("Real");
 	} else if (tipo == ENTERO) {
-        strcpy(tipo_str,"Entero");
+        tipo_str=strdup("Entero");
 	} else if ( tipo == TIPOBOOL ) {
-        strcpy(tipo_str,"Booleano");
+       tipo_str = strdup("Booleano");
 	} else if ( tipo == CARACTER ) {
-        strcpy(tipo_str,"Caracter");
+       tipo_str = strdup("Caracter");
 	}else if (tipo == TIPOCADENA){
-		strcpy(tipo_str,"Cadena");
+	    tipo_str = strdup("Cadena");
 	}else if (tipo== NA){
-		strcpy(tipo_str,"NA");
+ 	    tipo_str = strdup("NA");
 	}
 
 	return tipo_str;
@@ -844,7 +844,7 @@ void tsFunctionCall(atributos id, atributos* res){
                     TOPE_SUBPROG--;
                 }
                 currentFunction = index;
-                res->nombre = strdup(ts[index].nombre);
+                //res->nombre = strdup(ts[index].nombre);
                 res->tipoDato= ts[index].tipoDato;
                 res->nDim = ts[index].nDim;
 								res->lista = ts[index].lista;
@@ -1003,8 +1003,8 @@ etiquetas ts_etiq[50];
 
 void addDesc(char* resultado){
     etiquetas etiq;
-    etiq.etiqueta = malloc(255);
-    etiq.etiqueta = resultado;
+    etiq.etiqueta;
+    etiq.etiqueta = strdup(resultado);
     ts_etiq[TS_ETIQ] = etiq;
     TS_ETIQ++;
 }
@@ -1014,11 +1014,12 @@ void delDesc(){
 }
 
 void generaGOTO(char* etq){
-    char* resultado = malloc(255);
-    strcpy(resultado, "goto ");
-    strcat(resultado,etq);
-    strcat(resultado, ";\n");
+    char* resultado = malloc(255); ;
+    char* pattern = strdup("goto %s ;\n");
+    snprintf(resultado,255,pattern,etq);
     cWriteCode(resultado);
+    free(pattern);
+    free(resultado);
 }
 
 
@@ -1228,11 +1229,11 @@ void generaCodigoAsignacion(atributos a, atributos b){
 }
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
-    char* _code = malloc(255);
+    char* _code;
     if(op.attr==0)
-        strcpy(_code,"%s = %s + %s;\n");
+       _code = strdup("%s = %s + %s;\n");
     else
-        strcpy(_code,"%s = %s - %s;\n");
+       _code = strdup("%s = %s - %s;\n");
     snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
     cWriteCode(res->codigo);
     free(_code);
@@ -1240,26 +1241,26 @@ void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* re
 
 void generaSigno(atributos op, atributos b, atributos* res){
     res->nombre = malloc(255);
-    char* _code = malloc(255);
+    char* _code;
     if(op.attr==0)
-        strcpy(_code,"+%s");
+       _code = strdup("+%s");
     else
-        strcpy(_code,"-%s");
+       _code = strdup("-%s");
     snprintf(res->nombre,255,_code,b.nombre);
     free(_code);
 }
 
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
-    char* _code = malloc(255);
+    char* _code;
     if(op.attr==0)
-        strcpy(_code,"%s = %s * %s;\n");
+       _code = strdup("%s = %s * %s;\n");
     else if(op.attr==1)
-        strcpy(_code,"%s = %s / %s;\n");
+       _code = strdup("%s = %s / %s;\n");
     else if(op.attr==2)
-        strcpy(_code,"%s = %s %% %s;\n");
+       _code = strdup("%s = %s %% %s;\n");
     else if(op.attr==3)
-        strcpy(_code,"%s = %s ** %s;\n");
+       _code = strdup("%s = %s ** %s;\n");
     snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
     cWriteCode(res->codigo);
     free(_code);
@@ -1267,15 +1268,15 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
 
 void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
-    char* _code = malloc(255);
+    char* _code;
     if(op.attr==0)
-        strcpy(_code,"%s = %s < %s;\n");
+       _code = strdup("%s = %s < %s;\n");
     else if(op.attr==1)
-        strcpy(_code,"%s = %s > %s;\n");
+       _code = strdup("%s = %s > %s;\n");
     else if(op.attr==2)
-        strcpy(_code,"%s = %s <= %s;\n");
+       _code = strdup("%s = %s <= %s;\n");
     else if(op.attr==3)
-        strcpy(_code,"%s = %s >= %s;\n");
+       _code = strdup("%s = %s >= %s;\n");
     snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
     cWriteCode(res->codigo);
     free(_code);
@@ -1297,14 +1298,14 @@ void generaCodigo(char* pattern, char* a, char* b, char* c){
 
 void generaCodigoUnario(atributos op, atributos a, atributos* res){
     res->codigo = malloc(255);
-    char* _code = malloc(255);
+    char* _code ;
 
     if(op.attr==0)
-        strcpy(_code,"%s = !%s;\n");
+       _code = strdup("%s = !%s;\n");
     else if(op.attr==1)
-        strcpy(_code,"%s = getLongitud(%s);");
+       _code = strdup("%s = getLongitud(%s);");
     else if(op.attr==2)
-        strcpy(_code,"%s = getActual(%s);");
+       _code = strdup("%s = getActual(%s);");
 
     snprintf(res->codigo,255,_code,res->nombre, a.nombre);
     cWriteCode(res->codigo);
@@ -1313,32 +1314,27 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
 
 void generaCodigoSi(atributos* a, atributos exp){
     char* _code = malloc(255);
-    strcpy(_code,"if(!");
-    strcat(_code,exp.nombre);
-    strcat(_code,") goto ");
-    a->nombre = malloc(255);
+    char* pattern = strdup("if(!%s) goto %s;\n");
     a->etiq1 = generarEtiqueta();
-    strcpy(a->nombre,a->etiq1);
-    strcat(_code,a->nombre);
-    strcat(a->nombre,":");
-    strcat(_code,";\n");
+    snprintf(_code,255,pattern,exp.nombre,a->etiq1);
     cWriteCode(_code);
     free(_code);
+    free(pattern);
 }
 
 char* tipoAprintf(dtipo tipo) {
-    char* resultado = malloc(3);
+    char* resultado;
 
 	if ( tipo == ENTERO ) {
-		strcpy(resultado , "%d");
+		resultado = strdup( "%d");
 	} else if ( tipo == REAL ) {
-		strcpy(resultado , "%f");
+		resultado = strdup( "%f");
 	} else if ( tipo == TIPOBOOL ) {
-		strcpy(resultado , "%d");
+		resultado = strdup( "%d");
 	} else if ( tipo == CARACTER ) {
-		strcpy(resultado , "%c");
+		resultado = strdup( "%c");
 	} else if ( tipo == TIPOCADENA ) {
-		strcpy(resultado , "%s");
+		resultado = strdup( "%s");
     }
 
 	return resultado;
@@ -1366,6 +1362,7 @@ void generarE(char* E_S){
     strcat(res,");\n");
     cWriteCode(res);
     TOPE_SUBPROG = 0;
+    free(res);
 }
 
 void generarS(char* E_S){
@@ -1389,6 +1386,7 @@ void generarS(char* E_S){
     strcat(res,");\n");
     cWriteCode(res);
     TOPE_SUBPROG = 0;
+    free(res);
 }
 
 
@@ -1407,4 +1405,27 @@ char* generarFuncion(char* nombre){
     strcat(res,");\n");
 
 	return res;
+}
+
+void cWriteLabel(char* etiq1){
+    char* etq = malloc(255);
+    strcpy(etq,etiq1);
+    strcat(etq,":\n;");
+    cWriteCode(etq);
+    free(etq);
+}
+
+void cWriteFunc(atributos in, atributos* res){
+    int index = tsSearchName(in);
+    atributos a;
+    a.lista = ts[index].lista;
+    a.nombre = ts[index].nombre;
+    a.tipoDato = ts[index].tipoDato;
+    generaCodigoVariableTemporal(a,res);
+    char* resultado = malloc(255);
+    char* pattern = strdup("%s = %s");
+    snprintf(resultado,255,pattern,res->nombre,generarFuncion(in.nombre));
+    cWriteCode(resultado);
+    free(resultado);
+    free(pattern);
 }

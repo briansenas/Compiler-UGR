@@ -281,3 +281,5 @@ void generaCodigoSiNo(atributos* a, atributos exp);
 void generarE(char* E_S);
 void generarS(char* E_S);
 char* generarFuncion(char* nombre);
+void cWriteLabel(char* etiq1);
+void cWriteFunc(atributos in, atributos* res);
