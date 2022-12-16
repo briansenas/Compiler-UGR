@@ -10,6 +10,13 @@ And we must comply with the following language processing steps:
 - Semantic Analysis
 - Intermedium code generation based on 4-tuples.
 
+# How to compile?
+Bruh:
+```
+clear && make clean && make && ./bin/scanner < examples/basic.txt && gcc -o main generado/main.c && ./main
+```
+
+# List operations
 The following list operations are available:
 ```
     imprimir >> "Avanzando...\n";
