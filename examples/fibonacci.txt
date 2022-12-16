@@ -17,11 +17,37 @@ principal(){
     }
 
     entero fibonacci(entero in){
+
+        entero multiplicarPorDos(entero mul){
+
+            entero multiplicarSiMisma(entero a){
+                ve = 0;
+                mientras( ve < #lx ){
+                    ve = ?lx;
+                    ve = ve * ve;
+                    lx3 = lx3++ve@ve2;
+                    lx>>;
+                }
+                imprimir >> "Multiplicando Lx * Lx:\n";
+                $lx;
+                ve = imprimirlista(lx);
+                devolver 0;
+            }
+
+            imprimir >> "Multiplicando por:" >> mul >> "\n";
+            lx2 = lx * mul;
+            ve = imprimirlista(lx2);
+            ve = multiplicarSiMisma(ve);
+            devolver 0;
+        }
         last = 0;
         next = 1;
-        lx = lx++1@0;
+        ve = #lx;
+        ve = ve-1;
+        lx = lx++last@ve;
         si(in==1){
-            lx = lx++1@0;
+            ve = #lx;
+            lx = lx++next@ve;
         }
         si(in==2){
             ve = #lx;
@@ -40,10 +66,11 @@ principal(){
 
 
         imprimir >> "Fibonacci en lista:\n";
+        ve = imprimirlista(lx);
+        ve = multiplicarPorDos(2);
         devolver 0;
     }
 
     entrada >> ve;
     ve = fibonacci(ve);
 }
-

@@ -73,16 +73,12 @@ programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam 
 
 bloque: INI_BLOQUE
         {tsAddMark();
-        if(!principal )
+        if(!principal && cond<=0)
             cMarkIn();
         }
         cuerpo_bloque
         FIN_BLOQUE
         {tsCleanIn();
-        if(subProg ){
-            cMarkOut();
-            cond = 0;
-        }
         }
 
 cuerpo_bloque: declar_de_variables_locales
@@ -92,7 +88,8 @@ cuerpo_bloque: declar_de_variables_locales
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog:  cabecera_subprog {subProg++; addNewLine(); } bloque {addNewLine();  subProg--; };
+declar_subprog:  cabecera_subprog {subProg++; addNewLine(); } bloque {addNewLine();  cMarkOut(); subProg--;};
+
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;
              if(principal){
@@ -131,8 +128,8 @@ sentencias: sentencias {decvariable=2;} sentencia
 
 sentencia: bloque
     | sentencia_asignacion
-    | {cond=1;}sentencia_si
-    | {cond=1;}sentencia_mientras
+    | {cond++;}sentencia_si{cond--;}
+    | {cond++;}sentencia_mientras{cond--;}
     | sentencia_entrada
     | sentencia_salida
     | sentencia_retorno
@@ -238,8 +235,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoVariableTemporal($1,&$$);
     generaCodigoUnario($2,$1,&$$);
     }
-    | expresion OP_TERNARIO CONSTANTE_NUM {
-    if(!sigsig){
+    | expresion OP_TERNARIO expresion {
+    if(sigsig<0){
     tsCheckLeftList($1,$3,&$$);
     $$.nombre = generarVariableTemporal();
     int a = tsSearchId($1);
@@ -306,8 +303,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaSigno($1,$2, &$$);
     } %prec OP_UNARIO
     | sigsig{
-    sigsig = 1;
-
+    sigsig++;
     }
     | identificador {
     decvariable = 0;

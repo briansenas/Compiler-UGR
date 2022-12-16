@@ -1354,6 +1354,8 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
     else if(op.attr==2)
        _code = strdup("%s = getActualLista%s(%s);\n");
 
+    res->tipoDato = a.tipoDato;
+
     snprintf(res->codigo,255,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
     cWriteCode(res->codigo);
     free(_code);
