@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #ifndef DEC_DATA_H
 #define DEC_DATA_H
 
@@ -38,7 +38,7 @@ void avanzarListaint(struct listadeint* l){
 }
 
 void irAPosicionint(struct listadeint* l,int a){
-    if(a>0 && a <l->longitud)
+    if(a>=0 && a <l->longitud)
         l->actual = a;
     else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
@@ -48,7 +48,7 @@ void irAPosicionint(struct listadeint* l,int a){
 
 int getElementoint(struct listadeint l, int a){
     int res = -1;
-    if(a>0 && a <l.longitud)
+    if(a>=0 && a<l.last_pos)
         res = *(l.var +a);
     else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
@@ -62,9 +62,8 @@ int getLongitudListaint(struct listadeint l){
 }
 struct listadeint borrarListaint(struct listadeint l,int a){
     if(a < l.last_pos){
-        l.var = (l.var+a);
         l.last_pos -= a;
-        l.actual = MIN(l.actual-a,0);
+        l.actual = MAX(l.actual-a,0);
     }else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
         exit(-1);
@@ -85,7 +84,7 @@ struct listadeint concatenerListas(struct listadeint l, struct listadeint l2){
 }
 
 struct listadeint removeElementint(struct listadeint l, int a){
-    if(a>0 && a < l.last_pos){
+    if(a>=0 && a < l.last_pos){
         memcpy(l.var+a,l.var+l.last_pos-a-1,sizeof(int)*(l.last_pos-a-1));
         l.last_pos -= 1;
     }else{
@@ -93,5 +92,67 @@ struct listadeint removeElementint(struct listadeint l, int a){
         exit(-1);
     }
     return l;
+}
+
+struct listadeint addElementAtint(struct listadeint l, int a, int b){
+    if(a>=0 && a<l.last_pos){
+        memcpy(l.var+a+1,l.var+l.last_pos-(a+1),sizeof(int)*(l.last_pos-(a+1)));
+        *(l.var+a) = b;
+        l.last_pos +=1;
+    }else{
+        printf("\n[ERROR]: Out-of-bounds exception\n");
+        exit(-1);
+    }
+    return l;
+}
+
+struct listadeint IntOperationListaint(struct listadeint l, int a, int op){
+    switch(op){
+        case 0:
+            a *=-1;
+        case 1:
+            for(int i=0;i<l.last_pos;i++){
+                *(l.var+i) = *(l.var+i) + a;
+            }
+            break;
+        case 2:
+            for(int i=0;i<l.last_pos;i++){
+                *(l.var+i) = *(l.var+i) * a;
+            }
+            break;
+        case 3:
+            for(int i=0;i<l.last_pos;i++){
+                *(l.var+i) = *(l.var+i) / a;
+            }
+            break;
+    }
+
+    return l;
+}
+int getIntFromlistaint(struct listadeint l, int a, int op){
+    int res = a;
+    switch(op){
+        case 0:
+            for(int i=0;i<l.last_pos;i++){
+                res -= *(l.var+i);
+            }
+        case 1:
+            for(int i=0;i<l.last_pos;i++){
+                res += *(l.var+i);
+            }
+            break;
+        case 2:
+            for(int i=0;i<l.last_pos;i++){
+                res *= *(l.var+i);
+            }
+            break;
+        case 3:
+            for(int i=0;i<l.last_pos;i++){
+                res /= *(l.var+i);
+            }
+            break;
+    }
+
+    return res;
 }
 #endif

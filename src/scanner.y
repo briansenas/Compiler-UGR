@@ -31,11 +31,11 @@ void yyerror(const char * mensaje);
 %left OP_IGUALDAD
 %left OP_RELACION
 %left OP_ADITIVO
+%right SIGSIG
 %left OP_MULTIPLICATIVO
 
 %right OP_UNARIO
 %left OP_TERNARIO
-%left SIGSIG
 
 %token OP_ASIGNACION
 %token BOOLEANO
@@ -138,14 +138,14 @@ sentencia: bloque
     | sentencia_retorno
     | identificador DIRECCION PYC {
     $2.tipoDato = $1.tipoDato;
-    moverCursor($2);
+    moverCursor($1,$2);
     if(!tsCheckList($1)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
     }
     | DIRECCION identificador PYC {
     $2.tipoDato = $1.tipoDato;
-    moverCursor($1);
+    moverCursor($2, $1);
     if(!tsCheckList($2)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
@@ -341,7 +341,7 @@ sigsig:expresion SIGSIG expresion {
         cWriteCode(res);
     }else{
         snprintf(res,255,"%s = addElementAt%s(%s,%s,%s);\n",
-        $$.nombre, tipoAstring(ts[index].tipoDato),$1.nombre,$3.nombre,$3.codigo
+        $$.nombre, tipoAstring(ts[index].tipoDato),$1.nombre,$3.codigo,$3.nombre
         );
         cWriteCode(res);
     }

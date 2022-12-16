@@ -283,5 +283,5 @@ void generarS(char* E_S);
 char* generarFuncion(char* nombre);
 void cWriteLabel(char* etiq1);
 void cWriteFunc(atributos in, atributos* res);
-void moverCursor(atributos a );
+void moverCursor(atributos a,atributos op);
 void generaCreacionLista(atributos a);

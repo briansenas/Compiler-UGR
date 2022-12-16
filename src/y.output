@@ -202,10 +202,10 @@ Terminals, with rules where they appear
     OP_IGUALDAD (266) 73
     OP_RELACION (267) 71
     OP_ADITIVO (268) 74 75
-    OP_MULTIPLICATIVO (269) 72
-    OP_UNARIO (270) 65 66
-    OP_TERNARIO (271) 67
-    SIGSIG (272) 82
+    SIGSIG (269) 82
+    OP_MULTIPLICATIVO (270) 72
+    OP_UNARIO (271) 65 66
+    OP_TERNARIO (272) 67
     OP_ASIGNACION (273) 46
     BOOLEANO (274) 90 105 106
     CONSTANTE_NUM (275) 67 91 108 109
@@ -1239,10 +1239,10 @@ State 77
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 62 (@19)
 
@@ -1487,10 +1487,10 @@ State 102
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 88 (expresion_o_cadena)
 
@@ -1525,9 +1525,8 @@ State 105
    75          | OP_ADITIVO expresion •
    82 sigsig: expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
-    SIGSIG       shift, and go to state 126
+    OP_UNARIO    shift, and go to state 125
+    OP_TERNARIO  shift, and go to state 126
 
     $default  reduce using rule 75 (expresion)
 
@@ -1546,9 +1545,8 @@ State 106
    74          | expresion • OP_ADITIVO expresion
    82 sigsig: expresion • SIGSIG expresion
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
-    SIGSIG       shift, and go to state 126
+    OP_UNARIO    shift, and go to state 125
+    OP_TERNARIO  shift, and go to state 126
 
     $default  reduce using rule 65 (expresion)
 
@@ -1603,10 +1601,10 @@ State 108
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
     PARENTESIS_CIERRA  shift, and go to state 144
 
 
@@ -1842,7 +1840,7 @@ State 122
 
 State 123
 
-   72 expresion: expresion OP_MULTIPLICATIVO • expresion
+   82 sigsig: expresion SIGSIG • expresion
 
     error            shift, and go to state 67
     OP_ADITIVO       shift, and go to state 68
@@ -1869,21 +1867,7 @@ State 123
 
 State 124
 
-   66 expresion: expresion OP_UNARIO •
-
-    $default  reduce using rule 66 (expresion)
-
-
-State 125
-
-   67 expresion: expresion OP_TERNARIO • CONSTANTE_NUM
-
-    CONSTANTE_NUM  shift, and go to state 160
-
-
-State 126
-
-   82 sigsig: expresion SIGSIG • expresion
+   72 expresion: expresion OP_MULTIPLICATIVO • expresion
 
     error            shift, and go to state 67
     OP_ADITIVO       shift, and go to state 68
@@ -1896,7 +1880,7 @@ State 126
     PARENTESIS_ABRE  shift, and go to state 75
     CORCHETE_ABRE    shift, and go to state 76
 
-    expresion                 go to state 161
+    expresion                 go to state 160
     sigsig                    go to state 78
     identificador             go to state 79
     constante                 go to state 80
@@ -1906,6 +1890,20 @@ State 126
     lista_constante_entero    go to state 84
     lista_constante_flotante  go to state 85
     lista_constante_car       go to state 86
+
+
+State 125
+
+   66 expresion: expresion OP_UNARIO •
+
+    $default  reduce using rule 66 (expresion)
+
+
+State 126
+
+   67 expresion: expresion OP_TERNARIO • CONSTANTE_NUM
+
+    CONSTANTE_NUM  shift, and go to state 161
 
 
 State 127
@@ -1989,10 +1987,10 @@ State 132
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
     PYC                shift, and go to state 167
 
 
@@ -2110,10 +2108,10 @@ State 142
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 99 (lista_expresiones)
 
@@ -2217,10 +2215,10 @@ State 153
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 68 (expresion)
 
@@ -2243,10 +2241,10 @@ State 154
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 69 (expresion)
 
@@ -2268,10 +2266,10 @@ State 155
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 70 (expresion)
 
@@ -2292,10 +2290,10 @@ State 156
 
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 73 (expresion)
 
@@ -2315,10 +2313,10 @@ State 157
    82 sigsig: expresion • SIGSIG expresion
 
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 71 (expresion)
 
@@ -2337,10 +2335,10 @@ State 158
    74          | expresion OP_ADITIVO expresion •
    82 sigsig: expresion • SIGSIG expresion
 
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 74 (expresion)
 
@@ -2354,26 +2352,20 @@ State 159
    70          | expresion • OP_XOR expresion
    71          | expresion • OP_RELACION expresion
    72          | expresion • OP_MULTIPLICATIVO expresion
-   72          | expresion OP_MULTIPLICATIVO expresion •
    73          | expresion • OP_IGUALDAD expresion
    74          | expresion • OP_ADITIVO expresion
    82 sigsig: expresion • SIGSIG expresion
+   82       | expresion SIGSIG expresion •
 
-    OP_UNARIO    shift, and go to state 124
-    OP_TERNARIO  shift, and go to state 125
-    SIGSIG       shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
-    $default  reduce using rule 72 (expresion)
+    $default  reduce using rule 82 (sigsig)
 
 
 State 160
-
-   67 expresion: expresion OP_TERNARIO CONSTANTE_NUM •
-
-    $default  reduce using rule 67 (expresion)
-
-
-State 161
 
    66 expresion: expresion • OP_UNARIO
    67          | expresion • OP_TERNARIO CONSTANTE_NUM
@@ -2382,12 +2374,22 @@ State 161
    70          | expresion • OP_XOR expresion
    71          | expresion • OP_RELACION expresion
    72          | expresion • OP_MULTIPLICATIVO expresion
+   72          | expresion OP_MULTIPLICATIVO expresion •
    73          | expresion • OP_IGUALDAD expresion
    74          | expresion • OP_ADITIVO expresion
    82 sigsig: expresion • SIGSIG expresion
-   82       | expresion SIGSIG expresion •
 
-    $default  reduce using rule 82 (sigsig)
+    OP_UNARIO    shift, and go to state 125
+    OP_TERNARIO  shift, and go to state 126
+
+    $default  reduce using rule 72 (expresion)
+
+
+State 161
+
+   67 expresion: expresion OP_TERNARIO CONSTANTE_NUM •
+
+    $default  reduce using rule 67 (expresion)
 
 
 State 162
@@ -2417,10 +2419,10 @@ State 163
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
     PARENTESIS_CIERRA  shift, and go to state 177
 
 
@@ -2611,10 +2613,10 @@ State 179
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
     PARENTESIS_CIERRA  shift, and go to state 184
 
 
@@ -2652,10 +2654,10 @@ State 182
     OP_IGUALDAD        shift, and go to state 120
     OP_RELACION        shift, and go to state 121
     OP_ADITIVO         shift, and go to state 122
-    OP_MULTIPLICATIVO  shift, and go to state 123
-    OP_UNARIO          shift, and go to state 124
-    OP_TERNARIO        shift, and go to state 125
-    SIGSIG             shift, and go to state 126
+    SIGSIG             shift, and go to state 123
+    OP_MULTIPLICATIVO  shift, and go to state 124
+    OP_UNARIO          shift, and go to state 125
+    OP_TERNARIO        shift, and go to state 126
 
     $default  reduce using rule 98 (lista_expresiones)
 

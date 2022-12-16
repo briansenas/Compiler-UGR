@@ -1234,11 +1234,30 @@ void generaCodigoAsignacion(atributos a, atributos b){
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
     char* _code;
-    if(op.attr==0)
-       _code = strdup("%s = %s + %s;\n");
-    else
-       _code = strdup("%s = %s - %s;\n");
-    snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    if(op.attr==0){
+        if(!a.lista && !b.lista)
+            _code = strdup("%s = %s + %s;\n");
+        if(a.lista && !b.lista)
+            _code = strdup("%s = IntOperationLista%s(%s,%s,1);\n");
+        if(!a.lista && b.lista)
+            _code = strdup("%s = getIntFromlista%s(%s,%s,1);\n");
+    }else{
+        if(!a.lista && !b.lista)
+            _code = strdup("%s = %s - %s;\n");
+        if(a.lista && !b.lista)
+            _code = strdup("%s = IntOperationLista%s(%s,%s,0);\n");
+        if(!a.lista && b.lista)
+            _code = strdup("%s = getIntFromlista%s(%s,%s,0);\n");
+    }
+    if(!a.lista && !b.lista)
+        snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
+    else if(a.lista)
+        snprintf(res->codigo,255,_code,res->nombre, tipoAstring(a.tipoDato), a.nombre, b.nombre);
+    else{
+        int index = tsSearchId(b);
+        snprintf(res->codigo,255,_code,res->nombre,tipoAstring(ts[index].tipoDato),
+                b.nombre, a.nombre);
+    }
     cWriteCode(res->codigo);
     free(_code);
 }
@@ -1257,10 +1276,21 @@ void generaSigno(atributos op, atributos b, atributos* res){
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
     char* _code;
-    if(op.attr==0)
-       _code = strdup("%s = %s * %s;\n");
-    else if(op.attr==1)
-       _code = strdup("%s = %s / %s;\n");
+    if(op.attr==0){
+        if(!a.lista && !b.lista)
+            _code = strdup("%s = %s * %s;\n");
+        if(a.lista && !b.lista)
+            _code = strdup("%s = IntOperationLista%s(%s,%s,2);\n");
+        if(!a.lista && b.lista)
+            _code = strdup("%s = getIntFromlista%s(%s,%s,2);\n");
+    }else if(op.attr==1){
+        if(!a.lista && !b.lista)
+            _code = strdup("%s = %s / %s;\n");
+        if(a.lista && !b.lista)
+            _code = strdup("%s = IntOperationLista%s(%s,%s,3);\n");
+        if(!a.lista && b.lista)
+            _code = strdup("%s = getIntFromlista%s(%s,%s,3);\n");
+    }
     else if(op.attr==2){
         if(!a.lista)
             _code = strdup("%s = %s %% %s;\n");
@@ -1269,11 +1299,16 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
     }else if(op.attr==3)
        _code = strdup("%s = concatenerListas(%s,%s);\n");
 
-    if(!a.lista || op.attr==3)
+    if((!a.lista && !b.lista) || op.attr==3)
         snprintf(res->codigo,255,_code,res->nombre, a.nombre, b.nombre);
-    else if(op.attr==2)
+    else if(a.lista)
         snprintf(res->codigo,255,_code,res->nombre,tipoAstring(a.tipoDato),
                 a.nombre, b.nombre);
+    else{
+        int index = tsSearchId(b);
+        snprintf(res->codigo,255,_code,res->nombre,tipoAstring(ts[index].tipoDato),
+                b.nombre, a.nombre);
+    }
     cWriteCode(res->codigo);
     free(_code);
 }
@@ -1440,17 +1475,18 @@ void cWriteFunc(atributos in, atributos* res){
     free(pattern);
 }
 
-void moverCursor(atributos a ){
+void moverCursor(atributos a,atributos op){
     char* pattern;
-    if(a.attr==0){
+    if(op.attr==0){
     pattern = strdup("retrocederLista%s(&%s);\n");
-    }else if(a.attr==1){
+    }else if(op.attr==1){
     pattern = strdup("avanzarLista%s(&%s);\n");
     }else{
     pattern = strdup("irAPosicion%s(&%s,0);\n");
     }
+    int index = tsSearchId(a);
     char* code = malloc(255);
-    snprintf(code,255,pattern,tipoAstring(a.tipoDato),a.nombre);
+    snprintf(code,255,pattern,tipoAstring(ts[index].tipoDato),a.nombre);
     cWriteCode(code);
     free(pattern);
     free(code);

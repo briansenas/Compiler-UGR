@@ -28,6 +28,7 @@ ve=tmp_3;
 goto etiqueta_0 ;
 etiqueta_1:
 printf("%s","\n");
+irAPosicionint(&lx,0);
 
 }
 

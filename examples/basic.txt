@@ -15,6 +15,7 @@ principal()
             ve = ve + 1;
         }
         imprimir >> "\n";
+        $lx;
     }
 
     lx = [1,2,3,4];
@@ -27,17 +28,45 @@ principal()
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";
     lx<<;
     imprimir >> "Elemento Actual: " >> ?lx >> " \n";
-    imprimir >> "Elemento Posicion 4: " >> lx@4 >> " \n";
+    imprimir >> "Elemento Posicion 3: " >> lx@3 >> " \n";
 
+    $lx;
 
     imprimir >> "Borrando lista por la mitad \n";
     lx = lx%2;
+    ve = imprimirlista(lx);
     imprimir >> "Elemento Longitud nueva: " >> #lx >> " \n";
     imprimir >> "Concatenando listas...\n";
     lx = lx**lx2;
     imprimir >> "Elemento Longitud Lx nueva: " >> #lx >> " \n";
     ve = imprimirlista(lx);
 
+    imprimir >> "Quitando elemento posición 1" >> "\n";
     lx = lx--1;
     ve = imprimirlista(lx);
+    imprimir >> "Añadiendo 1 en la posición 2" >> "\n";
+    lx = lx++1@2;
+    ve = imprimirlista(lx);
+
+    imprimir >> "Sumar 1 a la lista" >> "\n";
+    lx = lx + 1;
+    ve = imprimirlista(lx);
+    imprimir >> "Restar 1 a la lista" >> "\n";
+    lx = lx - 1;
+    ve = imprimirlista(lx);
+    imprimir >> "Multiplicar 2 a la lista" >> "\n";
+    lx = lx * 2;
+    ve = imprimirlista(lx);
+    imprimir >> "Dividir 2 a la lista" >> "\n";
+    lx = lx / 2;
+    ve = imprimirlista(lx);
+
+    ve = 1 + lx;
+    imprimir >> ve >> "\t";
+    ve = 1 - lx;
+    imprimir >> ve >> "\t";
+    ve = 1 * lx;
+    imprimir >> ve >> "\t";
+    ve = 1 / lx;
+    imprimir >> ve >> "\t\n";
 }
