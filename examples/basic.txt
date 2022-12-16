@@ -6,27 +6,63 @@ principal(){
 
     entero imprimirlista(listade entero b){
         ve = 0;
+        ve2 = #b;
         mientras(ve<#b){
-            ve2 = ?lx;
+            ve2 = ?b;
             imprimir >> ve2 >> "\t";
-            lx>>;
+            b>>;
             ve = ve + 1;
         }
         imprimir >> "\n";
-        $lx;
+        $b;
     }
 
     entero fibonacci(entero in){
+
+        entero multiplicarPorDos(entero mul){
+
+            entero multiplicarSiMisma(entero a){
+                ve = 0;
+                $lx;
+                mientras( ve < #lx ){
+                    ve = ?lx;
+                    ve = ve * ve;
+                    ve2 = #lx3;
+                    lx3 = lx3++ve@ve2;
+                    lx>>;
+                }
+                imprimir >> "Multiplicando Lx * Lx:\n";
+                $lx;
+                ve = imprimirlista(lx3);
+                devolver 0;
+            }
+
+            imprimir >> "Multiplicando por:" >> mul >> "\n";
+            lx2 = lx * mul;
+            ve = imprimirlista(lx2);
+            devolver 0;
+        }
+
         last = 0;
         next = 1;
-        lx = lx++1@0;
-        si(in==1){
-            lx = lx++1@0;
-        }
-        si(in==2){
+        ve = #lx;
+        lx = lx++last@ve;
+        si(in<2){
             ve = #lx;
             lx = lx++next@ve;
-        }sino{
+        }
+        sino si(in==2){
+            ve = #lx;
+            lx = lx++next@ve;
+            ve = #lx;
+            lx = lx++next@ve;
+        }
+        sino{
+            ve = #lx;
+            lx = lx++next@ve;
+            ve = #lx;
+            lx = lx++next@ve;
+            last = 1;
             cont = 2;
             mientras(cont < in){
                 suma = last + next ;
@@ -40,10 +76,15 @@ principal(){
 
 
         imprimir >> "Fibonacci en lista:\n";
+        ve = imprimirlista(lx);
+        ve = multiplicarPorDos(2);
         devolver 0;
     }
-
+    imprimir >> "Introduzca un número--->:\n";
     entrada >> ve;
     ve = fibonacci(ve);
+
+    lx = lx**lx;
+    ve = imprimirlista(lx);
 }
 

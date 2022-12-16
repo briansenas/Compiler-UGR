@@ -16,9 +16,16 @@ struct listadeint lx;
 struct listadeint lx2;
 struct listadeint lx3;
 int main(){
+printf("%s","Introduzca un número--->:\n");
 scanf("%d",&ve);
-int tmp_15;
-tmp_15 = fibonacci(ve);
-ve=tmp_15;
+int tmp_35;
+tmp_35 = fibonacci(ve);
+ve=tmp_35;
+struct listadeint tmp_36;
+tmp_36 = concatenerListas(lx,lx);
+lx=tmp_36;
+int tmp_37;
+tmp_37 = imprimirlista(lx);
+ve=tmp_37;
 
 }

@@ -9,7 +9,7 @@
     int actual;
     int longitud;
     int last_pos;
-} listadeint_default = {NULL,0,255,0};
+} listadeint_default = {NULL,0,255,1};
 
 void insertarint(struct listadeint* l, int a){
     if(l->var == NULL){
@@ -33,12 +33,12 @@ void retrocederListaint(struct listadeint* l){
         (*l).actual--;
 }
 void avanzarListaint(struct listadeint* l){
-    if(l->actual<l->longitud)
+    if(l->actual<l->last_pos)
         l->actual++;
 }
 
 void irAPosicionint(struct listadeint* l,int a){
-    if(a>=0 && a <l->longitud)
+    if(a>=0 && a<l->last_pos)
         l->actual = a;
     else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
@@ -73,13 +73,10 @@ struct listadeint borrarListaint(struct listadeint l,int a){
 }
 
 struct listadeint concatenerListas(struct listadeint l, struct listadeint l2){
-    if(l.last_pos + l2.last_pos < l.longitud){
-        memcpy(l.var+l.last_pos,l2.var,sizeof(int)*l2.last_pos);
+        for(int i=0;i<l2.last_pos;i++){
+            *(l.var+l.last_pos+i) = *(l2.var+i);
+        }
         l.last_pos += l2.last_pos;
-    }else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
-        exit(-1);
-    }
     return l;
 }
 
@@ -95,11 +92,20 @@ struct listadeint removeElementint(struct listadeint l, int a){
 }
 
 struct listadeint addElementAtint(struct listadeint l, int a, int b){
-    if(a>=0 && a<l.last_pos){
-        memcpy(l.var+a+1,l.var+l.last_pos-(a+1),sizeof(int)*(l.last_pos-(a+1)));
+    if(l.var == NULL){
+        l.var = malloc(sizeof(int)*255);
+    }
+    if(a>0 && a<=l.last_pos){
+        for(int i=a+1;i<l.last_pos;i++){
+            *(l.var + i) = *(l.var+i-1);
+        }
         *(l.var+a) = b;
         l.last_pos +=1;
-    }else{
+    }else if(a==0){
+        *(l.var+a) = b;
+        l.last_pos++;
+    }
+    else{
         printf("\n[ERROR]: Out-of-bounds exception\n");
         exit(-1);
     }
