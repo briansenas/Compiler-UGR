@@ -47,7 +47,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addNewLine();} bloque {addNewLine(); fputs("}",MAIN); cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addChar('\n');} bloque {addChar('\n'); fputs("}",MAIN); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
@@ -67,7 +67,7 @@ cuerpo_bloque: declar_de_variables_locales
 declar_de_subprogs: declar_de_subprogs declar_subprog
                   |;
 
-declar_subprog:  cabecera_subprog {subProg++; addNewLine(); } bloque {addNewLine();  cMarkOut(); subProg--;};
+declar_subprog:  cabecera_subprog {subProg++; addChar('\n'); } bloque {addChar('\n');  cMarkOut(); subProg--;};
 
 
 declar_de_variables_locales: INI_VAR {decvariable=1;} variables_locales FIN_VAR {decvariable=0;
@@ -85,14 +85,14 @@ variables_locales: variables_locales cuerpo_declar_variables
 cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
                        | error;
 
-cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;tsAddSubprog($2); tipoAtipoC($1); cWriteIdent($2); addPAR_A(); }PARENTESIS_ABRE parametros PARENTESIS_CIERRA{decParam=1; addPAR_C(); decParam=0;}
+cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;tsAddSubprog($2); tipoAtipoC($1); cWriteIdent($2); addChar('('); }PARENTESIS_ABRE parametros PARENTESIS_CIERRA{decParam=1; addChar(')'); decParam=0;}
                 | error ;
 
 parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;}
 
 lista_parametros:
     | lista_parametros COMA tipo identificador { nParam++; setType($3); tsAddParam($4);
-                    addCOMMA();
+                    addChar(',');
                     tipoAtipoC($3);
                     cWriteIdent($4);
     }
@@ -119,7 +119,7 @@ sentencia: bloque
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
     }
-    | DIRECCION identificador PYC {
+    | OP_UNARIO identificador PYC {
     $2.tipoDato = $1.tipoDato;
     moverCursor($2, $1);
     if(!tsCheckList($2)){
@@ -153,6 +153,10 @@ sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
             }
         }
         generaCodigoLambda($1,$3,$5,$7);
+    }
+    | identificador OP_ASIGNACION TIPO_DATO PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA PYC{
+        checkTypes($1,$3);
+        generaCodigoInicializacion($1);
     };
 
 sentencia_primera: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA{
@@ -193,7 +197,7 @@ cond_mientras: PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 cuerpo_mientras: sentencia;
 
 sentencia_entrada: ENTRADA DIRECCION lista_variables PYC {
-                 generarE("scanf(\"");
+                 generarE_S("scanf(\"",0);
                  };
 
 lista_variables: identificador {TS_subprog_params($1); }
@@ -205,7 +209,7 @@ lista_variables: identificador {TS_subprog_params($1); }
 
 
 sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC{
-                generarS("printf(\"");
+                generarE_S("printf(\"",1);
                 };
 
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoReturn($2);} PYC;
@@ -216,9 +220,13 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
+    $$.nombre = malloc(255);
     $$.nombre=generarVariableTemporal();
     $2.lista=0;
+    int tipo = $2.tipoDato;
+    $2.tipoDato = $$.tipoDato;
     generaCodigoVariableTemporal($2,&$$);
+    $2.tipoDato = tipo;
     generaCodigoUnario($1,$2,&$$);
     }
     | OP_INTERR expresion {
@@ -320,6 +328,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | funcion {
         $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; cond=1;
+        $$.nombre = $1.nombre;
     }
     | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;
         $$.nombre = generarVariableTemporal();
@@ -357,15 +366,15 @@ identificador: IDENT {
                         if(!decParam) {
                             tipoAtipoC($1);
                             cWriteIdent($1);
-                            addPYC();
-                            addNewLine();
+                            addChar(';');
+                            addChar('\n');
                             if(principal){
                                 decParam = 1;
                                 cWriteCode("extern ");
                                 tipoAtipoC($1);
                                 cWriteIdent($1);
-                                addPYC();
-                                addNewLine();
+                                addChar(';');
+                                addChar('\n');
                                 decParam = 0;
                             }
                         }
@@ -402,11 +411,13 @@ funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             cWriteFunc($1,&$$);
             tsFunctionCall($1,&$$);
+            $$.nombre = $1.nombre;
         }
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             cWriteFunc($1,&$$);
             tsFunctionCall($1,&$$);
+            $$.nombre = $1.nombre;
        };
 
 lista_expresiones: lista_expresiones COMA expresion {nParam++;TS_subprog_params($3);}

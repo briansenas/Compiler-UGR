@@ -1,7 +1,9 @@
 principal(){
     ini_var
     entero ve, ve2, last, next, suma, cont;
+    real r, i;
     listade entero lx, lx2, lx3;
+    complejo c1;
     fin_var
 
     ve = 5;
@@ -15,5 +17,12 @@ principal(){
     ve = (next > last) ? ve : ve2;
 
     imprimir >> ve >> "\n";
+
+    c1 = complejo(1,2);
+
+    i = $c1;
+    r = #c1;
+
+    imprimir >> r >> " - " >> i >> "i" >> "\n";
 }
 

@@ -39,3 +39,4 @@
 #define OP_IGUALDAD 295
 #define DOS_PUNTOS 296
 #define OP_INTERR 297
+#define COMPLEJO 298

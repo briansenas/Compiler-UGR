@@ -17,6 +17,7 @@ typedef enum {
 	TIPOBOOL,//BOOLEANO,
 	TIPOLISTA,
     TIPOCADENA,
+    COMPLEJO,
 	DESCONOCIDO,
     NA
 
@@ -224,8 +225,8 @@ extern int TS_ETIQ;
 int tsSearchParam(atributos a);
 char* generarEtiqueta(), * generarVariableTemporal();
 void abrirArchivos(), cerrarArchivos();
-void cMarkIn(), cMarkOut(), tipoAtipoC(), addNewLine(), addPYC(), addCOMMA();
-void addPAR_A(), addPAR_C(), addASSIGN(), generaGOTO(char* etq), addDesc(char* resultado);
+void cMarkIn(), cMarkOut(), tipoAtipoC(), addChar(char c);
+void generaGOTO(char* etq), addDesc(char* resultado);
 void delDesc();
 char* getADD(int a), * generarFuncion(char* nombre);
 void writeLastGotos(), addADD(atributos a), cWriteIdent(), cWriteName(), cWriteCode(char* code);
@@ -241,9 +242,10 @@ void generaCodigo(char* pattern, char* a, char* b, char* c);
 void generaCodigoUnario(atributos op, atributos a, atributos* res);
 void generaCodigoSi(atributos* a, atributos exp);
 void generaCodigoSiNo(atributos* a, atributos exp);
-void generarE(char* E_S);
-void generarS(char* E_S);
+void generarE_S(char* E_S, int tipo);
 void cWriteLabel(char* etiq1);
 void cWriteFunc(atributos in, atributos* res);
 void moverCursor(atributos a,atributos op);
 void generaCreacionLista(atributos a);
+void checkTypes(atributos a, atributos b);
+void generaCodigoInicializacion(atributos a);

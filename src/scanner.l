@@ -34,6 +34,7 @@ ESPACIO					[" "]
 "real"                    { if(DEBUGGING) ECHO; yylval.tipoDato=REAL; return(TIPO_DATO);}
 "car"                { if(DEBUGGING) ECHO;      yylval.tipoDato=CARACTER;return(TIPO_DATO);}
 "bool"                { if(DEBUGGING) ECHO;     yylval.tipoDato=TIPOBOOL;return(TIPO_DATO);}
+"complejo"                { if(DEBUGGING) ECHO;    yylval.tipoDato=COMPLEJO; return(TIPO_DATO);}
 "listade"                { if(DEBUGGING) ECHO;    yylval.tipoDato=TIPOLISTA; return(LISTA);}
 "si"                      { if(DEBUGGING) ECHO;       return(SI);}
 "sino"                      { if(DEBUGGING) ECHO;       return(SINO);}
@@ -51,14 +52,13 @@ ESPACIO					[" "]
 "@"                              { if(DEBUGGING) ECHO; return(OP_TERNARIO);}
 "!"                              { if(DEBUGGING) ECHO; yylval.attr=0; return(OP_UNARIO);}
 "#"                              { if(DEBUGGING) ECHO; yylval.attr=1; return(OP_UNARIO);}
-"?"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_INTERR);}
+"$"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_UNARIO);}
+"?"                       { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_INTERR);}
 ":"                       { if(DEBUGGING) ECHO;        yylval.nombre=":";  return(DOS_PUNTOS);}
-"$"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(DIRECCION);}
 "-"                       { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_ADITIVO);}
 "+"                       { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_ADITIVO);}
 "="                       { if(DEBUGGING) ECHO;       return(OP_ASIGNACION);}
 "*"                       { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_MULTIPLICATIVO);}
-"//"                       { if(DEBUGGING) ECHO;      yylval.attr=11; return(OP_MULTIPLICATIVO);}
 "/"                       { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_MULTIPLICATIVO);}
 "%"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
 "**"                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}

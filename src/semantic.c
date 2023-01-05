@@ -369,6 +369,43 @@ int tsCheckList(atributos a){
 	return ts[index].lista;
 }
 
+void checkTypes(atributos a, atributos b){
+    int index = tsSearchId(a);
+    if(index<0){
+			printf("Semantic Error(%d): Identifier not found for assignment.\n",line);
+    }else if(ts[index].tipoDato != b.tipoDato){
+        printf("Semantic Error(%d): La variable %s es de tipo %s pero se asigna el tipo %s \n",
+                line, ts[index].nombre, tipoAstring(ts[index].tipoDato), tipoAstring(b.tipoDato));
+    }
+}
+
+void generaCodigoInicializacion(atributos a){
+    decvariable=1;
+    cWriteIdent(a);
+    addChar('=');
+    if(a.tipoDato==COMPLEJO){
+        char* _pattern = strdup("setComplex(");
+        int i = 0;
+        if(TOPE_SUBPROG!=2){
+			printf("Semantic Error(%d): Wrong number of parameters\n",line);
+        }else{
+            while(i<TOPE_SUBPROG){
+                strcat(_pattern,ts_subprog[i].nombre);
+                if(i<TOPE_SUBPROG-1){
+                    strcat(_pattern,",");
+                }
+                i++;
+            }
+            strcat(_pattern,")");
+            cWriteCode(_pattern);
+        }
+        TOPE_SUBPROG = 0;
+    }
+    addChar(';');
+    addChar('\n');
+    decvariable=2;
+}
+
 // Comprueba si el tipoDatode la expresión coincide con lo que devuelve la función
 void tsCheckReturn(atributos expr, atributos* res){
 
@@ -416,26 +453,28 @@ void tsGetId(atributos id, atributos* res){
 
 }
 
-// Realiza la comprobación de la operación !, &, ~
+// Realiza la comprobación de !, #, $.
 void tsOpUnary(atributos op, atributos o, atributos* res){
 	int index = tsSearchId(o);
-	if (!ts[index].lista && ts[index].tipoDato!=TIPOBOOL) {
-		printf("Semantic Error(%d): Not operator expects logic expression.", line);
-	}else if (ts[index].lista){
-		if(op.attr==0){
-			// Se esta aplicando el operador ! con una lista
-			printf("Semantic Error(%d): Not operator expects logic expression.", line);
-		}else{
-            // se esta aplicando otras operadores unarios con la lista, tipo #.
-			res->tipoDato= ts[index].tipoDato;
-			res->lista = 0;
-			res->es_constante = 1;
-		}
-	}else{
-		res->tipoDato= TIPOBOOL;
-		res->lista = 0;
-		res->es_constante = 0;
-	}
+    if(op.attr==0){
+        // Not operator not available to lists.
+        if(ts[index].lista || ts[index].tipoDato!=TIPOBOOL){
+		    printf("Semantic Error(%d): Not operator expects logic expression.", line);
+        }
+        res->tipoDato= TIPOBOOL;
+    }else{
+        if(ts[index].lista){
+            if(op.attr==1){
+                res->tipoDato= ENTERO;
+            }else{
+		        printf("Semantic Error(%d): Expression not allowed in this context for lists.", line);
+            }
+         }else if(ts[index].tipoDato==COMPLEJO){
+             res->tipoDato = REAL;
+         }
+     }
+    res->lista = 0;
+    res->es_constante = 1;
 }
 
 void tsCheckLeftList(atributos l, atributos a, atributos* res){
@@ -934,11 +973,14 @@ void abrirArchivos(){
 	fputs("#include <stdbool.h>\n", MAIN);
 	fputs("#include \"dec_func.c\"\n",MAIN);
 	fputs("#include \"dec_data.c\"\n",MAIN);
+	fputs("#include \"dec_complex.c\"\n",MAIN);
     fputs("\n",MAIN);
 	fputs("#include <stdio.h>\n",FUNC);
 	fputs("#include <stdbool.h>\n", FUNC);
 	fputs("#include \"dec_data.c\"\n",FUNC);
+	fputs("#include \"dec_complex.c\"\n",FUNC);
     fputs("#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))\n",FUNC);
+    fputs("#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))\n",FUNC);
 }
 
 void cerrarArchivos(){
@@ -978,8 +1020,9 @@ void tipoAtipoC(atributos var){
 		strcat(resultado, "bool ");
 	} else if ( tipo == CARACTER ) {
 		strcat(resultado, "char ");
-	}
-
+	}else if (tipo == COMPLEJO ){
+        strcpy(resultado, "struct complejo ");
+    }
 
     if(subProg>0|| decParam)
         fputs(resultado,FUNC);
@@ -989,45 +1032,14 @@ void tipoAtipoC(atributos var){
     free(resultado);
 }
 
-void addNewLine(){
-    if(subProg>0 || decParam)
-        fputs("\n",FUNC);
-    else
-        fputs("\n",MAIN);
-}
 
-void addPYC(){
+void addChar(char c){
+    char* out = malloc(2);
+    snprintf(out,2,"%c",c);
     if(subProg>0 || decParam)
-        fputs(";",FUNC);
+        fputs(out,FUNC);
     else
-        fputs(";",MAIN);
-}
-
-void addCOMMA(){
-    if(subProg>0 || decParam)
-        fputs(",",FUNC);
-    else
-        fputs(",",MAIN);
-}
-void addPAR_A(){
-    if(subProg>0 || decParam)
-        fputs("(",FUNC);
-    else
-        fputs("(",MAIN);
-}
-
-void addPAR_C(){
-    if(subProg>0 || decParam)
-        fputs(")",FUNC);
-    else
-        fputs(")",MAIN);
-}
-
-void addASSIGN(){
-    if(subProg>0 || decParam)
-        fputs("=",FUNC);
-    else
-        fputs("=",MAIN);
+        fputs(out,MAIN);
 }
 
 char* getADD(int a){
@@ -1101,16 +1113,16 @@ void cWriteCode(char* code){
 void generaCodigoVariableTemporal(atributos a, atributos* res){
     tipoAtipoC(a);
     cWriteCode(res->nombre);
-    addPYC();
-    addNewLine();
+    addChar(';');
+    addChar('\n');
 }
 void generaCodigoAsignacion(atributos a, atributos b){
     decvariable=1;
     cWriteIdent(a);
-    addASSIGN();
+    addChar('=');
     cWriteName(b);
-    addPYC();
-    addNewLine();
+    addChar(';');
+    addChar('\n');
     decvariable=2;
 }
 
@@ -1258,14 +1270,22 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
 
     if(op.attr==0)
        _code = strdup("%s = !%s;\n");
-    else if(op.attr==1)
-       _code = strdup("%s = getLongitudLista%s(%s);\n");
-    else if(op.attr==2)
+    else if(op.attr==1){
+        if(a.lista)
+            _code = strdup("%s = getLongitudLista%s(%s);\n");
+        if(a.tipoDato==COMPLEJO){
+            _code = strdup("%s = getReal(%s);\n");
+        }
+    }if(op.attr==2)
+        _code = strdup("%s = getImaginaria(%s);\n");
+    else if(op.attr==3)
        _code = strdup("%s = getActualLista%s(%s);\n");
 
-    res->tipoDato = a.tipoDato;
-
-    snprintf(res->codigo,255,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
+    if(a.tipoDato==COMPLEJO){
+        snprintf(res->codigo,255,_code,res->nombre, a.nombre);
+    }else{
+        snprintf(res->codigo,255,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
+    }
     cWriteCode(res->codigo);
     free(_code);
 }
@@ -1299,32 +1319,7 @@ char* tipoAprintf(dtipo tipo) {
 	return resultado;
 }
 
-void generarE(char* E_S){
-    int i = 0;
-    char* res = malloc(255);
-    strcpy(res,E_S);
-    while(i<TOPE_SUBPROG){
-        strcat(res,tipoAprintf(ts_subprog[i].tipoDato));
-        if(i<TOPE_SUBPROG-1)
-            strcat(res,", ");
-        i++;
-    }
-    i=0;
-    strcat(res,"\",");
-    while(i<TOPE_SUBPROG){
-				strcat(res,"&");
-        strcat(res,ts_subprog[i].nombre);
-        if(i<TOPE_SUBPROG-1)
-            strcat(res,", ");
-        i++;
-    }
-    strcat(res,");\n");
-    cWriteCode(res);
-    TOPE_SUBPROG = 0;
-    free(res);
-}
-
-void generarS(char* E_S){
+void generarE_S(char* E_S, int tipo){
     int i = 0;
     char* res = malloc(255);
     strcpy(res,E_S);
@@ -1335,6 +1330,8 @@ void generarS(char* E_S){
     i=0;
     strcat(res,"\",");
     while(i<TOPE_SUBPROG){
+        if(tipo==0)
+		    strcat(res,"&");
         strcat(res,ts_subprog[i].nombre);
         if(i<TOPE_SUBPROG-1)
             strcat(res,", ");
