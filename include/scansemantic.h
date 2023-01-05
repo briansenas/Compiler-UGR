@@ -30,15 +30,6 @@ typedef struct {
 	int lista;
 	int es_constante;
 	unsigned int nParam;
-	unsigned int nDim;
-
-	// Tamaño de la dimensión 1
-	int tamDimen1;//tDim1;
-
-	// Tamaño de la dimensión 2
-	int tamDimen2;//tDim2;
-
-
 } entradaTS;
 
 typedef struct {
@@ -51,12 +42,6 @@ typedef struct {
 	dtipo tipoDato;
 	int lista;		// indica si es una lista
 	int es_constante;		// indica si es constante
-	unsigned int nDim;
-	// Tamaño de la dimensión 1
-	int tamDimen1;
-    // Tamaño de la dimensión 2
-	int tamDimen2;
-
 } atributos;
 
 #define YYSTYPE atributos
@@ -108,15 +93,11 @@ extern int aux;
 // Devuelve si el atributo es array o no
 int isList(atributos e);
 
-// Devuelve si los dos posibles arrays que recibe tienen el mismo tamaño
-int equalSize(atributos e1, atributos e2);
-
 // Guarda el tipo de la variable
 int setType(atributos value);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Tabla de Símbolos
-//
 
 // Inserta una entrada en la tabla de símbolos
 int tsAddIn(entradaTS in);
@@ -148,12 +129,10 @@ void tsAddParam(atributos e);
 // Actualiza el número de parámetros de la función
 void tsUpdateNparam(atributos e);
 
-//
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 // Analizador Semántico
-//
 
 // Devuelve la entrada que sea función más cercana
 int tsGetNextFunction();
@@ -208,7 +187,6 @@ void tsCheckParam(atributos param, int checkParam);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Visualización
-//
 
 // Muestra una entrada de la tabla de símbolos
 void printIn(int row);
@@ -220,8 +198,7 @@ void printInType(tipoEntrada tipo);
 void printDataType(dtipo type);
 
 // Muestra la tabla de símbolos
-void printTS();
-void printSPTS();
+void printTS(), printSPTS();
 
 // Muestra un atributo recibido
 void printAttr(atributos e, char *t);
@@ -245,30 +222,16 @@ extern int TS_ETIQ;
 
 
 int tsSearchParam(atributos a);
-char* generarEtiqueta();
-char* generarVariableTemporal();
-void abrirArchivos();
-void cerrarArchivos();
-void cMarkIn();
-void cMarkOut();
-void tipoAtipoC();
-void addNewLine();
-void addPYC();
-void addCOMMA();
-void addPAR_A();
-void addPAR_C();
-void addASSIGN();
-void generaGOTO(char* etq);
-void addDesc(char* resultado);
+char* generarEtiqueta(), * generarVariableTemporal();
+void abrirArchivos(), cerrarArchivos();
+void cMarkIn(), cMarkOut(), tipoAtipoC(), addNewLine(), addPYC(), addCOMMA();
+void addPAR_A(), addPAR_C(), addASSIGN(), generaGOTO(char* etq), addDesc(char* resultado);
 void delDesc();
-char* getADD(int a);
-void writeLastGotos();
-void addADD(atributos a);
-void cWriteIdent();
-void cWriteName();
-void cWriteCode(char* code);
+char* getADD(int a), * generarFuncion(char* nombre);
+void writeLastGotos(), addADD(atributos a), cWriteIdent(), cWriteName(), cWriteCode(char* code);
 void generaCodigoVariableTemporal(atributos a, atributos* res);
 void generaCodigoAsignacion(atributos a, atributos b);
+void generaCodigoLambda(atributos assign, atributos cond, atributos pos, atributos neg);
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res);
 void generaSigno(atributos op, atributos b, atributos* res);
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res);
@@ -280,7 +243,6 @@ void generaCodigoSi(atributos* a, atributos exp);
 void generaCodigoSiNo(atributos* a, atributos exp);
 void generarE(char* E_S);
 void generarS(char* E_S);
-char* generarFuncion(char* nombre);
 void cWriteLabel(char* etiq1);
 void cWriteFunc(atributos in, atributos* res);
 void moverCursor(atributos a,atributos op);

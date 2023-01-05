@@ -37,3 +37,5 @@
 #define OP_AND 293
 #define OP_RELACION 294
 #define OP_IGUALDAD 295
+#define DOS_PUNTOS 296
+#define OP_INTERR 297

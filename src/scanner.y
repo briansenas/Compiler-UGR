@@ -19,12 +19,10 @@ void yyerror(const char * mensaje);
 // A continuación declaramos los nombres simbólicos de los tokens.
 // byacc se encarga de asociar a cada uno un código.
 
-%token INI_VAR
-%token FIN_VAR
-%token PRINCIPAL
-%token INI_BLOQUE
-%token FIN_BLOQUE
+%token INI_VAR FIN_VAR PRINCIPAL INI_BLOQUE FIN_BLOQUE
 
+%left OP_INTERR
+%left DOS_PUNTOS
 %left OP_OR
 %left OP_AND
 %left OP_XOR
@@ -37,32 +35,13 @@ void yyerror(const char * mensaje);
 %right OP_UNARIO
 %left OP_TERNARIO
 
-%token OP_ASIGNACION
-%token BOOLEANO
-%token CONSTANTE_NUM
-%token CONSTANTE_CAR
-%token CONSTANTE_FLOAT
-%token TIPO_DATO
+%token OP_ASIGNACION BOOLEANO CONSTANTE_NUM CONSTANTE_CAR CONSTANTE_FLOAT TIPO_DATO
 
-%token CADENA
-%token LISTA
-%token MIENTRAS
-%token SI
-%token SINO
-%token ENTRADA
-%token IMPRIMIR
-%token DEVOLVER
+%token CADENA LISTA MIENTRAS SI SINO ENTRADA IMPRIMIR DEVOLVER
 
-%token DIRECCION
-%token IDENT
+%token DIRECCION IDENT PARENTESIS_ABRE PARENTESIS_CIERRA CORCHETE_ABRE CORCHETE_CIERRA
 
-%token PARENTESIS_ABRE
-%token PARENTESIS_CIERRA
-%token CORCHETE_ABRE
-%token CORCHETE_CIERRA
-
-%token COMA
-%token PYC
+%token COMA PYC
 
 %start programa
 
@@ -109,15 +88,15 @@ cuerpo_declar_variables: tipo {setType($1);} varios_identificador PYC
 cabecera_subprog: tipo IDENT {decParam = 1;$2.tipoDato = $1.tipoDato;tsAddSubprog($2); tipoAtipoC($1); cWriteIdent($2); addPAR_A(); }PARENTESIS_ABRE parametros PARENTESIS_CIERRA{decParam=1; addPAR_C(); decParam=0;}
                 | error ;
 
-parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;} {$1.nDim=0;}
+parametros: lista_parametros {tsUpdateNparam($1); nParam=0; decParam=0;}
 
 lista_parametros:
-    | lista_parametros COMA tipo identificador {$4.nDim=0; nParam++; setType($3); tsAddParam($4);
+    | lista_parametros COMA tipo identificador { nParam++; setType($3); tsAddParam($4);
                     addCOMMA();
                     tipoAtipoC($3);
                     cWriteIdent($4);
     }
-    | tipo identificador {$2.nDim=0; nParam++; setType($1); tsAddParam($2);
+    | tipo identificador { nParam++; setType($1); tsAddParam($2);
                     tipoAtipoC($1);
                     cWriteIdent($2);
 };
@@ -154,16 +133,27 @@ sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
         printf("Semantic Error(%d): El valor a asignar no es del mismo tipo.[Expected: %s - Got:%s]\n",
         line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
     }
-    if(!equalSize($1,$3)){
-        printf("Semantic Error(%d): El valor a asignar no es del mismo tamanio.\n",line);
-    }
     if(tsCheckList($1)){
         if(!$3.lista){
             printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
         }
     }
 
-};
+}
+    | identificador OP_ASIGNACION expresion OP_INTERR expresion DOS_PUNTOS expresion PYC{
+        if ($3.tipoDato != TIPOBOOL){
+            printf("Semantic Error(%d): Se espera una expresión condicional de tipo booleana.\n",line);
+        }
+        if($5.tipoDato != $7.tipoDato && $1.tipoDato != $5.tipoDato){
+            printf("Semantic Error(%d): Los tipos de datos no coinciden\n",line);
+        }
+        if(tsCheckList($1)){
+            if(!$3.lista){
+                printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
+            }
+        }
+        generaCodigoLambda($1,$3,$5,$7);
+    };
 
 sentencia_primera: SI PARENTESIS_ABRE expresion PARENTESIS_CIERRA{
         $$.etiq1 = generarEtiqueta();
@@ -221,7 +211,9 @@ sentencia_salida: IMPRIMIR DIRECCION lista_expresiones_o_cadena PYC{
 sentencia_retorno: DEVOLVER expresion {tsCheckReturn($2, &$$); generaCodigoReturn($2);} PYC;
 
 expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
-    $$.tipoDato = $2.tipoDato; $$.nDim = $2.nDim; $$.tamDimen1 = $2.tamDimen1; $$.tamDimen2 = $2.tamDimen2; }
+    $$.tipoDato = $2.tipoDato;
+    $$.nombre = $2.nombre;
+    }
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
     $$.nombre=generarVariableTemporal();
@@ -229,12 +221,15 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoVariableTemporal($2,&$$);
     generaCodigoUnario($1,$2,&$$);
     }
-    | expresion OP_UNARIO {
-    tsOpUnary($2, $1, &$$);
-    $$.nombre=generarVariableTemporal();
-    generaCodigoVariableTemporal($1,&$$);
-    generaCodigoUnario($2,$1,&$$);
+    | OP_INTERR expresion {
+    if(!isList($1)){
+        printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
+    $$.nombre = generarVariableTemporal();
+    $2.lista = 0;
+    generaCodigoVariableTemporal($2,&$$);
+    generaCodigoUnario($1,$2,&$$);
+    } %prec OP_UNARIO
     | expresion OP_TERNARIO expresion {
     if(sigsig<0){
     tsCheckLeftList($1,$3,&$$);
@@ -284,6 +279,16 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoVariableTemporal($1,&$$);
     generaCodigoOpMultiplicativo($1,$2,$3,&$$);
     }
+    | expresion OP_MULTIPLICATIVO OP_MULTIPLICATIVO expresion {
+        if($1.attr!=$2.attr && $1.attr!=1){
+            printf("Semantic Error(%d): Operación no permitida. ", line);
+        }
+        $2.attr=11;
+        tsOpMul($1, $2, $4, &$$);
+        $$.nombre = generarVariableTemporal();
+        generaCodigoVariableTemporal($1,&$$);
+        generaCodigoOpMultiplicativo($1,$2,$3,&$$);
+    }
     | expresion OP_IGUALDAD expresion {
     tsOpEqual($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
@@ -311,12 +316,10 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $$.nombre = $1.nombre;
     }
     | constante {
-        $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
-        $$.tamDimen2 = $1.tamDimen2; $$.nombre = $1.nombre; $$.codigo = $1.codigo;
+        $$.tipoDato = $1.tipoDato; $$.nombre = $1.nombre; $$.codigo = $1.codigo;
     }
     | funcion {
-        $$.tipoDato = $1.tipoDato; $$.nDim = $1.nDim; $$.tamDimen1 = $1.tamDimen1;
-        $$.tamDimen2 = $1.tamDimen2; $$.lista = $1.lista; cond=1;
+        $$.tipoDato = $1.tipoDato; $$.lista = $1.lista; cond=1;
     }
     | lista_constantes {$$.tipoDato = $1.tipoDato;$$.lista = $1.lista;
         $$.nombre = generarVariableTemporal();
@@ -348,9 +351,7 @@ varios_identificador: identificador
 
 identificador: IDENT {
                     if(decvariable == 1){
-						$1.nDim=0; $1.tamDimen1 = 0; $1.tamDimen2 = 0;
                         $1.tipoDato = globaltipoDato; $1.lista = globalLista; $1.es_constante = 0;
-						$$.nDim=0; $$.tamDimen1 = 0; $$.tamDimen2 = 0;
                         $$.tipoDato = globaltipoDato; $$.lista = globalLista; $$.es_constante = 0;
                         tsAddId($1);
                         if(!decParam) {
@@ -389,10 +390,10 @@ expresion_o_cadena: expresion{
                   TS_subprog_params($1);
                   } ;
 
-constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
-| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
-| CONSTANTE_FLOAT { $$.tipoDato = REAL; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; }
-| CONSTANTE_CAR { $$.tipoDato = CARACTER; $$.nDim = 0; $$.tamDimen1 = 0; $$.tamDimen2 = 0; $$.nombre = $1.nombre; };
+constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nombre = $1.nombre; }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; }
+| CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre; }
+| CONSTANTE_CAR { $$.tipoDato = CARACTER;  $$.nombre = $1.nombre; };
 
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}
     | LISTA TIPO_DATO {$$.tipoDato = $2.tipoDato; $$.lista=1;};

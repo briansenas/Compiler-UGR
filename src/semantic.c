@@ -45,15 +45,6 @@ int isList(atributos e){
 	return e.lista;
 }
 
-// Devuelve si los dos posibles arrays que recibe tienen el mismo tamaño
-int equalSize(atributos e1, atributos e2){
-
-    return (e1.nDim == e2.nDim &&
-        e1.tamDimen1 == e2.tamDimen1 &&
-        e1.tamDimen2 == e2.tamDimen2);
-
-}
-
 // Guarda el tipoDatode la variableiable
 int setType(atributos value){
 	globaltipoDato= value.tipoDato;
@@ -77,9 +68,6 @@ int tsAddIn(entradaTS in){
 		ts[TOPE].lista = in.lista;
 		ts[TOPE].es_constante = in.es_constante;
 		ts[TOPE].nParam=in.nParam;
-		ts[TOPE].nDim=in.nDim;
-		ts[TOPE].tamDimen1=in.tamDimen1;
-		ts[TOPE].tamDimen2=in.tamDimen2;
 
         // Se aumenta el contador de entradas
 		TOPE++;
@@ -223,9 +211,6 @@ void tsAddId(atributos e){
 			newIn.nParam = 0;
 			newIn.lista = globalLista;
 			newIn.es_constante = e.es_constante;
-			newIn.nDim=e.nDim;
-			newIn.tamDimen1=e.tamDimen1;
-			newIn.tamDimen2=e.tamDimen2;
 			tsAddIn(newIn);
 
 		}
@@ -244,9 +229,6 @@ void tsAddMark(){
 	inInitScope.nParam = 0;
 	inInitScope.lista = 0;
 	inInitScope.es_constante = 0;
-	inInitScope.nDim = 0;
-	inInitScope.tamDimen1 = 0;
-	inInitScope.tamDimen2 = 0;
 
 	tsAddIn(inInitScope);
 
@@ -269,11 +251,8 @@ void tsAddMark(){
 				newIn.nombre = ts[j].nombre;
 				newIn.tipoDato= ts[j].tipoDato;
 				newIn.nParam = ts[j].nParam;
-				newIn.nDim = ts[j].nDim;
 				newIn.lista = ts[j].lista;
 				newIn.es_constante = ts[j].es_constante;
-				newIn.tamDimen1 = ts[j].tamDimen1;
-				newIn.tamDimen2 = ts[j].tamDimen2;
 				tsAddIn(newIn);
 
 			}
@@ -294,11 +273,8 @@ void tsAddSubprog(atributos e){
 	inSubProg.entrada = FUNCION;
 	inSubProg.nombre = e.nombre;
 	inSubProg.nParam = 0;
-	inSubProg.nDim = 0;
 	inSubProg.lista = e.lista;
 	inSubProg.es_constante = e.es_constante;
-	inSubProg.tamDimen1 = 0;
-	inSubProg.tamDimen2 = 0;
 	inSubProg.tipoDato= e.tipoDato;
 
 	currentFunction = TOPE;
@@ -333,11 +309,8 @@ void tsAddParam(atributos e){
 		newIn.nombre = e.nombre;
 		newIn.tipoDato= globaltipoDato;
 		newIn.nParam = 0;
-		newIn.nDim = e.nDim;
 		newIn.lista = globalLista;
 		newIn.es_constante = e.es_constante;
-		newIn.tamDimen1 = e.tamDimen1;
-		newIn.tamDimen2 = e.tamDimen2;
 		tsAddIn(newIn);
 
 	}
@@ -346,12 +319,7 @@ void tsAddParam(atributos e){
 
 // Actualiza el número de parámetros de la función
 void tsUpdateNparam(atributos e){
-
 	ts[currentFunction].nParam = nParam;
-	ts[currentFunction].nDim=e.nDim;
-	ts[currentFunction].tamDimen1=e.tamDimen1;
-	ts[currentFunction].tamDimen2=e.tamDimen2;
-
 }
 
 //
@@ -416,23 +384,9 @@ void tsCheckReturn(atributos expr, atributos* res){
 			return;
 		}
 
-		atributos tmp;
-		tmp.nDim = ts[index].nDim;
-		tmp.tamDimen1 = ts[index].tamDimen1;
-		tmp.tamDimen2 = ts[index].tamDimen2;
-
-		if (!equalSize(expr,tmp)) {
-			printf("Semantic Error(%d): Return expresion not same size than return of function %s\n",
-                    line,ts[index].nombre);
-			return;
-		}
-
 		res->tipoDato = expr.tipoDato;
-		res->nDim = expr.nDim;
 		res->lista = expr.lista;
 		res->es_constante = res->es_constante;
-		res->tamDimen1 = expr.tamDimen1;
-		res->tamDimen2 = expr.tamDimen2;
 
 	} else {
 		printf("Semantic Error(%d-%d): res not declared inside a function.\n", line, index);
@@ -455,11 +409,8 @@ void tsGetId(atributos id, atributos* res){
 
 		res->nombre = strdup(ts[index].nombre);
 		res->tipoDato= ts[index].tipoDato;
-		res->nDim = ts[index].nDim;
 		res->lista = ts[index].lista;
 		res->es_constante = ts[index].es_constante;
-		res->tamDimen1 = ts[index].tamDimen1;
-		res->tamDimen2 = ts[index].tamDimen2;
 
 	}
 
@@ -475,20 +426,15 @@ void tsOpUnary(atributos op, atributos o, atributos* res){
 			// Se esta aplicando el operador ! con una lista
 			printf("Semantic Error(%d): Not operator expects logic expression.", line);
 		}else{
+            // se esta aplicando otras operadores unarios con la lista, tipo #.
 			res->tipoDato= ts[index].tipoDato;
 			res->lista = 0;
 			res->es_constante = 1;
-			res->nDim = 0;
-			res->tamDimen1 = 0;
-			res->tamDimen2 = 0;
 		}
 	}else{
 		res->tipoDato= TIPOBOOL;
-		res->nDim = 0;
 		res->lista = 0;
 		res->es_constante = 0;
-		res->tamDimen1 = 0;
-		res->tamDimen2 = 0;
 	}
 }
 
@@ -506,9 +452,6 @@ void tsCheckLeftList(atributos l, atributos a, atributos* res){
 	res->tipoDato = ts[index].tipoDato;
 	res->lista = 0;
 	res->es_constante = 1;
-	res->nDim = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 }
 
 
@@ -520,11 +463,8 @@ void tsOpSign(atributos op, atributos o, atributos* res){
 	}
 
 	res->tipoDato= o.tipoDato;
-	res->nDim = 0;
 	res->lista = o.lista;
 	res->es_constante = o.es_constante;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 }
 
@@ -544,30 +484,16 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 
 	if (isList(o1) && isList(o2)){
 
-		if(equalSize(o1,o2)){
-
 			res->tipoDato= o1.tipoDato;
-			res->nDim = o1.nDim;
 			res->lista = o1.lista;
 			res->es_constante = o1.es_constante;
-			res->tamDimen1 = o1.tamDimen1;
-			res->tamDimen2 = o1.tamDimen2;
-
-		} else {
-			printf("Semantic Error(%d): El tamaño debe ser el mismo. LS tiene %dx%d y RS tiene %dx%d",
-							line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
-			return;
-		}
 
 	} else {
 
 		if (isList(o1) && !isList(o2)) {
 			res->tipoDato= o1.tipoDato;
-			res->nDim = o1.nDim;
 			res->lista = o1.lista;
 			res->es_constante = o1.es_constante;
-			res->tamDimen1 = o1.tamDimen1;
-			res->tamDimen2 = o1.tamDimen2;
 
 		}
 
@@ -581,11 +507,8 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 			} else {
 
 				res->tipoDato= o2.tipoDato;
-				res->nDim = o2.nDim;
 				res->lista = o2.lista;
 				res->es_constante = o2.es_constante;
-				res->tamDimen1 = o2.tamDimen1;
-				res->tamDimen2 = o2.tamDimen2;
 
 			}
 
@@ -633,30 +556,21 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 		return;
 	}
 
+    if(op.attr==11 && o1.tipoDato!=ENTERO && o2.tipoDato!=ENTERO){
+		printf("Semantic Error%d): La operación debe ser con enteros.", line);
+        return;
+    }
+
 	if (isList(o1) && isList(o2)){
-		if(equalSize(o1,o2)){
 			res->tipoDato= o1.tipoDato;
-			res->nDim = o1.nDim;
 			res->lista = o1.lista;
 			res->es_constante = o1.es_constante;
-			res->tamDimen1 = o1.tamDimen1;
-			res->tamDimen2 = o1.tamDimen2;
-
-		} else {
-			printf("Semantic Error(%d): El tamaño debe ser el mismo. LS tiene %dx%d y RS tiene %dx%d",
-							line, o1.tamDimen1,o1.tamDimen2,o2.tamDimen1,o2.tamDimen2);
-			return;
-		}
-
 	} else {
 		if (isList(o1) && !isList(o2)) {
 			if(op.attr != 3){
 				res->tipoDato= o1.tipoDato;
-				res->nDim = o1.nDim;
 				res->lista = o1.lista;
 				res->es_constante = o1.es_constante;
-				res->tamDimen1 = o1.tamDimen1;
-				res->tamDimen2 = o1.tamDimen2;
 			}
 			else{
 				printf("Semantic Error(%d): Esa operación solo es válida con Listas\n",line);
@@ -667,11 +581,8 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 		if (!isList(o1) && isList(o2)){
 			if(op.attr != 3){
 				res->tipoDato= o2.tipoDato;
-				res->nDim = o2.nDim;
 				res->lista = o2.lista;
 				res->es_constante = o2.es_constante;
-				res->tamDimen1 = o2.tamDimen1;
-				res->tamDimen2 = o2.tamDimen2;
 			}
 			else{
 				printf("Semantic Error(%d): Esa operación solo es válida con Listas\n",line);
@@ -695,11 +606,8 @@ void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 	}
 
 	res->tipoDato= TIPOBOOL;
-	res->nDim = 0;
 	res->lista = 0;
 	res->es_constante = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 }
 
@@ -717,11 +625,8 @@ void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 	}
 
 	res->tipoDato= TIPOBOOL;
-	res->nDim = 0;
 	res->lista = 0;
 	res->es_constante = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 }
 
@@ -739,11 +644,8 @@ void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 	}
 
 	res->tipoDato= TIPOBOOL;
-	res->nDim = 0;
 	res->lista = 0;
 	res->es_constante = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 }
 
@@ -762,11 +664,8 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 	}
 
 	res->tipoDato= TIPOBOOL;
-	res->nDim = 0;
 	res->lista = 0;
 	res->es_constante = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 
 }
@@ -786,11 +685,8 @@ void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 	}
 
 	res->tipoDato= TIPOBOOL;
-	res->nDim = 0;
 	res->lista = 0;
 	res->es_constante = 0;
-	res->tamDimen1 = 0;
-	res->tamDimen2 = 0;
 
 }
 
@@ -849,11 +745,8 @@ void tsFunctionCall(atributos id, atributos* res){
                 currentFunction = index;
                 //res->nombre = strdup(ts[index].nombre);
                 res->tipoDato= ts[index].tipoDato;
-                res->nDim = ts[index].nDim;
 								res->lista = ts[index].lista;
 								res->es_constante = ts[index].es_constante;
-                res->tamDimen1 = ts[index].tamDimen1;
-                res->tamDimen2 = ts[index].tamDimen2;
             }
 
 		}
@@ -873,11 +766,6 @@ void tsCheckParam(atributos param, int checkParam){
 		return;
 	}
 
-	if (param.nDim != ts[posParam].nDim || param.tamDimen1 != ts[posParam].tamDimen1  || param.tamDimen2 != ts[posParam].tamDimen2) {
-		printf("Semantic Error(%d): Tamaño del parámetro (%d) no es válido.\n", line, error);
-		return;
-	}
-
 }
 
 //
@@ -891,8 +779,8 @@ void tsCheckParam(atributos param, int checkParam){
 void printIn(int row){
 
 	entradaTS e = ts[row];
-	printf("\n\nTipo Entrada: %d\nLexema: %s\nTipo Dato: %d\nNum Parametros: %d\nDimensiones[i][j]: %d[%d][%d]\n",
-		e.entrada, e.nombre, e.tipoDato, e.nParam, e.nDim, e.tamDimen1, e.tamDimen2);
+	printf("\n\nTipo Entrada: %d\nLexema: %s\nTipo Dato: %d\nNum Parametros: %d\n",
+		e.entrada, e.nombre, e.tipoDato, e.nParam);
 
 }
 
@@ -936,9 +824,6 @@ void printTS(){
 		printf("-type: %-10s", t);
 		printf("-lista %-10d",ts[j].lista);
 		printf("-nParam: %-4d", ts[j].nParam);
-		printf("-nDim: %-4d", ts[j].nDim);
-		printf("-tamDimen1: %-4d", ts[j].tamDimen1);
-		printf("-tamDimen2: %-4d\n", ts[j].tamDimen2);
 		j++;
 	}
 	printf("--------------------------------\n");
@@ -983,9 +868,6 @@ void printAttr(atributos e, char *msg){
 	printf("-Lexema: %-12s", e.nombre);
 	printf("-type: %-10s", t);
 	printf("-lista %-10d",e.lista);
-	printf("-nDim: %-4d", e.nDim);
-	printf("-tamDimen1: %-4d", e.tamDimen1);
-	printf("-tamDimen2: %-4d\n", e.tamDimen2);
 	printf("-------------------------------\n");
 
 }
@@ -1231,6 +1113,31 @@ void generaCodigoAsignacion(atributos a, atributos b){
     addNewLine();
     decvariable=2;
 }
+
+void generaCodigoLambda(atributos assign, atributos cond, atributos pos, atributos neg){
+    char* _pattern = strdup("if(!%s) goto %s;\n");
+    char* _code = malloc(255);
+    neg.etiq1 = generarEtiqueta(); // Etiqueta negativa;
+    neg.etiq2 = generarEtiqueta();  // Etiqueta de salida;
+
+    snprintf(_code,255,_pattern, cond.nombre, neg.etiq1);
+    cWriteCode(_code);
+    generaCodigoAsignacion(assign,neg);
+    _pattern = strdup("goto %s;\n");
+    snprintf(_code,255,_pattern,neg.etiq2);
+    cWriteCode(_code);
+    _pattern = strdup("%s:\n");
+    snprintf(_code,255,_pattern, neg.etiq1);
+    cWriteCode(_code);
+    generaCodigoAsignacion(assign,pos);
+    _pattern = strdup("%s:\n");
+    snprintf(_code,255,_pattern, neg.etiq2);
+    cWriteCode(_code);
+
+    free(_pattern);
+    free(_code);
+}
+
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo = malloc(255);
     char* _code;
@@ -1290,6 +1197,8 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
             _code = strdup("%s = IntOperationLista%s(%s,%s,3);\n");
         if(!a.lista && b.lista)
             _code = strdup("%s = getIntFromlista%s(%s,%s,3);\n");
+    }else if(op.attr==11){
+        _code = strdup("%s = %s / %s;\n");
     }
     else if(op.attr==2){
         if(!a.lista)
@@ -1370,6 +1279,7 @@ void generaCodigoSi(atributos* a, atributos exp){
     free(_code);
     free(pattern);
 }
+
 
 char* tipoAprintf(dtipo tipo) {
     char* resultado;

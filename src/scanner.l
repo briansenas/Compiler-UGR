@@ -51,13 +51,17 @@ ESPACIO					[" "]
 "@"                              { if(DEBUGGING) ECHO; return(OP_TERNARIO);}
 "!"                              { if(DEBUGGING) ECHO; yylval.attr=0; return(OP_UNARIO);}
 "#"                              { if(DEBUGGING) ECHO; yylval.attr=1; return(OP_UNARIO);}
-"?"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_UNARIO);}
+"?"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_INTERR);}
+":"                       { if(DEBUGGING) ECHO;        yylval.nombre=":";  return(DOS_PUNTOS);}
 "$"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(DIRECCION);}
 "-"                       { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_ADITIVO);}
 "+"                       { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_ADITIVO);}
 "="                       { if(DEBUGGING) ECHO;       return(OP_ASIGNACION);}
 "*"                       { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_MULTIPLICATIVO);}
+"//"                       { if(DEBUGGING) ECHO;      yylval.attr=11; return(OP_MULTIPLICATIVO);}
 "/"                       { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_MULTIPLICATIVO);}
+"%"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
+"**"                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 "&&"                      { if(DEBUGGING) ECHO;       return(OP_AND);}
 "||"                      { if(DEBUGGING) ECHO;       return(OP_OR);}
 "^"                       { if(DEBUGGING) ECHO;       return(OP_XOR);}
@@ -67,8 +71,6 @@ ESPACIO					[" "]
 ">="                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_RELACION);}
 "=="                      { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_IGUALDAD);}
 "!="                      { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
-"%"                       { if(DEBUGGING) ECHO;       yylval.attr=2; return(OP_MULTIPLICATIVO);}
-"**"                      { if(DEBUGGING) ECHO;       yylval.attr=3; return(OP_MULTIPLICATIVO);}
 ","                       { if(DEBUGGING) ECHO;       return(COMA);}
 {DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 {DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
@@ -77,7 +79,8 @@ ESPACIO					[" "]
 "Falso"                 { if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = "false"; return(BOOLEANO);}
 \"[^\"]*\"				  { if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
 {LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre=strdup(yytext); return(IDENT);}
-"//".*                           { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
+[^;]*;[ ]*"//".*                           { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
+^[ ]*"//".*                             { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 [/][*]                                    {
     printf(" \n [Linea %d]: lexical error: comentario sin cerrar'%s'. ", yylineno, yytext);
