@@ -220,8 +220,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
-    $$.nombre = malloc(255);
-    $$.nombre=generarVariableTemporal();
+    $$.nombre;
+    asprintf(&$$.nombre,"%s",generarVariableTemporal());
     $2.lista=0;
     int tipo = $2.tipoDato;
     $2.tipoDato = $$.tipoDato;
@@ -245,12 +245,12 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     int a = tsSearchId($1);
     $1.lista=0;
     generaCodigoVariableTemporal($1,&$$);
-    char* res = malloc(255);
-    snprintf(res,255,"%s = getElemento%s(%s,%s);\n", $$.nombre,
+    char* res;
+    asprintf(res,"%s = getElemento%s(%s,%s);\n", $$.nombre,
     tipoAstring(ts[a].tipoDato),
     $1.nombre,$3.nombre);
-    $$.codigo = malloc(255);
-    $$.codigo = $3.nombre;
+    $$.codigo;
+    asprintf($$.codigo,"%s",$3.nombre);
     cWriteCode(res);
     }else{
         $$.nombre = $1.nombre;
@@ -301,8 +301,8 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     tsOpEqual($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal($1,&$$);
-    $$.codigo = malloc(255);
-    snprintf($$.codigo,255,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
+    $$.codigo;
+    asprintf($$.codigo,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
     cWriteCode($$.codigo);
     }
     | expresion OP_ADITIVO expresion {
@@ -342,13 +342,13 @@ sigsig:expresion SIGSIG expresion {
     $$.nombre = generarVariableTemporal();
     int index = tsSearchId($1);
     generaCodigoVariableTemporal($1,&$$);
-    char* res = malloc(255);
+    char* res;
     if($2.attr==1){
-        snprintf(res,255,"%s = removeElement%s(%s,%s);\n", $$.nombre,
+        asprintf(&res,"%s = removeElement%s(%s,%s);\n", $$.nombre,
         tipoAstring(ts[index].tipoDato),ts[index].nombre,$3.nombre);
         cWriteCode(res);
     }else{
-        snprintf(res,255,"%s = addElementAt%s(%s,%s,%s);\n",
+        asprintf(&res,"%s = addElementAt%s(%s,%s,%s);\n",
         $$.nombre, tipoAstring(ts[index].tipoDato),$1.nombre,$3.codigo,$3.nombre
         );
         cWriteCode(res);

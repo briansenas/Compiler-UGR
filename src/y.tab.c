@@ -1821,7 +1821,7 @@ yyreduce:
             printf("Semantic Error(%d): Los tipos de datos no coinciden\n",line);
         }
         if(tsCheckList(yyvsp[-7])){
-            if(!yyvsp[-5].lista){
+            if(!yyvsp[-3].lista && !yyvsp[-1].lista){
                 printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
             }
         }
@@ -1959,8 +1959,8 @@ yyreduce:
 #line 221 "./src/scanner.y"
                           {
     tsOpUnary(yyvsp[-1], yyvsp[0], &yyval);
-    yyval.nombre = malloc(255);
-    yyval.nombre=generarVariableTemporal();
+    yyval.nombre;
+    asprintf(&yyval.nombre,"%s",generarVariableTemporal());
     yyvsp[0].lista=0;
     int tipo = yyvsp[0].tipoDato;
     yyvsp[0].tipoDato = yyval.tipoDato;
@@ -1994,12 +1994,12 @@ yyreduce:
     int a = tsSearchId(yyvsp[-2]);
     yyvsp[-2].lista=0;
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
-    char* res = malloc(255);
-    snprintf(res,255,"%s = getElemento%s(%s,%s);\n", yyval.nombre,
+    char* res;
+    asprintf(res,"%s = getElemento%s(%s,%s);\n", yyval.nombre,
     tipoAstring(ts[a].tipoDato),
     yyvsp[-2].nombre,yyvsp[0].nombre);
-    yyval.codigo = malloc(255);
-    yyval.codigo = yyvsp[0].nombre;
+    yyval.codigo;
+    asprintf(yyval.codigo,"%s",yyvsp[0].nombre);
     cWriteCode(res);
     }else{
         yyval.nombre = yyvsp[-2].nombre;
@@ -2085,8 +2085,8 @@ yyreduce:
     tsOpEqual(yyvsp[-2], yyvsp[-1], yyvsp[0], &yyval);
     yyval.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
-    yyval.codigo = malloc(255);
-    snprintf(yyval.codigo,255,"%s = %s == %s;\n",yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
+    yyval.codigo;
+    asprintf(yyval.codigo,"%s = %s == %s;\n",yyval.nombre, yyvsp[-2].nombre, yyvsp[0].nombre);
     cWriteCode(yyval.codigo);
     }
 #line 2093 "src/y.tab.c"
@@ -2164,13 +2164,13 @@ yyreduce:
     yyval.nombre = generarVariableTemporal();
     int index = tsSearchId(yyvsp[-2]);
     generaCodigoVariableTemporal(yyvsp[-2],&yyval);
-    char* res = malloc(255);
+    char* res;
     if(yyvsp[-1].attr==1){
-        snprintf(res,255,"%s = removeElement%s(%s,%s);\n", yyval.nombre,
+        asprintf(&res,"%s = removeElement%s(%s,%s);\n", yyval.nombre,
         tipoAstring(ts[index].tipoDato),ts[index].nombre,yyvsp[0].nombre);
         cWriteCode(res);
     }else{
-        snprintf(res,255,"%s = addElementAt%s(%s,%s,%s);\n",
+        asprintf(&res,"%s = addElementAt%s(%s,%s,%s);\n",
         yyval.nombre, tipoAstring(ts[index].tipoDato),yyvsp[-2].nombre,yyvsp[0].codigo,yyvsp[0].nombre
         );
         cWriteCode(res);
