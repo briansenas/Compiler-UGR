@@ -148,7 +148,7 @@ sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
             printf("Semantic Error(%d): Los tipos de datos no coinciden\n",line);
         }
         if(tsCheckList($1)){
-            if(!$3.lista){
+            if(!$5.lista && !$7.lista){
                 printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
             }
         }
