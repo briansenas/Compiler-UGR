@@ -5,6 +5,7 @@
 extern FILE * yyin;
 
 int yyparse(void);
+int yylex_destroy ( void );
 
 FILE * abrir_entrada(int argc, char * argv[] ) {
 	FILE * f= NULL;
@@ -24,5 +25,7 @@ FILE * abrir_entrada(int argc, char * argv[] ) {
 /************************************************************/
 int main(int argc, char * argv[] ) {
 	yyin = abrir_entrada(argc,argv) ;
-	return yyparse();
+	int res = yyparse();
+    yylex_destroy();
+    return res;
 }

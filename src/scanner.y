@@ -47,7 +47,9 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addChar('\n');} bloque {addChar('\n'); fputs("}",MAIN); cerrarArchivos();}
+programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addChar('\n');} bloque {addChar('\n'); fputs("}",MAIN); cerrarArchivos();
+        freeTable();
+        }
         | error;
 
 bloque: INI_BLOQUE
@@ -220,8 +222,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     }
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
-    $$.nombre;
-    asprintf(&$$.nombre,"%s",generarVariableTemporal());
+    $$.nombre=generarVariableTemporal();
     $2.lista=0;
     int tipo = $2.tipoDato;
     $2.tipoDato = $$.tipoDato;
@@ -246,12 +247,12 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $1.lista=0;
     generaCodigoVariableTemporal($1,&$$);
     char* res;
-    asprintf(res,"%s = getElemento%s(%s,%s);\n", $$.nombre,
+    asprintf(&res,"%s = getElemento%s(%s,%s);\n", $$.nombre,
     tipoAstring(ts[a].tipoDato),
     $1.nombre,$3.nombre);
-    $$.codigo;
-    asprintf($$.codigo,"%s",$3.nombre);
+    asprintf($$.codigo, "%s",$3.nombre);
     cWriteCode(res);
+    free(res);
     }else{
         $$.nombre = $1.nombre;
         $$.codigo = $3.nombre;
@@ -301,8 +302,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     tsOpEqual($1, $2, $3, &$$);
     $$.nombre = generarVariableTemporal();
     generaCodigoVariableTemporal($1,&$$);
-    $$.codigo;
-    asprintf($$.codigo,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
+    asprintf(&$$.codigo,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
     cWriteCode($$.codigo);
     }
     | expresion OP_ADITIVO expresion {
@@ -353,6 +353,7 @@ sigsig:expresion SIGSIG expresion {
         );
         cWriteCode(res);
     }
+    free(res);
       };
 
 varios_identificador: identificador
@@ -400,8 +401,8 @@ expresion_o_cadena: expresion{
                   } ;
 
 constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nombre = $1.nombre; }
-| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; }
-| CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre; }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; free($1.nombre); }
+| CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre;}
 | CONSTANTE_CAR { $$.tipoDato = CARACTER;  $$.nombre = $1.nombre; };
 
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}

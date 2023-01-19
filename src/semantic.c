@@ -18,20 +18,20 @@ int currentFunction = -1;
 char* tipoAstring(dtipo tipo){
 
 	char *tipo_str;
-    tipo_str=strdup("Desconocido");
+    tipo_str="Desconocido";
 
 	if ( tipo == REAL ) {
-        tipo_str=strdup("float");
+        tipo_str="float";
 	} else if (tipo == ENTERO) {
-        tipo_str=strdup("int");
+        tipo_str="int";
 	} else if ( tipo == TIPOBOOL ) {
-       tipo_str = strdup("bool");
+       tipo_str = "bool";
 	} else if ( tipo == CARACTER ) {
-       tipo_str = strdup("char");
+       tipo_str = "char";
 	}else if (tipo == TIPOCADENA){
-	    tipo_str = strdup("string");
+	    tipo_str = "string";
 	}else if (tipo== NA){
- 	    tipo_str = strdup("NA");
+ 	    tipo_str = "NA";
 	}
 
 	return tipo_str;
@@ -427,7 +427,7 @@ void tsGetId(atributos id, atributos* res){
 	} else {
 		//printf("El indice es %i", index);
 
-		res->nombre = strdup(ts[index].nombre);
+		res->nombre = ts[index].nombre;
 		res->tipoDato= ts[index].tipoDato;
 		res->lista = ts[index].lista;
 		res->es_constante = ts[index].es_constante;
@@ -918,7 +918,7 @@ etiquetas ts_etiq[50];
 void addDesc(char* resultado){
     etiquetas etiq;
     etiq.etiqueta;
-    etiq.etiqueta = strdup(resultado);
+    etiq.etiqueta = resultado;
     ts_etiq[TS_ETIQ] = etiq;
     TS_ETIQ++;
 }
@@ -929,10 +929,9 @@ void delDesc(){
 
 void generaGOTO(char* etq){
     char* resultado;
-    char* pattern = strdup("goto %s ;\n");
+    char* pattern = "goto %s ;\n";
     asprintf(&resultado,pattern,etq);
     cWriteCode(resultado);
-    free(pattern);
     free(resultado);
 }
 
@@ -1033,7 +1032,7 @@ void addChar(char c){
 }
 
 char* getADD(int a){
-    char* tmp = strdup("+");
+    char* tmp = "+";
     if(a==1)
         tmp[0] = '-';
     return tmp;
@@ -1071,9 +1070,11 @@ void cWriteIdent(atributos a){
         index = tsSearchParam(a);
 
     char* tmp;
-    if(index<0)
-        asprintf(&tmp,"%s",generarVariableTemporal());
-    else
+    if(index<0){
+        char* var = generarVariableTemporal();
+        asprintf(&tmp,"%s",var);
+        free(var);
+    }else
         asprintf(&tmp,"%s",ts[index].nombre);
 
     if(subProg>0|| decParam)
@@ -1115,26 +1116,27 @@ void generaCodigoAsignacion(atributos a, atributos b){
 }
 
 void generaCodigoLambda(atributos assign, atributos cond, atributos pos, atributos neg){
-    char* _pattern = strdup("if(!%s) goto %s;\n");
+    char* _pattern = "if(!%s) goto %s;\n";
     char* _code;
     neg.etiq1 = generarEtiqueta(); // Etiqueta negativa;
     neg.etiq2 = generarEtiqueta();  // Etiqueta de salida;
 
     asprintf(&_code,_pattern, cond.nombre, neg.etiq1);
     cWriteCode(_code);
+    free(_code);
     generaCodigoAsignacion(assign,neg);
-    _pattern = strdup("goto %s;\n");
+    _pattern = "goto %s;\n";
     asprintf(&_code,_pattern,neg.etiq2);
     cWriteCode(_code);
-    _pattern = strdup("%s:\n");
+    free(_code);
+    _pattern = "%s:\n";
     asprintf(&_code,_pattern, neg.etiq1);
     cWriteCode(_code);
+    free(_code);
     generaCodigoAsignacion(assign,pos);
-    _pattern = strdup("%s:\n");
+    _pattern = "%s:\n";
     asprintf(&_code,_pattern, neg.etiq2);
     cWriteCode(_code);
-
-    free(_pattern);
     free(_code);
 }
 
@@ -1143,18 +1145,18 @@ void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* re
     char* _code;
     if(op.attr==0){
         if(!a.lista && !b.lista)
-            _code = strdup("%s = %s + %s;\n");
+            _code = "%s = %s + %s;\n";
         if(a.lista && !b.lista)
-            _code = strdup("%s = IntOperationLista%s(%s,%s,1);\n");
+            _code = "%s = IntOperationLista%s(%s,%s,1);\n";
         if(!a.lista && b.lista)
-            _code = strdup("%s = getIntFromlista%s(%s,%s,1);\n");
+            _code = "%s = getIntFromlista%s(%s,%s,1);\n";
     }else{
         if(!a.lista && !b.lista)
-            _code = strdup("%s = %s - %s;\n");
+            _code = "%s = %s - %s;\n";
         if(a.lista && !b.lista)
-            _code = strdup("%s = IntOperationLista%s(%s,%s,0);\n");
+            _code = "%s = IntOperationLista%s(%s,%s,0);\n";
         if(!a.lista && b.lista)
-            _code = strdup("%s = getIntFromlista%s(%s,%s,0);\n");
+            _code = "%s = getIntFromlista%s(%s,%s,0);\n";
     }
     if(!a.lista && !b.lista)
         asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
@@ -1166,18 +1168,17 @@ void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* re
                 b.nombre, a.nombre);
     }
     cWriteCode(res->codigo);
-    free(_code);
+    free(res->codigo);
 }
 
 void generaSigno(atributos op, atributos b, atributos* res){
     res->nombre;
     char* _code;
     if(op.attr==0)
-       _code = strdup("+%s");
+       _code = "+%s";
     else
-       _code = strdup("-%s");
+       _code = "-%s";
     asprintf(&res->nombre,_code,b.nombre);
-    free(_code);
 }
 
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
@@ -1185,28 +1186,28 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
     char* _code;
     if(op.attr==0){
         if(!a.lista && !b.lista)
-            _code = strdup("%s = %s * %s;\n");
+            _code = "%s = %s * %s;\n";
         if(a.lista && !b.lista)
-            _code = strdup("%s = IntOperationLista%s(%s,%s,2);\n");
+            _code = "%s = IntOperationLista%s(%s,%s,2);\n";
         if(!a.lista && b.lista)
-            _code = strdup("%s = getIntFromlista%s(%s,%s,2);\n");
+            _code = "%s = getIntFromlista%s(%s,%s,2);\n";
     }else if(op.attr==1){
         if(!a.lista && !b.lista)
-            _code = strdup("%s = %s / %s;\n");
+            _code = "%s = %s / %s;\n";
         if(a.lista && !b.lista)
-            _code = strdup("%s = IntOperationLista%s(%s,%s,3);\n");
+            _code = "%s = IntOperationLista%s(%s,%s,3);\n";
         if(!a.lista && b.lista)
-            _code = strdup("%s = getIntFromlista%s(%s,%s,3);\n");
+            _code = "%s = getIntFromlista%s(%s,%s,3);\n";
     }else if(op.attr==11){
-        _code = strdup("%s = %s / %s;\n");
+        _code = "%s = %s / %s;\n";
     }
     else if(op.attr==2){
         if(!a.lista)
-            _code = strdup("%s = %s %% %s;\n");
+            _code = "%s = %s %% %s;\n";
         else
-            _code = strdup("%s = borrarLista%s(%s,%s);\n");
+            _code = "%s = borrarLista%s(%s,%s);\n";
     }else if(op.attr==3)
-       _code = strdup("%s = concatenerListas(%s,%s);\n");
+       _code = "%s = concatenerListas(%s,%s);\n";
 
     if((!a.lista && !b.lista) || op.attr==3)
         asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
@@ -1219,23 +1220,23 @@ void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atribu
                 b.nombre, a.nombre);
     }
     cWriteCode(res->codigo);
-    free(_code);
+    free(res->codigo);
 }
 
 void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res){
     res->codigo;
     char* _code;
     if(op.attr==0)
-       _code = strdup("%s = %s < %s;\n");
+       _code = "%s = %s < %s;\n";
     else if(op.attr==1)
-       _code = strdup("%s = %s > %s;\n");
+       _code = "%s = %s > %s;\n";
     else if(op.attr==2)
-       _code = strdup("%s = %s <= %s;\n");
+       _code = "%s = %s <= %s;\n";
     else if(op.attr==3)
-       _code = strdup("%s = %s >= %s;\n");
+       _code = "%s = %s >= %s;\n";
     asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
     cWriteCode(res->codigo);
-    free(_code);
+    free(res->codigo);
 }
 
 void generaCodigoReturn(atributos a){
@@ -1252,21 +1253,19 @@ void generaCodigo(char* pattern, char* a, char* b, char* c){
 }
 
 void generaCodigoUnario(atributos op, atributos a, atributos* res){
-    res->codigo;
     char* _code ;
-
     if(op.attr==0)
-       _code = strdup("%s = !%s;\n");
+       _code = "%s = !%s;\n";
     else if(op.attr==1){
         if(a.lista)
-            _code = strdup("%s = getLongitudLista%s(%s);\n");
+            _code = "%s = getLongitudLista%s(%s);\n";
         if(a.tipoDato==COMPLEJO){
-            _code = strdup("%s = getReal(%s);\n");
+            _code = "%s = getReal(%s);\n";
         }
     }if(op.attr==2)
-        _code = strdup("%s = getImaginaria(%s);\n");
+        _code = "%s = getImaginaria(%s);\n";
     else if(op.attr==3)
-       _code = strdup("%s = getActualLista%s(%s);\n");
+       _code = "%s = getActualLista%s(%s);\n";
 
     if(a.tipoDato==COMPLEJO){
         asprintf(&res->codigo,_code,res->nombre, a.nombre);
@@ -1274,17 +1273,16 @@ void generaCodigoUnario(atributos op, atributos a, atributos* res){
         asprintf(&res->codigo,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
     }
     cWriteCode(res->codigo);
-    free(_code);
+    free(res->codigo);
 }
 
 void generaCodigoSi(atributos* a, atributos exp){
     char* _code;
-    char* pattern = strdup("if(!%s) goto %s;\n");
+    char* pattern = "if(!%s) goto %s;\n";
     a->etiq1 = generarEtiqueta();
     asprintf(&_code,pattern,exp.nombre,a->etiq1);
     cWriteCode(_code);
     free(_code);
-    free(pattern);
 }
 
 
@@ -1292,15 +1290,15 @@ char* tipoAprintf(dtipo tipo) {
     char* resultado;
 
 	if ( tipo == ENTERO ) {
-		resultado = strdup( "%d");
+		resultado =  "%d";
 	} else if ( tipo == REAL ) {
-		resultado = strdup( "%f");
+		resultado =  "%f";
 	} else if ( tipo == TIPOBOOL ) {
-		resultado = strdup( "%d");
+		resultado =  "%d";
 	} else if ( tipo == CARACTER ) {
-		resultado = strdup( "%c");
+		resultado =  "%c";
 	} else if ( tipo == TIPOCADENA ) {
-		resultado = strdup( "%s");
+		resultado =  "%s";
     }
 
 	return resultado;
@@ -1364,27 +1362,27 @@ void cWriteFunc(atributos in, atributos* res){
     a.tipoDato = ts[index].tipoDato;
     generaCodigoVariableTemporal(a,res);
     char* resultado;
-    char* pattern = strdup("%s = %s");
-    asprintf(&resultado,pattern,res->nombre,generarFuncion(in.nombre));
+    char* pattern = "%s = %s";
+    char* fun = generarFuncion(in.nombre);
+    asprintf(&resultado,pattern,res->nombre,fun);
     cWriteCode(resultado);
     free(resultado);
-    free(pattern);
+    free(fun);
 }
 
 void moverCursor(atributos a,atributos op){
     char* pattern;
     if(op.attr==0){
-    pattern = strdup("retrocederLista%s(&%s);\n");
+    pattern = "retrocederLista%s(&%s);\n";
     }else if(op.attr==1){
-    pattern = strdup("avanzarLista%s(&%s);\n");
+    pattern = "avanzarLista%s(&%s);\n";
     }else{
-    pattern = strdup("irAPosicion%s(&%s,0);\n");
+    pattern = "irAPosicion%s(&%s,0);\n";
     }
     int index = tsSearchId(a);
     char* code;
     asprintf(&code,pattern,tipoAstring(ts[index].tipoDato),a.nombre);
     cWriteCode(code);
-    free(pattern);
     free(code);
 }
 
@@ -1396,15 +1394,40 @@ void generaCreacionLista(atributos a){
     asprintf(&var_name, "listade%s", tipoAstring(a.tipoDato));
     asprintf(&res,"struct %s %s= %s_default;\n",var_name,a.nombre,var_name);
     cWriteCode(res);
-    var_name = strdup(a.nombre);
-    char* pattern = strdup("insertar%s(&%s,%s);\n");
+    char* pattern = "insertar%s(&%s,%s);\n";
     while(i>=0){
-        asprintf(&res,pattern,tipoAstring(a.tipoDato),var_name,ts_subprog[i].nombre);
+        asprintf(&res,pattern,tipoAstring(a.tipoDato),a.nombre,ts_subprog[i].nombre);
         cWriteCode(res);
         i--;
     }
     TOPE_SUBPROG = 0;
     free(var_name);
-    free(pattern);
     free(res);
+}
+
+void freeEverything(atributos* res){
+    if(res->nombre!=NULL)
+        free(res->nombre);
+    if(res->codigo!=NULL)
+        free(res->codigo);
+    if(res->etiq1!=NULL)
+        free(res->etiq1);
+    if(res->etiq2!=NULL)
+        free(res->etiq2);
+}
+
+void freeTable(){
+
+    unsigned int i = 0;
+    for(i=0;i<MAX_IN;i++){
+        if(ts[i].nombre!=NULL){
+            //free(ts[i].nombre);
+        }
+	}
+
+    for(i=0;i<MAX_SUBPROG;i++){
+        if(ts_subprog[i].nombre!=NULL){
+            freeEverything(&ts_subprog[i]);
+        }
+    }
 }

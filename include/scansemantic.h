@@ -249,3 +249,5 @@ void moverCursor(atributos a,atributos op);
 void generaCreacionLista(atributos a);
 void checkTypes(atributos a, atributos b);
 void generaCodigoInicializacion(atributos a);
+void freeEverything(atributos* res);
+void freeTable();
