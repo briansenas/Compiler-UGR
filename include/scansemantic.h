@@ -251,3 +251,4 @@ void checkTypes(atributos a, atributos b);
 void generaCodigoInicializacion(atributos a);
 void freeEverything(atributos* res);
 void freeTable();
+void *strealloc(char *origptr, char *strdata);

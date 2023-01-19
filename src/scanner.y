@@ -47,9 +47,7 @@ void yyerror(const char * mensaje);
 
 %%
 
-programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addChar('\n');} bloque {addChar('\n'); fputs("}",MAIN); cerrarArchivos();
-        freeTable();
-        }
+programa: {abrirArchivos();}PRINCIPAL {principal=1;tsAddSubprog($1);} {decParam = 1;} PARENTESIS_ABRE parametros PARENTESIS_CIERRA {addChar('\n');} bloque {addChar('\n'); fputs("}",MAIN); cerrarArchivos();}
         | error;
 
 bloque: INI_BLOQUE
@@ -131,10 +129,7 @@ sentencia: bloque
 
 sentencia_asignacion:identificador OP_ASIGNACION expresion PYC{
     generaCodigoAsignacion($1,$3);
-    if($1.tipoDato != $3.tipoDato){
-        printf("Semantic Error(%d): El valor a asignar no es del mismo tipo.[Expected: %s - Got:%s]\n",
-        line, tipoAstring($1.tipoDato),tipoAstring($3.tipoDato));
-    }
+    ErrorTipo($1,$3);
     if(tsCheckList($1)){
         if(!$3.lista){
             printf("Semantic Error(%d): No se puede asignar porque tienen que ser de tipo lista.\n",line);
@@ -223,19 +218,21 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     | OP_UNARIO expresion {
     tsOpUnary($1, $2, &$$);
     $$.nombre=generarVariableTemporal();
-    $2.lista=0;
     int tipo = $2.tipoDato;
     $2.tipoDato = $$.tipoDato;
+    $2.lista=0;
     generaCodigoVariableTemporal($2,&$$);
+    $2.lista=1;
     $2.tipoDato = tipo;
     generaCodigoUnario($1,$2,&$$);
     }
     | OP_INTERR expresion {
-    if(!isList($1)){
+    if(!isList($2)){
         printf("Semantic Error(%d): Esta operación solamente de listas", line);
     }
     $$.nombre = generarVariableTemporal();
     $2.lista = 0;
+    $$.tipoDato = $2.tipoDato;
     generaCodigoVariableTemporal($2,&$$);
     generaCodigoUnario($1,$2,&$$);
     } %prec OP_UNARIO
@@ -247,10 +244,12 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     $1.lista=0;
     generaCodigoVariableTemporal($1,&$$);
     char* res;
+    char* tipoA = tipoAstring(ts[a].tipoDato);
     asprintf(&res,"%s = getElemento%s(%s,%s);\n", $$.nombre,
-    tipoAstring(ts[a].tipoDato),
+    tipoA,
     $1.nombre,$3.nombre);
-    asprintf($$.codigo, "%s",$3.nombre);
+    free(tipoA);
+    $$.codigo = $3.nombre;
     cWriteCode(res);
     free(res);
     }else{
@@ -304,6 +303,7 @@ expresion: PARENTESIS_ABRE expresion PARENTESIS_CIERRA {
     generaCodigoVariableTemporal($1,&$$);
     asprintf(&$$.codigo,"%s = %s == %s;\n",$$.nombre, $1.nombre, $3.nombre);
     cWriteCode($$.codigo);
+    free($$.codigo);
     }
     | expresion OP_ADITIVO expresion {
     tsOpAdditivo($1, $2, $3, &$$);
@@ -343,17 +343,19 @@ sigsig:expresion SIGSIG expresion {
     int index = tsSearchId($1);
     generaCodigoVariableTemporal($1,&$$);
     char* res;
+    char* tipoA = tipoAstring(ts[index].tipoDato);
     if($2.attr==1){
         asprintf(&res,"%s = removeElement%s(%s,%s);\n", $$.nombre,
-        tipoAstring(ts[index].tipoDato),ts[index].nombre,$3.nombre);
+        tipoA,ts[index].nombre,$3.nombre);
         cWriteCode(res);
     }else{
         asprintf(&res,"%s = addElementAt%s(%s,%s,%s);\n",
-        $$.nombre, tipoAstring(ts[index].tipoDato),$1.nombre,$3.codigo,$3.nombre
+        $$.nombre, tipoA,$1.nombre,$3.codigo,$3.nombre
         );
         cWriteCode(res);
     }
     free(res);
+    free(tipoA);
       };
 
 varios_identificador: identificador
@@ -402,7 +404,7 @@ expresion_o_cadena: expresion{
 
 constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nombre = $1.nombre; }
 | CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; }
-| CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre;}
+| CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre; }
 | CONSTANTE_CAR { $$.tipoDato = CARACTER;  $$.nombre = $1.nombre; };
 
 tipo: TIPO_DATO {$$.tipoDato = $1.tipoDato;$$.lista=0;}

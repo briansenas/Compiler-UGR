@@ -25,7 +25,7 @@ ESPACIO					[" "]
 %%
 "ini_var"                { if(DEBUGGING) ECHO;       return(INI_VAR);}
 "fin_var"                { if(DEBUGGING) ECHO;       return(FIN_VAR);}
-"principal"             { if(DEBUGGING) ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
+"principal"             { if(DEBUGGING) ECHO; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 "}"                       { if(DEBUGGING) ECHO;       return(FIN_BLOQUE);}
 "{"                       { if(DEBUGGING) ECHO;       return(INI_BLOQUE);}
 "["                       { if(DEBUGGING) ECHO;       return(CORCHETE_ABRE);}
@@ -72,13 +72,13 @@ ESPACIO					[" "]
 "=="                      { if(DEBUGGING) ECHO;       yylval.attr=0; return(OP_IGUALDAD);}
 "!="                      { if(DEBUGGING) ECHO;       yylval.attr=1; return(OP_IGUALDAD);}
 ","                       { if(DEBUGGING) ECHO;       return(COMA);}
-{DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
-{DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
-\'[^\"\']?\'               { if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+{DIGITO}+				  { if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{DIGITO}+"."{DIGITO}+	  { if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+\'[^\"\']?\'               { if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=3; return(CONSTANTE_CAR);}
 "Verdadero"                 { if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1;  yylval.attr=0; yylval.nombre = "true"; return(BOOLEANO);}
 "Falso"                 { if(DEBUGGING) ECHO;  yylval.tipoDato=TIPOBOOL; yylval.es_constante = 1; yylval.attr=1; yylval.nombre = "false"; return(BOOLEANO);}
-\"[^\"]*\"				  { if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
-{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre=strdup(yytext); return(IDENT);}
+\"[^\"]*\"				  { if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); return(CADENA);}
+{LETRA}({LETRA}|{GUIONES}|{DIGITO})*    { if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); return(IDENT);}
 [^;]*;[ ]*"//".*                           { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 ^[ ]*"//".*                             { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ if(DEBUGGING || COMMENTS) ECHO;}

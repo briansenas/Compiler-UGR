@@ -15,12 +15,16 @@
 void insertarint(struct listadeint* l, int a){
     if(l->var == NULL){
         l->var = malloc(sizeof(int)*255);
+        l->longitud = 255;
+    }
+    else if(l->last_pos >= l->longitud){
+        l->var = realloc(l->var,sizeof(int)*l->longitud*2);
+        l->longitud = l->longitud * 2;
     }
     if(l->last_pos < l->longitud){
         *(l->var+l->last_pos) = a;
         l->last_pos++;
     }else{
-        printf("OVERFLOW ERROR, lists only support 255 numbers");
         exit(-1);
     }
 }
@@ -42,7 +46,7 @@ void irAPosicionint(struct listadeint* l,int a){
     if(a>=0 && a<l->last_pos)
         l->actual = a;
     else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
+        printf("\n[ERROR GO-TO-LIST]: Out-of-bounds exception: %d \n",a);
         exit(-1);
     }
 }
@@ -52,7 +56,7 @@ int getElementoint(struct listadeint l, int a){
     if(a>=0 && a<l.last_pos)
         res = *(l.var +a);
     else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
+        printf("\n[ERROR GET]: Out-of-bounds exception: %d \n",a);
         exit(-1);
     }
     return res;
@@ -66,7 +70,7 @@ struct listadeint borrarListaint(struct listadeint l,int a){
         l.last_pos -= a;
         l.actual = MAX(l.actual-a,0);
     }else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
+        printf("\n[ERROR LENGHT]: Out-of-bounds exception: %d \n",a);
         exit(-1);
     }
 
@@ -86,7 +90,7 @@ struct listadeint removeElementint(struct listadeint l, int a){
         memcpy(l.var+a,l.var+l.last_pos-a-1,sizeof(int)*(l.last_pos-a-1));
         l.last_pos -= 1;
     }else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
+        printf("\n[ERROR REMOVE]: Out-of-bounds exception: %d \n",a);
         exit(-1);
     }
     return l;
@@ -95,19 +99,24 @@ struct listadeint removeElementint(struct listadeint l, int a){
 struct listadeint addElementAtint(struct listadeint l, int a, int b){
     if(l.var == NULL){
         l.var = malloc(sizeof(int)*255);
+        l.longitud = 255;
     }
-    if(a>0 && a<=l.last_pos){
+    else if(l.last_pos >= l.longitud){
+        l.var = realloc(l.var,sizeof(int)*l.longitud*2);
+        l.longitud = l.longitud * 2;
+    }
+    if(a>=0 && a<=l.last_pos){
         for(int i=a+1;i<l.last_pos;i++){
             *(l.var + i) = *(l.var+i-1);
         }
         *(l.var+a) = b;
-        l.last_pos +=1;
+        l.last_pos++;
     }else if(a==0){
         *(l.var+a) = b;
         l.last_pos++;
     }
     else{
-        printf("\n[ERROR]: Out-of-bounds exception\n");
+        printf("\n[ERROR ADD]: Out-of-bounds exception: %d \n",a);
         exit(-1);
     }
     return l;

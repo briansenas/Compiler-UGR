@@ -953,7 +953,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 28 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; yylval.nombre=strdup(yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
+{ if(DEBUGGING) ECHO; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext);yylval.tipoDato=ENTERO; return(PRINCIPAL);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -1188,18 +1188,18 @@ YY_RULE_SETUP
 case 50:
 YY_RULE_SETUP
 #line 75 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=1; return(CONSTANTE_NUM);}
+{ if(DEBUGGING) ECHO;    yylval.tipoDato=ENTERO; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=1; return(CONSTANTE_NUM);}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
 #line 76 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
+{ if(DEBUGGING) ECHO;    yylval.tipoDato=REAL; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=2; return(CONSTANTE_FLOAT);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
 #line 77 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre=strdup(yytext); yylval.attr=3; return(CONSTANTE_CAR);}
+{ if(DEBUGGING) ECHO;   yylval.tipoDato=CARACTER; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); yylval.attr=3; return(CONSTANTE_CAR);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
@@ -1215,12 +1215,12 @@ case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
 #line 80 "./src/scanner.l"
-{ if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre =strdup(yytext); return(CADENA);}
+{ if(DEBUGGING) ECHO;   yylval.tipoDato=TIPOCADENA; yylval.es_constante = 1; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); return(CADENA);}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
 #line 81 "./src/scanner.l"
-{ if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre=strdup(yytext); return(IDENT);}
+{ if(DEBUGGING) ECHO; yylval.es_constante = 1;yylval.tipoDato=DESCONOCIDO; yylval.nombre = NULL; yylval.nombre=strealloc(yylval.nombre,yytext); return(IDENT);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */

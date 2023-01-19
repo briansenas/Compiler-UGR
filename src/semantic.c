@@ -17,21 +17,21 @@ int currentFunction = -1;
 
 char* tipoAstring(dtipo tipo){
 
-	char *tipo_str;
-    tipo_str="Desconocido";
+	char *tipo_str = NULL ;
+    tipo_str=strealloc(tipo_str,"Desconocido");
 
 	if ( tipo == REAL ) {
-        tipo_str="float";
+        tipo_str=strealloc(tipo_str,"float");
 	} else if (tipo == ENTERO) {
-        tipo_str="int";
+        tipo_str=strealloc(tipo_str,"int");
 	} else if ( tipo == TIPOBOOL ) {
-       tipo_str = "bool";
+       tipo_str =strealloc(tipo_str ,"bool");
 	} else if ( tipo == CARACTER ) {
-       tipo_str = "char";
+       tipo_str =strealloc(tipo_str, "char");
 	}else if (tipo == TIPOCADENA){
-	    tipo_str = "string";
+	    tipo_str =strealloc(tipo_str ,"string");
 	}else if (tipo== NA){
- 	    tipo_str = "NA";
+ 	    tipo_str =strealloc(tipo_str, "NA");
 	}
 
 	return tipo_str;
@@ -356,8 +356,12 @@ void checkTypes(atributos a, atributos b){
     if(index<0){
 			printf("Semantic Error(%d): Identifier not found for assignment.\n",line);
     }else if(ts[index].tipoDato != b.tipoDato){
+        char* tipoA = tipoAstring(ts[index].tipoDato);
+        char* tipoB = tipoAstring(b.tipoDato);
         printf("Semantic Error(%d): La variable %s es de tipo %s pero se asigna el tipo %s \n",
-                line, ts[index].nombre, tipoAstring(ts[index].tipoDato), tipoAstring(b.tipoDato));
+                line, ts[index].nombre, tipoA,tipoB);
+        free(tipoA);
+        free(tipoB);
     }
 }
 
@@ -366,7 +370,8 @@ void generaCodigoInicializacion(atributos a){
     cWriteIdent(a);
     addChar('=');
     if(a.tipoDato==COMPLEJO){
-        char* _pattern = strdup("setComplex(");
+        char* _pattern = malloc(255);
+        strcpy(_pattern,"setComplex(");
         int i = 0;
         if(TOPE_SUBPROG!=2){
 			printf("Semantic Error(%d): Wrong number of parameters\n",line);
@@ -382,7 +387,7 @@ void generaCodigoInicializacion(atributos a){
             cWriteCode(_pattern);
         }
         TOPE_SUBPROG = 0;
-    free(_pattern);
+        free(_pattern);
     }
     addChar(';');
     addChar('\n');
@@ -399,8 +404,12 @@ void tsCheckReturn(atributos expr, atributos* res){
 		//printf("Ha encontrado una FUNCION en la pila\n");
 
 		if (expr.tipoDato!= ts[index].tipoDato) {
+            char* expT =  tipoAstring(expr.tipoDato);
+            char* tipo = tipoAstring(ts[index].tipoDato);
 			printf("Semantic Error(%d): Return of type %s does not equal return type %s of function %s.\n",
-                    line, tipoAstring(expr.tipoDato),tipoAstring(ts[index].tipoDato),ts[index].nombre);
+                    line,expT,tipo ,ts[index].nombre);
+            free(expT);
+            free(tipo);
 			return;
 		}
 
@@ -493,11 +502,7 @@ void tsOpSign(atributos op, atributos o, atributos* res){
 // Realiza la comprobación de la operación +, - binaria
 void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
 		printf("Semantic Error%d): La operación debe ser con enteros o reales.", line);
@@ -544,11 +549,7 @@ void tsOpAdditivo(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación ++, --
 void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
 		printf("Semantic Error%d): La operación debe ser con enteros o reales.", line);
@@ -564,14 +565,21 @@ void tsOpSignSign(atributos o1, atributos op, atributos o2, atributos* res){
 
 }
 
+void ErrorTipo(atributos o1, atributos o2){
+	if (o1.tipoDato!= o2.tipoDato) {
+        char* tipoA = tipoAstring(o1.tipoDato);
+        char* tipoB = tipoAstring(o2.tipoDato);
+		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
+							line, tipoA, tipoB);
+        free(tipoA);
+        free(tipoB);
+	}
+}
+
 // Realiza la comprobación de la operación *, /, **, %
 void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) {
 		printf("Semantic Error%d): La operación debe ser con enteros o reales.", line);
@@ -616,11 +624,7 @@ void tsOpMul(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación &&
 void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Los valores deben ser los mismos. Expects TIPOBOOL", line);
@@ -635,11 +639,7 @@ void tsOpAnd(atributos o1, atributos op, atributos o2, atributos* res){
 
 void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Los valores deben ser los mismos. Expects TIPOBOOL", line);
@@ -655,11 +655,7 @@ void tsOpXOr(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación ||
 void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 	if (o1.tipoDato!= TIPOBOOL || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Los valores deben ser los mismos. Expects TIPOBOOL", line);
 		return;
@@ -674,11 +670,7 @@ void tsOpOr(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación ==, !=
 void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if (isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):El valor de una lista es ambiguo, no puede usar en un condicional.", line);
@@ -695,11 +687,7 @@ void tsOpEqual(atributos o1, atributos op, atributos o2, atributos* res){
 // Realiza la comprobación de la operación <, >, <=, >=, <>
 void tsOpRel(atributos o1, atributos op, atributos o2, atributos* res){
 
-	if (o1.tipoDato!= o2.tipoDato) {
-		printf("Semantic Error(%d): Las expresión deben ser del mismo tipo. %s no es igual a %s",
-							line, tipoAstring(o1.tipoDato),tipoAstring(o2.tipoDato));
-		return;
-	}
+    ErrorTipo(o1,o2);
 
 	if ((o1.tipoDato!= ENTERO && o1.tipoDato!= REAL) || isList(o1) || isList(o2)) {
 		printf("Semantic Error(%d):Los valores deben ser los mismos. Expects ENTERO or REAL", line);
@@ -757,15 +745,19 @@ void tsFunctionCall(atributos id, atributos* res){
                     }
 
                     if(ts[pos_limit].tipoDato != tempTS.tipoDato){
+                        char* tipoA =  tipoAstring(ts[pos_limit].tipoDato);
+                        char* tipoB =  tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato);
                         printf("Semantic Error(%d): El parámetro %s es de tipo %s pero se espera un tipo %s \n",
-                                line ,ts[pos_limit].nombre, tipoAstring(ts[pos_limit].tipoDato),
-                                tipoAstring(ts_subprog[TOPE_SUBPROG].tipoDato) );
+                                line ,ts[pos_limit].nombre,tipoA ,
+                                tipoB);
+                        free(tipoA);
+                        free(tipoB);
                     }
                     pos_limit--;
                     TOPE_SUBPROG--;
                 }
                 currentFunction = index;
-                //res->nombre = strdup(ts[index].nombre);
+                //res->nombre = strealloc(nombre ,ts[index].nombre);
                 res->tipoDato= ts[index].tipoDato;
 								res->lista = ts[index].lista;
 								res->es_constante = ts[index].es_constante;
@@ -917,8 +909,8 @@ etiquetas ts_etiq[50];
 
 void addDesc(char* resultado){
     etiquetas etiq;
-    etiq.etiqueta;
-    etiq.etiqueta = resultado;
+    etiq.etiqueta = NULL;
+    etiq.etiqueta = strealloc( etiq.etiqueta ,resultado);
     ts_etiq[TS_ETIQ] = etiq;
     TS_ETIQ++;
 }
@@ -929,9 +921,11 @@ void delDesc(){
 
 void generaGOTO(char* etq){
     char* resultado;
-    char* pattern = "goto %s ;\n";
+    char* pattern = NULL;
+    pattern = strealloc(pattern ,"goto %s ;\n");
     asprintf(&resultado,pattern,etq);
     cWriteCode(resultado);
+    free(pattern);
     free(resultado);
 }
 
@@ -969,18 +963,19 @@ void abrirArchivos(){
 	fputs("#include \"dec_complex.c\"\n",FUNC);
     fputs("#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))\n",FUNC);
     fputs("#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))\n",FUNC);
+    fflush(MAIN);
+    fflush(FUNC);
 }
 
 void cerrarArchivos(){
+    fflush(MAIN);
+    fflush(FUNC);
     fclose(MAIN);
     fclose(FUNC);
 }
 
 void cMarkOut(){
-    if(subProg>0 || decParam)
-        fputs("\n}\n",FUNC);
-    else
-        fputs("\n}\n",MAIN);
+    cWriteCode("\n}\n");
     variable_main = 0;
 }
 
@@ -995,28 +990,30 @@ void tipoAtipoC(atributos var){
 
     char* resultado = malloc(255);
 
-    if(var.lista)
-        strcpy(resultado,"struct listade");
-    else
-        strcpy(resultado,"");
     dtipo tipo = var.tipoDato;
     if ( tipo == ENTERO ) {
-		strcat(resultado, "int ");
+        strcpy(resultado,"int ");
 	} else if ( tipo == REAL ) {
-		strcat(resultado, "float ");
+        strcpy(resultado,"float ");
 	} else if ( tipo == TIPOBOOL ) {
-		strcat(resultado, "bool ");
+        strcpy(resultado,"bool ");
 	} else if ( tipo == CARACTER ) {
-		strcat(resultado, "char ");
+        strcpy(resultado,"char ");
 	}else if (tipo == COMPLEJO ){
-        strcpy(resultado, "struct complejo ");
+        strcpy(resultado,"struct complejo ");
+    }else if (tipo== DESCONOCIDO){
+        strcpy(resultado,"desconocido ");
     }
 
-    if(subProg>0|| decParam)
-        fputs(resultado,FUNC);
-    else
-        fputs(resultado,MAIN);
 
+    if(var.lista){
+        char* temp = NULL;
+        temp = strealloc(temp ,resultado);
+        strcpy(resultado,"struct listade");
+        strcat(resultado,temp);
+        free(temp);
+    }
+    cWriteCode(resultado);
     free(resultado);
 }
 
@@ -1024,25 +1021,22 @@ void tipoAtipoC(atributos var){
 void addChar(char c){
     char* out;
     asprintf(&out,"%c",c);
-    if(subProg>0 || decParam)
-        fputs(out,FUNC);
-    else
-        fputs(out,MAIN);
+    cWriteCode(out);
     free(out);
 }
 
 char* getADD(int a){
-    char* tmp = "+";
+    char* tmp = NULL;
+    tmp = strealloc(tmp ,"+");
     if(a==1)
         tmp[0] = '-';
     return tmp;
 }
 
 void addADD(atributos a){
-    if(subProg>0 || decParam)
-        fputs(getADD(a.attr),FUNC);
-    else
-        fputs(getADD(a.attr),MAIN);
+    char* add = getADD(a.attr);
+    cWriteCode(add);
+    free(add);
 }
 
 int tsSearchParam(atributos a) {
@@ -1077,33 +1071,28 @@ void cWriteIdent(atributos a){
     }else
         asprintf(&tmp,"%s",ts[index].nombre);
 
-    if(subProg>0|| decParam)
-        fputs(tmp,FUNC);
-    else
-        fputs(tmp,MAIN);
-
+    cWriteCode(tmp);
     free(tmp);
 }
 
 void cWriteName(atributos a){
-    if(subProg>0 || decParam)
-        fputs(a.nombre,FUNC);
-    else
-        fputs(a.nombre,MAIN);
+    cWriteCode(a.nombre);
 }
 
 void cWriteCode(char* code){
     if(subProg>0 || decParam)
-        fputs(code,FUNC);
+        fwrite(code,sizeof(char),strlen(code),FUNC);
     else
-        fputs(code,MAIN);
+        fwrite(code,sizeof(char),strlen(code),MAIN);
 }
 
 void generaCodigoVariableTemporal(atributos a, atributos* res){
     tipoAtipoC(a);
-    cWriteCode(res->nombre);
-    addChar(';');
-    addChar('\n');
+    char* var = malloc(255);
+    strcpy(var,res->nombre);
+    strcat(var,";\n");
+    cWriteCode(var);
+    free(var);
 }
 void generaCodigoAsignacion(atributos a, atributos b){
     decvariable=1;
@@ -1116,126 +1105,138 @@ void generaCodigoAsignacion(atributos a, atributos b){
 }
 
 void generaCodigoLambda(atributos assign, atributos cond, atributos pos, atributos neg){
-    char* _pattern = "if(!%s) goto %s;\n";
+    char* _pattern = NULL;
+    _pattern = strealloc(_pattern ,"if(!%s) goto %s;\n");
     char* _code;
     neg.etiq1 = generarEtiqueta(); // Etiqueta negativa;
     neg.etiq2 = generarEtiqueta();  // Etiqueta de salida;
 
     asprintf(&_code,_pattern, cond.nombre, neg.etiq1);
     cWriteCode(_code);
-    free(_code);
     generaCodigoAsignacion(assign,neg);
-    _pattern = "goto %s;\n";
+    _pattern = strealloc(_pattern ,"goto %s;\n");
     asprintf(&_code,_pattern,neg.etiq2);
     cWriteCode(_code);
-    free(_code);
-    _pattern = "%s:\n";
+    _pattern = strealloc(_pattern ,"%s:\n");
     asprintf(&_code,_pattern, neg.etiq1);
     cWriteCode(_code);
-    free(_code);
     generaCodigoAsignacion(assign,pos);
-    _pattern = "%s:\n";
+    _pattern = strealloc(_pattern ,"%s:\n");
     asprintf(&_code,_pattern, neg.etiq2);
     cWriteCode(_code);
+
+    free(_pattern);
     free(_code);
 }
 
 void generaCodigoOpAditivo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo;
-    char* _code;
+    char* _code = NULL;
     if(op.attr==0){
         if(!a.lista && !b.lista)
-            _code = "%s = %s + %s;\n";
+            _code = strealloc(_code ,"%s = %s + %s;\n");
         if(a.lista && !b.lista)
-            _code = "%s = IntOperationLista%s(%s,%s,1);\n";
+            _code = strealloc(_code ,"%s = IntOperationLista%s(%s,%s,1);\n");
         if(!a.lista && b.lista)
-            _code = "%s = getIntFromlista%s(%s,%s,1);\n";
+            _code = strealloc(_code ,"%s = getIntFromlista%s(%s,%s,1);\n");
     }else{
         if(!a.lista && !b.lista)
-            _code = "%s = %s - %s;\n";
+            _code = strealloc(_code ,"%s = %s - %s;\n");
         if(a.lista && !b.lista)
-            _code = "%s = IntOperationLista%s(%s,%s,0);\n";
+            _code = strealloc(_code ,"%s = IntOperationLista%s(%s,%s,0);\n");
         if(!a.lista && b.lista)
-            _code = "%s = getIntFromlista%s(%s,%s,0);\n";
+            _code = strealloc(_code ,"%s = getIntFromlista%s(%s,%s,0);\n");
     }
     if(!a.lista && !b.lista)
         asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
-    else if(a.lista)
-        asprintf(&res->codigo,_code,res->nombre, tipoAstring(a.tipoDato), a.nombre, b.nombre);
-    else{
+    else if(a.lista){
+        char* tipoA = tipoAstring(a.tipoDato);
+        asprintf(&res->codigo,_code,res->nombre,tipoA , a.nombre, b.nombre);
+        free(tipoA);
+    }else{
         int index = tsSearchId(b);
-        asprintf(&res->codigo,_code,res->nombre,tipoAstring(ts[index].tipoDato),
+        char* tipoA = tipoAstring(ts[index].tipoDato);
+        asprintf(&res->codigo,_code,res->nombre,tipoA,
                 b.nombre, a.nombre);
+        free(tipoA);
     }
     cWriteCode(res->codigo);
+    free(_code);
     free(res->codigo);
 }
 
 void generaSigno(atributos op, atributos b, atributos* res){
     res->nombre;
-    char* _code;
+    char* _code = NULL ;
     if(op.attr==0)
-       _code = "+%s";
+       _code = strealloc(_code ,"+%s");
     else
-       _code = "-%s";
+       _code = strealloc(_code ,"-%s");
     asprintf(&res->nombre,_code,b.nombre);
+    free(_code);
 }
 
 void generaCodigoOpMultiplicativo(atributos a, atributos op, atributos b, atributos* res){
     res->codigo;
-    char* _code;
+    char* _code = NULL ;
     if(op.attr==0){
         if(!a.lista && !b.lista)
-            _code = "%s = %s * %s;\n";
+            _code = strealloc(_code ,"%s = %s * %s;\n");
         if(a.lista && !b.lista)
-            _code = "%s = IntOperationLista%s(%s,%s,2);\n";
+            _code = strealloc(_code ,"%s = IntOperationLista%s(%s,%s,2);\n");
         if(!a.lista && b.lista)
-            _code = "%s = getIntFromlista%s(%s,%s,2);\n";
+            _code = strealloc(_code ,"%s = getIntFromlista%s(%s,%s,2);\n");
     }else if(op.attr==1){
         if(!a.lista && !b.lista)
-            _code = "%s = %s / %s;\n";
+            _code = strealloc(_code ,"%s = %s / %s;\n");
         if(a.lista && !b.lista)
-            _code = "%s = IntOperationLista%s(%s,%s,3);\n";
+            _code = strealloc(_code ,"%s = IntOperationLista%s(%s,%s,3);\n");
         if(!a.lista && b.lista)
-            _code = "%s = getIntFromlista%s(%s,%s,3);\n";
+            _code = strealloc(_code ,"%s = getIntFromlista%s(%s,%s,3);\n");
     }else if(op.attr==11){
-        _code = "%s = %s / %s;\n";
+        _code = strealloc(_code ,"%s = %s / %s;\n");
     }
     else if(op.attr==2){
         if(!a.lista)
-            _code = "%s = %s %% %s;\n";
+            _code = strealloc(_code ,"%s = %s %% %s;\n");
         else
-            _code = "%s = borrarLista%s(%s,%s);\n";
+            _code = strealloc(_code ,"%s = borrarLista%s(%s,%s);\n");
     }else if(op.attr==3)
-       _code = "%s = concatenerListas(%s,%s);\n";
+       _code = strealloc(_code ,"%s = concatenerListas(%s,%s);\n");
 
     if((!a.lista && !b.lista) || op.attr==3)
         asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
-    else if(a.lista)
-        asprintf(&res->codigo,_code,res->nombre,tipoAstring(a.tipoDato),
+    else if(a.lista){
+        char* tipoA = tipoAstring(a.tipoDato);
+        asprintf(&res->codigo,_code,res->nombre,tipoA,
                 a.nombre, b.nombre);
-    else{
+        free(tipoA);
+    }else{
         int index = tsSearchId(b);
-        asprintf(&res->codigo,_code,res->nombre,tipoAstring(ts[index].tipoDato),
+        char* tipoA = tipoAstring(ts[index].tipoDato);
+        asprintf(&res->codigo,_code,res->nombre,tipoA,
                 b.nombre, a.nombre);
+        free(tipoA);
     }
     cWriteCode(res->codigo);
+    free(_code);
     free(res->codigo);
 }
 
 void generaCodigoOpRelacion(atributos a, atributos op, atributos b, atributos* res){
     res->codigo;
-    char* _code;
+    char* _code = NULL;
     if(op.attr==0)
-       _code = "%s = %s < %s;\n";
+       _code = strealloc(_code ,"%s = %s < %s;\n");
     else if(op.attr==1)
-       _code = "%s = %s > %s;\n";
+       _code = strealloc(_code ,"%s = %s > %s;\n");
     else if(op.attr==2)
-       _code = "%s = %s <= %s;\n";
+       _code = strealloc(_code ,"%s = %s <= %s;\n");
     else if(op.attr==3)
-       _code = "%s = %s >= %s;\n";
+       _code = strealloc(_code ,"%s = %s >= %s;\n");
     asprintf(&res->codigo,_code,res->nombre, a.nombre, b.nombre);
     cWriteCode(res->codigo);
+    free(_code);
     free(res->codigo);
 }
 
@@ -1247,58 +1248,65 @@ void generaCodigoReturn(atributos a){
 }
 
 void generaCodigo(char* pattern, char* a, char* b, char* c){
-    char* resultado; asprintf(&resultado,pattern,a,b,c);
+    char* resultado;
+    asprintf(&resultado,pattern,a,b,c);
     cWriteCode(resultado);
     free(resultado);
 }
 
 void generaCodigoUnario(atributos op, atributos a, atributos* res){
-    char* _code ;
+    res->codigo;
+    char* _code = NULL ;
     if(op.attr==0)
-       _code = "%s = !%s;\n";
+       _code = strealloc(_code ,"%s = !%s;\n");
     else if(op.attr==1){
         if(a.lista)
-            _code = "%s = getLongitudLista%s(%s);\n";
+            _code = strealloc(_code ,"%s = getLongitudLista%s(%s);\n");
         if(a.tipoDato==COMPLEJO){
-            _code = "%s = getReal(%s);\n";
+            _code = strealloc(_code ,"%s = getReal(%s);\n");
         }
     }if(op.attr==2)
-        _code = "%s = getImaginaria(%s);\n";
+        _code = strealloc(_code ,"%s = getImaginaria(%s);\n");
     else if(op.attr==3)
-       _code = "%s = getActualLista%s(%s);\n";
+       _code = strealloc(_code ,"%s = getActualLista%s(%s);\n");
+
 
     if(a.tipoDato==COMPLEJO){
         asprintf(&res->codigo,_code,res->nombre, a.nombre);
     }else{
-        asprintf(&res->codigo,_code,res->nombre, tipoAstring(a.tipoDato),a.nombre);
+        char* tipoA = tipoAstring(a.tipoDato);
+        asprintf(&res->codigo,_code,res->nombre, tipoA,a.nombre);
+        free(tipoA);
     }
     cWriteCode(res->codigo);
     free(res->codigo);
+    free(_code);
 }
 
 void generaCodigoSi(atributos* a, atributos exp){
-    char* _code;
-    char* pattern = "if(!%s) goto %s;\n";
+    char* _code = NULL;
+    char* pattern = NULL;
+    pattern = strealloc(pattern ,"if(!%s) goto %s;\n");
     a->etiq1 = generarEtiqueta();
     asprintf(&_code,pattern,exp.nombre,a->etiq1);
     cWriteCode(_code);
     free(_code);
+    free(pattern);
 }
 
 
 char* tipoAprintf(dtipo tipo) {
-    char* resultado;
-
+    char* resultado = NULL;
 	if ( tipo == ENTERO ) {
-		resultado =  "%d";
+		resultado = strealloc(resultado , "%d");
 	} else if ( tipo == REAL ) {
-		resultado =  "%f";
+		resultado = strealloc(resultado , "%f");
 	} else if ( tipo == TIPOBOOL ) {
-		resultado =  "%d";
+		resultado = strealloc(resultado , "%d");
 	} else if ( tipo == CARACTER ) {
-		resultado =  "%c";
+		resultado = strealloc(resultado , "%c");
 	} else if ( tipo == TIPOCADENA ) {
-		resultado =  "%s";
+		resultado = strealloc(resultado , "%s");
     }
 
 	return resultado;
@@ -1306,8 +1314,8 @@ char* tipoAprintf(dtipo tipo) {
 
 void generarE_S(char* E_S, int tipo){
     int i = 0;
-    char* res;
-    asprintf(&res,"%s",E_S);
+    char* res = malloc(255); ;
+    snprintf(res,255,"%s",E_S);
     while(i<TOPE_SUBPROG){
         strcat(res,tipoAprintf(ts_subprog[i].tipoDato));
         i++;
@@ -1331,9 +1339,8 @@ void generarE_S(char* E_S, int tipo){
 
 char* generarFuncion(char* nombre){
     int i = 0;
-    char* res;
-    i=0;
-	asprintf(&res,"%s",nombre);
+    char* res = malloc(255); ;
+    snprintf(res,255,"%s",nombre);
     strcat(res,"(");
     while(i<TOPE_SUBPROG){
         strcat(res,ts_subprog[i].nombre);
@@ -1347,8 +1354,8 @@ char* generarFuncion(char* nombre){
 }
 
 void cWriteLabel(char* etiq1){
-    char* etq;
-    asprintf(&etq,"%s",etiq1);
+    char* etq = malloc(255);
+    snprintf(etq,255,"%s",etiq1);
     strcat(etq,":\n");
     cWriteCode(etq);
     free(etq);
@@ -1362,27 +1369,32 @@ void cWriteFunc(atributos in, atributos* res){
     a.tipoDato = ts[index].tipoDato;
     generaCodigoVariableTemporal(a,res);
     char* resultado;
-    char* pattern = "%s = %s";
-    char* fun = generarFuncion(in.nombre);
-    asprintf(&resultado,pattern,res->nombre,fun);
+    char* pattern = NULL;
+    pattern = strealloc(pattern ,"%s = %s");
+    char* var = generarFuncion(in.nombre);
+    asprintf(&resultado,pattern,res->nombre,var);
     cWriteCode(resultado);
     free(resultado);
-    free(fun);
+    free(pattern);
+    free(var);
 }
 
 void moverCursor(atributos a,atributos op){
-    char* pattern;
+    char* pattern = NULL;
     if(op.attr==0){
-    pattern = "retrocederLista%s(&%s);\n";
+    pattern = strealloc(pattern ,"retrocederLista%s(&%s);\n");
     }else if(op.attr==1){
-    pattern = "avanzarLista%s(&%s);\n";
+    pattern = strealloc(pattern ,"avanzarLista%s(&%s);\n");
     }else{
-    pattern = "irAPosicion%s(&%s,0);\n";
+    pattern = strealloc(pattern ,"irAPosicion%s(&%s,0);\n");
     }
     int index = tsSearchId(a);
     char* code;
-    asprintf(&code,pattern,tipoAstring(ts[index].tipoDato),a.nombre);
+    char* tipoA = tipoAstring(ts[index].tipoDato);
+    asprintf(&code,pattern,tipoA,a.nombre);
+    free(tipoA);
     cWriteCode(code);
+    free(pattern);
     free(code);
 }
 
@@ -1391,21 +1403,29 @@ void generaCreacionLista(atributos a){
     char* res;
     i=TOPE_SUBPROG-1;
     char* var_name;
-    asprintf(&var_name, "listade%s", tipoAstring(a.tipoDato));
+    char* tipo = tipoAstring(a.tipoDato);
+    asprintf(&var_name, "listade%s",tipo);
     asprintf(&res,"struct %s %s= %s_default;\n",var_name,a.nombre,var_name);
     cWriteCode(res);
-    char* pattern = "insertar%s(&%s,%s);\n";
+    free(res);
+    free(var_name);
+    var_name = NULL;
+    var_name = strealloc(var_name ,a.nombre);
+    char* pattern = strealloc(pattern ,"insertar%s(&%s,%s);\n");
     while(i>=0){
-        asprintf(&res,pattern,tipoAstring(a.tipoDato),a.nombre,ts_subprog[i].nombre);
+        asprintf(&res,pattern,tipo,var_name,ts_subprog[i].nombre);
         cWriteCode(res);
+        free(res);
         i--;
     }
     TOPE_SUBPROG = 0;
     free(var_name);
+    free(pattern);
     free(res);
+    free(tipo);
 }
 
-void freeEverything(atributos* res){
+void freeEverything(atributos *res){
     if(res->nombre!=NULL)
         free(res->nombre);
     if(res->codigo!=NULL)
@@ -1421,7 +1441,7 @@ void freeTable(){
     unsigned int i = 0;
     for(i=0;i<MAX_IN;i++){
         if(ts[i].nombre!=NULL){
-            //free(ts[i].nombre);
+            free(ts[i].nombre);
         }
 	}
 
@@ -1430,4 +1450,13 @@ void freeTable(){
             freeEverything(&ts_subprog[i]);
         }
     }
+}
+
+void *strealloc(char *origptr, char *strdata)
+{
+    size_t nbytes = strlen(strdata) + 1;
+    char *newptr = (char *) realloc(origptr, nbytes); /* cast needed for C++ */
+    if (newptr)
+      memcpy(newptr, strdata, nbytes);
+    return newptr;
 }
