@@ -401,7 +401,7 @@ expresion_o_cadena: expresion{
                   } ;
 
 constante: BOOLEANO { $$.tipoDato = TIPOBOOL; $$.nombre = $1.nombre; }
-| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; free($1.nombre); }
+| CONSTANTE_NUM { $$.tipoDato = ENTERO; $$.nombre = $1.nombre; }
 | CONSTANTE_FLOAT { $$.tipoDato = REAL;  $$.nombre = $1.nombre;}
 | CONSTANTE_CAR { $$.tipoDato = CARACTER;  $$.nombre = $1.nombre; };
 
