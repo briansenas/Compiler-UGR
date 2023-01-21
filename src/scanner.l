@@ -6,6 +6,7 @@
 #include <string.h>
 #define DEBUGGING 1
 #define COMMENTS 0
+#define _GNU_SOURCE
 // #include "./../include/scanner.h"
 // #include "y.tab.h"
 

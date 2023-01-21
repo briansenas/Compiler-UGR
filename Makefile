@@ -12,13 +12,13 @@ crear_carpetas:
 	-@mkdir -p $(BIN)
 
 $(BIN)/scanner: $(OBJ)/semantic.o $(OBJ)/main.o $(OBJ)/y.tab.o
-	gcc -o $@ $(OBJ)/semantic.o $(OBJ)/main.o $(OBJ)/y.tab.o
+	gcc -std=gnu99 -o $@ $(OBJ)/semantic.o $(OBJ)/main.o $(OBJ)/y.tab.o
 
 $(OBJ)/main.o: $(SRC)/main.c
-	gcc -o $@ -c $(SRC)/main.c -I$(INCLUDE)
+	gcc -std=gnu99 -o $@ -c $(SRC)/main.c -I$(INCLUDE)
 
 $(OBJ)/y.tab.o: $(SRC)/y.tab.c
-	gcc -o $@ -c $(SRC)/y.tab.c -I$(INCLUDE)
+	gcc -std=gnu99 -o $@ -c $(SRC)/y.tab.c -I$(INCLUDE)
 
 $(SRC)/y.tab.c: $(SRC)/scanner.y $(SRC)/lex.yy.c
 	bison -v -d -o $@ $(SRC)/scanner.y
@@ -27,7 +27,7 @@ $(SRC)/lex.yy.c: $(SRC)/scanner.l
 	lex -o $@ $(SRC)/scanner.l
 
 $(OBJ)/semantic.o: $(SRC)/semantic.c
-	gcc -o $@ -c $(SRC)/semantic.c -I$(INCLUDE)
+	gcc -std=gnu99 -o $@ -c $(SRC)/semantic.c -I$(INCLUDE)
 
 clean:
 	-rm $(BIN)/*

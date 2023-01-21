@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -251,4 +252,5 @@ void checkTypes(atributos a, atributos b);
 void generaCodigoInicializacion(atributos a);
 void freeEverything(atributos* res);
 void freeTable();
+void ErrorTipo(atributos a, atributos b);
 void *strealloc(char *origptr, char *strdata);

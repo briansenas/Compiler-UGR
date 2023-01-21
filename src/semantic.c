@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "../include/scansemantic.h"
 #include <string.h>
 
