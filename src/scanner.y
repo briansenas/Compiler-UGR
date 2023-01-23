@@ -414,7 +414,6 @@ funcion: IDENT PARENTESIS_ABRE lista_expresiones PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();
             cWriteFunc($1,&$$);
             tsFunctionCall($1,&$$);
-            $$.nombre = $1.nombre;
         }
        | IDENT PARENTESIS_ABRE PARENTESIS_CIERRA {
             $$.nombre = generarVariableTemporal();

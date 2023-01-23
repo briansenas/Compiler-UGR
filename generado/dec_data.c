@@ -18,8 +18,8 @@ void insertarint(struct listadeint* l, int a){
         l->longitud = 255;
     }
     else if(l->last_pos >= l->longitud){
-        l->var = realloc(l->var,sizeof(int)*l->longitud*2);
-        l->longitud = l->longitud * 2;
+        l->longitud = l->longitud+1;
+        l->var = realloc(l->var,sizeof(int)*l->longitud);
     }
     if(l->last_pos < l->longitud){
         *(l->var+l->last_pos) = a;
@@ -102,8 +102,8 @@ struct listadeint addElementAtint(struct listadeint l, int a, int b){
         l.longitud = 255;
     }
     else if(l.last_pos >= l.longitud){
-        l.var = realloc(l.var,sizeof(int)*l.longitud*2);
-        l.longitud = l.longitud * 2;
+        l.longitud = l.longitud + 1;
+        l.var = realloc(l.var,sizeof(int)*l.longitud);
     }
     if(a>=0 && a<=l.last_pos){
         for(int i=a+1;i<l.last_pos;i++){

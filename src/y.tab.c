@@ -612,8 +612,8 @@ static const yytype_int16 yyrline[] =
      260,   266,   272,   278,   284,   290,   300,   308,   314,   318,
      321,   326,   329,   333,   338,   340,   361,   362,   364,   393,
      394,   396,   400,   405,   406,   407,   408,   410,   411,   413,
-     419,   426,   427,   429,   430,   431,   432,   434,   436,   437,
-     439,   441,   442,   444,   446,   447,   449,   451,   452
+     418,   425,   426,   428,   429,   430,   431,   433,   435,   436,
+     438,   440,   441,   443,   445,   446,   448,   450,   451
 };
 #endif
 
@@ -2273,108 +2273,107 @@ yyreduce:
             yyval.nombre = generarVariableTemporal();
             cWriteFunc(yyvsp[-3],&yyval);
             tsFunctionCall(yyvsp[-3],&yyval);
-            yyval.nombre = yyvsp[-3].nombre;
         }
-#line 2279 "src/y.tab.c"
+#line 2278 "src/y.tab.c"
     break;
 
   case 100: /* funcion: IDENT PARENTESIS_ABRE PARENTESIS_CIERRA  */
-#line 419 "./src/scanner.y"
+#line 418 "./src/scanner.y"
                                                  {
             yyval.nombre = generarVariableTemporal();
             cWriteFunc(yyvsp[-2],&yyval);
             tsFunctionCall(yyvsp[-2],&yyval);
             yyval.nombre = yyvsp[-2].nombre;
        }
-#line 2290 "src/y.tab.c"
+#line 2289 "src/y.tab.c"
     break;
 
   case 101: /* lista_expresiones: lista_expresiones COMA expresion  */
-#line 426 "./src/scanner.y"
+#line 425 "./src/scanner.y"
                                                     {nParam++;TS_subprog_params(yyvsp[0]);}
-#line 2296 "src/y.tab.c"
+#line 2295 "src/y.tab.c"
     break;
 
   case 102: /* lista_expresiones: expresion  */
-#line 427 "./src/scanner.y"
+#line 426 "./src/scanner.y"
                              {nParam=1;TS_subprog_params(yyvsp[0]);}
-#line 2302 "src/y.tab.c"
+#line 2301 "src/y.tab.c"
     break;
 
   case 103: /* lista_constantes: lista_constante_booleano  */
-#line 429 "./src/scanner.y"
+#line 428 "./src/scanner.y"
                                            {yyval.lista=1; yyval.tipoDato=TIPOBOOL;}
-#line 2308 "src/y.tab.c"
+#line 2307 "src/y.tab.c"
     break;
 
   case 104: /* lista_constantes: lista_constante_entero  */
-#line 430 "./src/scanner.y"
+#line 429 "./src/scanner.y"
                             {yyval.lista=1;yyval.tipoDato=ENTERO;}
-#line 2314 "src/y.tab.c"
+#line 2313 "src/y.tab.c"
     break;
 
   case 105: /* lista_constantes: lista_constante_flotante  */
-#line 431 "./src/scanner.y"
+#line 430 "./src/scanner.y"
                               {yyval.lista=1;yyval.tipoDato=REAL;}
-#line 2320 "src/y.tab.c"
+#line 2319 "src/y.tab.c"
     break;
 
   case 106: /* lista_constantes: lista_constante_car  */
-#line 432 "./src/scanner.y"
+#line 431 "./src/scanner.y"
                          {yyval.lista=1;yyval.tipoDato=CARACTER;}
-#line 2326 "src/y.tab.c"
+#line 2325 "src/y.tab.c"
     break;
 
   case 108: /* contenido_lista_booleano: BOOLEANO  */
-#line 436 "./src/scanner.y"
+#line 435 "./src/scanner.y"
                                   {nParam=1; TS_subprog_params(yyvsp[0]); }
-#line 2332 "src/y.tab.c"
+#line 2331 "src/y.tab.c"
     break;
 
   case 109: /* contenido_lista_booleano: BOOLEANO COMA contenido_lista_booleano  */
-#line 437 "./src/scanner.y"
+#line 436 "./src/scanner.y"
                                             {nParam++;TS_subprog_params(yyvsp[-2]);}
-#line 2338 "src/y.tab.c"
+#line 2337 "src/y.tab.c"
     break;
 
   case 111: /* contenido_lista_entero: CONSTANTE_NUM  */
-#line 441 "./src/scanner.y"
+#line 440 "./src/scanner.y"
                                       {nParam=1; TS_subprog_params(yyvsp[0]); }
-#line 2344 "src/y.tab.c"
+#line 2343 "src/y.tab.c"
     break;
 
   case 112: /* contenido_lista_entero: CONSTANTE_NUM COMA contenido_lista_entero  */
-#line 442 "./src/scanner.y"
+#line 441 "./src/scanner.y"
                                                {nParam++;TS_subprog_params(yyvsp[-2]);}
-#line 2350 "src/y.tab.c"
+#line 2349 "src/y.tab.c"
     break;
 
   case 114: /* contenido_lista_flotante: CONSTANTE_FLOAT  */
-#line 446 "./src/scanner.y"
+#line 445 "./src/scanner.y"
                                           {nParam=1; TS_subprog_params(yyvsp[0]); }
-#line 2356 "src/y.tab.c"
+#line 2355 "src/y.tab.c"
     break;
 
   case 115: /* contenido_lista_flotante: CONSTANTE_FLOAT COMA contenido_lista_flotante  */
-#line 447 "./src/scanner.y"
+#line 446 "./src/scanner.y"
                                                    {nParam++;TS_subprog_params(yyvsp[-2]);}
-#line 2362 "src/y.tab.c"
+#line 2361 "src/y.tab.c"
     break;
 
   case 117: /* contenido_lista_car: CONSTANTE_CAR  */
-#line 451 "./src/scanner.y"
+#line 450 "./src/scanner.y"
                                    {nParam=1; TS_subprog_params(yyvsp[0]); }
-#line 2368 "src/y.tab.c"
+#line 2367 "src/y.tab.c"
     break;
 
   case 118: /* contenido_lista_car: CONSTANTE_CAR COMA contenido_lista_car  */
-#line 452 "./src/scanner.y"
+#line 451 "./src/scanner.y"
                                             {nParam++;TS_subprog_params(yyvsp[-2]);}
-#line 2374 "src/y.tab.c"
+#line 2373 "src/y.tab.c"
     break;
 
 
-#line 2378 "src/y.tab.c"
+#line 2377 "src/y.tab.c"
 
       default: break;
     }
@@ -2598,7 +2597,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 454 "./src/scanner.y"
+#line 453 "./src/scanner.y"
 
 
 #include "lex.yy.c"

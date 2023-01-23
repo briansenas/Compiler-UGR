@@ -21,11 +21,9 @@ typedef enum {
     COMPLEJO,
 	DESCONOCIDO,
     NA
-
 } dtipo;
 
 typedef struct {
-
 	tipoEntrada entrada;//in;
 	char *nombre;//*lex;
 	dtipo tipoDato;//type;
@@ -35,7 +33,6 @@ typedef struct {
 } entradaTS;
 
 typedef struct {
-
 	int attr;
 	char *nombre;
     char *codigo;
